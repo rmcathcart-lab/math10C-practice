@@ -1,0 +1,25 @@
+var fs=require('fs'),vm=require('vm');var ctx={console:console,Math:Math,JSON:JSON,Number:Number,String:String,Error:Error,isFinite:isFinite,isNaN:isNaN};ctx.window=ctx;vm.createContext(ctx);
+vm.runInContext(fs.readFileSync(__dirname+'/../js/calc.js','utf8'),ctx);
+var C=ctx.HW.Calc.engine, fails=0;
+function run(seq, want){var c=new C();var keys=seq.split(' ');var last;keys.forEach(function(k){c.press(k);});var out=c.error?c.error:(function(){var f=c.fmt(c.result);return typeof f==='string'?f:f.m+(f.e!=null?'E'+f.e:'');})();if(out!==want){fails++;console.log('FAIL',seq,'=>',out,'want',want);}else console.log('ok  ',seq,'=>',out);}
+run('2 pow 3 enter','8.');
+run('neg 2 sq enter','-4.');
+run('3 frac 4 add 1 frac 2 enter','5┘4');
+run('3 root 8 enter','2.');
+run('sin 3 0 rp enter','0.5');
+run('1 div 3 enter','0.3333333333');
+run('2 ee 1 5 mul 3 enter','6E15');
+run('sqrt 5 0 rp enter','7.071067812');
+run('5 npr 2 enter','20.');
+run('2 pi enter','6.283185307');
+run('2 pow 3 enter add 2 enter','10.');
+run('1 div 0 enter','DIVIDE BY 0 ERROR');
+run('3 frac 4 enter fd','0.75');
+run('2 lp 3 add 4 rp enter','14.');
+run('1 2 inv enter','0.08333333333');
+run('6 fact enter','720.');
+run('1 2 3 4 5 6 7 8 9 mul 1 0 0 0 enter','1.23456789E11');
+run('0 . 0 0 0 0 0 0 0 0 0 0 1 2 enter','1.2E-11');
+run('2 pow 3 pow 2 enter','64.');
+run('neg 8 pow lp 1 div 3 rp enter','-2.');
+run('9 0 asin','');
