@@ -330,7 +330,7 @@
     blurb: 'One pass through the whole unit, diploma-exam style: radical vocabulary and forms, entire and mixed radicals, perfect powers, and the real number system.',
     questions: [
       { num: '1', section: 'Part A — Multiple Choice', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: '1', level: 'BEG', make: function (r) {
+        { id: '1', level: 'LIM', make: function (r) {
           var a, n, b, i;
           for (i = 0; i < 100; i++) { a = r.int(2, 9); n = r.int(3, 7); b = r.pick([r.int(11, 99) * 100, r.int(101, 999) * 10, r.int(1001, 9999)]); if (a !== n && !isPow(b, n)) break; }
           var what = r.pick([['height of a building', 'metres'], ['length of a bridge', 'metres'], ['depth of a lake', 'metres'], ['mass of a sculpture', 'kilograms']]), X = a + rt(n, F(b));
@@ -343,7 +343,7 @@
             ['Label the three parts of ' + t(X) + ': coefficient, index, radicand.'], 'index & radicand of ' + a + ' root' + n + '(' + b + ')');
         } }] },
       { num: '2', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: '2', level: 'PRG', make: function (r) {
+        { id: '2', level: 'EMG', make: function (r) {
           var ms = [2, 3, 5, 6, 7], k1 = r.int(3, 9), m1 = r.pick(ms), k2 = r.int(2, 6), m2 = r.pick(ms), k3 = r.int(3, 9), m3 = r.pick(ms);
           var S = r.shuffle([{ kind: 'mult', tex: F(k1 * m1) + '=' + rad(k1, 2, m1) }, { kind: 'tr', tex: '\\sqrt{' + F(k2 * k2 * m2) + '}=' + rad(k2, 2, m2) }, { kind: 'sq', tex: rad(k3, 2, m3) + '=' + F(k3 * k3 * m3) }]);
           var pos = {}; S.forEach(function (s, i) { pos[s.kind] = i + 1; });
@@ -363,9 +363,9 @@
             ['Estimate each side with a calculator, or simplify the radical side exactly.', t('a\\sqrt{b}') + ' means ' + t('a\\times\\sqrt{b}') + ', and it equals ' + t('\\sqrt{a^{2}b}') + '.'], 'which radical statements are true', true);
         } }] },
       { num: '3', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: '3', level: 'ADV', make: function (r) { return q3Part(r); } }] },
+        { id: '3', level: 'PRG', make: function (r) { return q3Part(r); } }] },
       { num: '4', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: '4', level: 'PRG', make: function (r) {
+        { id: '4', level: 'EMG', make: function (r) {
           var k = r.int(3, 12), m = r.pick([2, 3, 5, 6, 7]), A = k * k * m, r0 = r.int(3, 9);
           return P.mc(r, 'The area of a circle of radius ' + t('r') + ' is given by the formula ' + t('A=\\pi r^{2}') + '. A circle of radius ' + t(r0) + ' cm has an area of ' + t(r0 * r0 + '\\pi') + ' cm' + t('^{2}') + '. If a circle has an area of ' + t(A + '\\pi') + ' cm' + t('^{2}') + ', then the exact length of its radius in cm is', [
             { html: t(rad(k, 2, m)), right: true },
@@ -397,7 +397,7 @@
             ['Solve the equations in order: cube both sides of the first to find ' + t('x') + ', then use ' + t('x') + ' in the second and ' + t('y') + ' in the third.', 'Write ' + t('\\sqrt{x}') + ' and ' + t('\\sqrt{y}') + ' as mixed radicals so the radicands match.'], 'radical chain x,y,z');
         } }] },
       { num: '6', section: 'Part B — Numerical Response', stem: '<i>(Numerical Response)</i>', parts: [
-        { id: '6', level: 'PRG', make: function (r) {
+        { id: '6', level: 'EMG', make: function (r) {
           var a, m, v, i;
           for (i = 0; i < 300; i++) { a = r.int(3, 9); m = r.pick([2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15]); v = a * a * a * m; if (v >= 100 && v <= 9999) break; }
           return P.nr('When ' + t(rad(a, 3, m)) + ' is written as an entire radical, the value of the radicand is ________.', v, function (u) {
@@ -410,7 +410,7 @@
           ['A number in front of a cube root equals the cube root of its <b>cube</b>.'], 'entire radicand of ' + a + 'cbrt' + m);
         } }] },
       { num: '7', stem: '<i>(Numerical Response)</i>', parts: [
-        { id: '7', level: 'ADV', make: function (r) {
+        { id: '7', level: 'PRG', make: function (r) {
           var s, b, V, i;
           for (i = 0; i < 300; i++) { s = r.int(2, 6); b = r.int(2, 40); V = s * s * s * b; if (ex.simplest(b, 3) && V >= 100 && V <= 9999 && ex.nthFactor(V, 3) === s) break; }
           var ans = s + b, divs = nt.divisors(s).filter(function (d) { return d > 1 && d < s; });
@@ -424,7 +424,7 @@
           ['The edge is ' + t('\\sqrt[3]{' + F(V) + '}') + '. Find the largest perfect cube that divides ' + t(F(V)) + ' (try ' + t('8, 27, 64, 125, 216') + ').'], 'cube edge a cbrt b, V=' + V);
         } }] },
       { num: '8', section: 'Part C — Written Response', shared: gameShared, stem: gameStem, parts: [
-        { id: '8a', level: 'EMG', make: function (r, sh) {
+        { id: '8a', level: 'BEG', make: function (r, sh) {
           var p = sh.pts, n = sh.neg, ans = p.I + p.Q;
           return P.number('A student selects a card that has the number ' + t('-' + n) + ' on it. How many points are awarded for this card?', ans, function (v) {
             if (v === p.N + p.W + p.I + p.Q) return { code: 'game-pos', hint: t('-' + n) + ' is negative, so it is neither a natural number nor a whole number.' };
@@ -435,9 +435,9 @@
           }, t('-' + n) + ' is negative, so it is neither natural nor whole. It <b>is</b> an integer, and ' + t('-' + n + '=\\frac{-' + n + '}{1}') + ' makes it rational as well.<br>Points: ' + t(p.I + '+' + p.Q + '=' + ans) + '.',
           ['List every category ' + t('-' + n) + ' belongs to, then add those points.'], 'card game: points for -' + n);
         } },
-        { id: '8b', level: 'PRG', make: function (r, sh) { return setsPart('Student ' + t('A') + ' is dealt ' + handTex(sh.hands[0]) + '. Tick every category each card belongs to.', sh.hands[0], true, 'card game: classify hand A'); } },
+        { id: '8b', level: 'EMG', make: function (r, sh) { return setsPart('Student ' + t('A') + ' is dealt ' + handTex(sh.hands[0]) + '. Tick every category each card belongs to.', sh.hands[0], true, 'card game: classify hand A'); } },
         { id: '8c', level: 'PRG', make: function (r, sh) { return setsPart('Student ' + t('B') + ' is dealt ' + handTex(sh.hands[1]) + '. Tick every category each card belongs to.', sh.hands[1], true, 'card game: classify hand B'); } },
-        { id: '8d', level: 'ADV', make: function (r, sh) { return setsPart('Student ' + t('C') + ' is dealt ' + handTex(sh.hands[2]) + '. Tick every category each card belongs to.', sh.hands[2], true, 'card game: classify hand C'); } },
+        { id: '8d', level: 'PRG', make: function (r, sh) { return setsPart('Student ' + t('C') + ' is dealt ' + handTex(sh.hands[2]) + '. Tick every category each card belongs to.', sh.hands[2], true, 'card game: classify hand C'); } },
         { id: '8e', level: 'PRG', make: function (r, sh) {
           var tots = sh.hands.map(function (h) { return h.reduce(function (s, c) { return s + c.pts; }, 0); });
           return P.fields('Determine the point total for each student.<br>' + ['A', 'B', 'C'].map(function (L, i) { return 'Student ' + t(L) + ': ' + handTex(sh.hands[i]); }).join('<br>'),
@@ -446,7 +446,7 @@
             ['A', 'B', 'C'].map(function (L, i) { return '<b>Student ' + t(L) + '</b><br>' + handSol(sh.hands[i]); }).join('<br>'),
             ['Score each card separately: add the points for every category it belongs to.', 'Simplify each card first, e.g. ' + t('-\\sqrt{81}=-9') + '.'], 'card game: totals');
         } },
-        { id: '8f', level: 'PRG', make: function (r, sh) {
+        { id: '8f', level: 'EMG', make: function (r, sh) {
           var tots = sh.hands.map(function (h) { return h.reduce(function (s, c) { return s + c.pts; }, 0); }), best = Math.max.apply(null, tots);
           return P.mc(r, 'Which student wins?', ['A', 'B', 'C'].map(function (L, i) { return { html: 'Student ' + t(L), right: tots[i] === best, why: tots[i] === best ? null : 'Student ' + t(L) + ' scores ' + t(tots[i]) + ' points. Compare all three totals again.' }; }),
             'Totals: ' + ['A', 'B', 'C'].map(function (L, i) { return t(L + '=' + tots[i]); }).join(', ') + '. The highest total is ' + t(best) + ', so <b>Student ' + t(['A', 'B', 'C'][tots.indexOf(best)]) + ' wins</b>.',
@@ -467,11 +467,11 @@
               [numChk(nDiv(sh.mf), countAlts(sh.mf)), numChk(nDiv(sh.nf), countAlts(sh.nf))], [String(nDiv(sh.mf)), String(nDiv(sh.nf))], t('m') + ': ' + t(nDiv(sh.mf)) + ', &nbsp; ' + t('n') + ': ' + t(nDiv(sh.nf)),
               'Add ' + t('1') + ' to each exponent and multiply (a factor uses each prime from ' + t('0') + ' times up to its exponent).<br>' + countSol('m', sh.mf) + '<br>' + countSol('n', sh.nf), ['Use ' + t('(a+1)(b+1)(c+1)') + ' with the exponents.'], 'factor counts of m, n');
           } },
-          { id: 'e1b', level: 'PRG', outcome: 'AN1', make: function (r, sh) { return sqCubePart(r, 'm', sh.mf); } },
+          { id: 'e1b', level: 'EMG', outcome: 'AN1', make: function (r, sh) { return sqCubePart(r, 'm', sh.mf); } },
           { id: 'e1c', level: 'PRG', outcome: 'AN1', make: function (r, sh) {
             var gf = gcdF(sh.mf, sh.nf), g = fVal(gf), l = fVal(lcmF(sh.mf, sh.nf)), hi = fVal(sharedHighF(sh.mf, sh.nf));
             var alts = [{ v: l, code: 'gcf-lcm', hint: 'That’s the LCM. The GCF uses only the primes <b>both</b> numbers share, each to the <b>lower</b> power.' }, { v: hi, code: 'gcf-high', hint: 'Right primes, but the GCF takes the <b>lower</b> power of each shared prime.' }].filter(function (a) { return a.v !== g; });
-            return P.fields('Determine the GCF of ' + t('m') + ' and ' + t('n') + ' in exponent form <i>and</i> as a single number.', [{ label: 'Exponent form:', mode: 'text', wide: true, name: 'Exponent form', placeholder: 'e.g. 2^3 × 3' }, { label: 'Single number:', name: 'Single number' }],
+            return P.fields('Determine the GCF of ' + t('m') + ' and ' + t('n') + ' in exponent form <i>and</i> as a single number.', [{ label: 'Exponent form:', mode: 'math', wide: true, name: 'Exponent form', placeholder: 'e.g. 2^3 × 3' }, { label: 'Single number:', name: 'Single number' }],
               [prodChk(g, alts), numChk(g, alts)], [fTex(gf), String(g)], t('\\text{GCF}=' + fTex(gf) + '=' + F(g)),
               'The shared primes are ' + t(gf.map(function (pe) { return pe[0]; }).join('\\text{ and }')) + '; take the lower power of each:<br>' + t('\\text{GCF}=' + fTex(gf) + '=' + gf.map(function (pe) { return F(Math.pow(pe[0], pe[1])); }).join('\\times ') + '=' + F(g)) + '.',
               ['Use only the primes in <b>both</b> numbers, each to the lower power.'], 'GCF of m, n');
@@ -479,7 +479,7 @@
           { id: 'e1d', level: 'PRG', outcome: 'AN1', make: function (r, sh) {
             var lf = lcmF(sh.mf, sh.nf), l = fVal(lf), g = fVal(gcdF(sh.mf, sh.nf)), hi = fVal(sharedHighF(sh.mf, sh.nf));
             var alts = [{ v: g, code: 'gcf-lcm', hint: 'That’s the GCF. The LCM uses <b>every</b> prime in either number, each to the <b>higher</b> power.' }, { v: hi, code: 'lcm-missing', hint: 'The LCM needs every prime that appears in <b>either</b> number — including the ones only one of them has.' }, { v: sh.m * sh.n, code: 'lcm-product', hint: t('m\\times n') + ' is a common multiple, but not the <b>least</b> one: use each prime once, to its higher power.' }].filter(function (a) { return a.v !== l; });
-            return P.fields('Determine the LCM of ' + t('m') + ' and ' + t('n') + ' in exponent form <i>and</i> as a single number.', [{ label: 'Exponent form:', mode: 'text', wide: true, name: 'Exponent form', placeholder: 'e.g. 2^3 × 3' }, { label: 'Single number:', name: 'Single number', wide: true }],
+            return P.fields('Determine the LCM of ' + t('m') + ' and ' + t('n') + ' in exponent form <i>and</i> as a single number.', [{ label: 'Exponent form:', mode: 'math', wide: true, name: 'Exponent form', placeholder: 'e.g. 2^3 × 3' }, { label: 'Single number:', name: 'Single number', wide: true }],
               [prodChk(l, alts), numChk(l, alts)], [fTex(lf), String(l)], t('\\text{LCM}=' + fTex(lf) + '=' + F(l)),
               'Every prime in either number, higher power of each:<br>' + t('\\text{LCM}=' + fTex(lf) + '=' + F(l)) + '.',
               ['Use every prime that appears in either number, each to the higher power.'], 'LCM of m, n');
@@ -497,7 +497,7 @@
               t('n=' + fTex(sh.nf.map(function (pe) { return [pe[0], pe[1] - pe[1] % 2]; })) + '\\times(' + fTex(sh.nf.map(function (pe) { return [pe[0], pe[1] % 2]; })) + ')') + '<br>' + t('\\sqrt{n}=' + fTex(sh.nf.map(function (pe) { return [pe[0], Math.floor(pe[1] / 2)]; })) + '\\sqrt{' + fTex(sh.nf.map(function (pe) { return [pe[0], pe[1] % 2]; })) + '}=' + rad(mx.k, 2, mx.m)) + '.',
               ['Split each prime power into an even power (comes out, exponent halved) and what is left over (stays under the root).'], 'sqrt(n) simplest');
           } },
-          { id: 'e1g', level: 'ADV', make: function (r, sh) {
+          { id: 'e1g', level: 'PRG', make: function (r, sh) {
             var mx = mixedOf(sh.mf, 3);
             return P.radical('Is ' + t('\\sqrt[3]{m}') + ' rational? Write it in simplest mixed radical form.', { k: mx.k, n: 3, m: mx.m }, 'mixed',
               'The exponents ' + sh.mf.filter(function (pe) { return pe[1] % 3; }).map(function (pe) { return t(pe[1]); }).join(' and ') + ' are not multiples of ' + t('3') + ', so ' + t('\\sqrt[3]{m}') + ' is <b>not rational</b>. Take out the largest multiple-of-3 power of each prime:<br>' +
@@ -505,7 +505,7 @@
               t('\\sqrt[3]{m}=' + fTex(sh.mf.map(function (pe) { return [pe[0], Math.floor(pe[1] / 3)]; })) + '\\sqrt[3]{' + fTex(sh.mf.map(function (pe) { return [pe[0], pe[1] % 3]; })) + '}=' + rad(mx.k, 3, mx.m)) + '.',
               ['For a cube root, each prime comes out once for every ' + t('3') + ' copies (divide the exponent by ' + t('3') + ').'], 'cbrt(m) simplest');
           } },
-          { id: 'e1h', level: 'PRG', make: function (r, sh) {
+          { id: 'e1h', level: 'EMG', make: function (r, sh) {
             var s = fVal(sh.mf.map(function (pe) { return [pe[0], pe[1] / 2]; })), a = mixedOf(sh.nf, 2), b = mixedOf(sh.mf, 3);
             return setsPart('Classify each number: tick every set it belongs to.', [{ id: 'sm', tex: '\\sqrt{m}', cls: 'nat', note: '\\sqrt{m}=' + F(s) }, { id: 'sn', tex: '\\sqrt{n}', cls: 'irr', note: '\\sqrt{n}=' + rad(a.k, 2, a.m) }, { id: 'cm', tex: '\\sqrt[3]{m}', cls: 'irr', note: '\\sqrt[3]{m}=' + rad(b.k, 3, b.m) }], false, 'classify sqrt m, sqrt n, cbrt m');
           } }] },
@@ -541,8 +541,8 @@
               t('\\sqrt{p}=' + fTex(sh.pf.map(function (pe) { return [pe[0], Math.floor(pe[1] / 2)]; })) + '\\sqrt{' + fTex(sh.pf.map(function (pe) { return [pe[0], pe[1] % 2]; })) + '}=' + rad(mx.k, 2, mx.m)),
               ['Halve the even part of each exponent; the primes with an odd exponent leave one copy under the root.'], 'sqrt(p) simplest');
           } },
-          { id: 'e2e', level: 'PRG', make: function (r, sh) { var mx = mixedOf(sh.pf, 2); return setsPart('List every set ' + t('\\sqrt{p}') + ' belongs to.', [{ id: 'sp', tex: '\\sqrt{p}', cls: 'irr', note: '\\sqrt{p}=' + rad(mx.k, 2, mx.m) }], false, 'classify sqrt p'); } },
-          { id: 'e2f', level: 'ADV', outcome: 'AN1', make: function (r, sh) {
+          { id: 'e2e', level: 'EMG', make: function (r, sh) { var mx = mixedOf(sh.pf, 2); return setsPart('List every set ' + t('\\sqrt{p}') + ' belongs to.', [{ id: 'sp', tex: '\\sqrt{p}', cls: 'irr', note: '\\sqrt{p}=' + rad(mx.k, 2, mx.m) }], false, 'classify sqrt p'); } },
+          { id: 'e2f', level: 'PRG', outcome: 'AN1', make: function (r, sh) {
             var a = powerUp(sh.pf, 2), b = powerUp(sh.pf, 3);
             return P.mc(r, 'How can both values of ' + t('k') + ' be read straight off the exponents of ' + t('p') + ', without guessing or a calculator?', [
               { html: 'A square needs every exponent even and a cube needs every exponent a multiple of ' + t('3') + ', so ' + t('k') + ' supplies only what each exponent is <i>missing</i>. Anything more makes ' + t('k') + ' bigger.', right: true },
@@ -566,18 +566,18 @@
         stem: function (sh) { return 'Let ' + t('a=' + fTex(sh.af)) + ' and ' + t('b=' + fTex(sh.bf)) + '.'; },
         parts: [
           { id: 'e3a', level: 'PRG', outcome: 'AN1', make: function (r, sh) {
-            return P.fields('Determine ' + t('\\text{GCF}(a,b)') + ' and ' + t('\\text{LCM}(a,b)') + ' in exponent form.', [{ label: 'GCF:', mode: 'text', wide: true, name: 'GCF', placeholder: 'e.g. 2^3 × 3' }, { label: 'LCM:', mode: 'text', wide: true, name: 'LCM', placeholder: 'e.g. 2^3 × 3' }],
+            return P.fields('Determine ' + t('\\text{GCF}(a,b)') + ' and ' + t('\\text{LCM}(a,b)') + ' in exponent form.', [{ label: 'GCF:', mode: 'math', wide: true, name: 'GCF', placeholder: 'e.g. 2^3 × 3' }, { label: 'LCM:', mode: 'math', wide: true, name: 'LCM', placeholder: 'e.g. 2^3 × 3' }],
               [prodChk(sh.g, [{ v: sh.l, code: 'gcf-lcm', hint: 'That’s the LCM. The GCF takes the <b>lower</b> power of each shared prime.' }]), prodChk(sh.l, [{ v: sh.g, code: 'gcf-lcm', hint: 'That’s the GCF. The LCM takes the <b>higher</b> power of each prime.' }, { v: sh.a * sh.b, code: 'lcm-product', hint: t('ab') + ' is a common multiple, but not the least one.' }])],
               [fTex(sh.gf), fTex(sh.lf)], t('\\text{GCF}=' + fTex(sh.gf) + '\\ (=' + F(sh.g) + ')') + ', ' + t('\\text{LCM}=' + fTex(sh.lf) + '\\ (=' + F(sh.l) + ')'),
               'Shared primes ' + t('2, 3, 5') + ' — lower power of each: ' + t('\\text{GCF}(a,b)=' + fTex(sh.gf) + '=' + F(sh.g)) + '.<br>Higher power of each: ' + t('\\text{LCM}(a,b)=' + fTex(sh.lf) + '=' + F(sh.l)) + '.',
               ['GCF: lower power of each shared prime. LCM: higher power of every prime.'], 'GCF, LCM exponent form');
           } },
-          { id: 'e3b', level: 'PRG', outcome: 'AN1', make: function (r, sh) {
+          { id: 'e3b', level: 'EMG', outcome: 'AN1', make: function (r, sh) {
             return P.number('Verify that ' + t('\\text{GCF}(a,b)\\times\\text{LCM}(a,b)=ab') + ' by evaluating both sides. Both sides equal', sh.a * sh.b, function (v) { if (v === sh.g + sh.l) return { code: 'lcm-sum', hint: 'Multiply the GCF and the LCM — don’t add them.' }; return null; },
               t('a=' + fTex(sh.af) + '=' + F(sh.a)) + ', ' + t('b=' + fTex(sh.bf) + '=' + F(sh.b)) + '.<br>Left: ' + t(F(sh.g) + '\\times ' + F(sh.l) + '=' + F(sh.g * sh.l)) + '<br>Right: ' + t(F(sh.a) + '\\times ' + F(sh.b) + '=' + F(sh.a * sh.b)) + ' ✓',
               ['Evaluate ' + t('a') + ', ' + t('b') + ', the GCF and the LCM as numbers first.'], 'GCF×LCM = ab', { after: '' });
           } },
-          { id: 'e3c', level: 'PRG', outcome: 'AN1', make: function (r, sh) {
+          { id: 'e3c', level: 'EMG', outcome: 'AN1', make: function (r, sh) {
             var red = ex.norm(sh.a, sh.b);
             return P.fraction('Reduce ' + t('\\dfrac{a}{b}') + ' to lowest terms.', [sh.a, sh.b], {},
               t('\\frac{a}{b}=\\frac{' + fTex(sh.af) + '}{' + fTex(sh.bf) + '}=\\frac{' + F(sh.a) + '}{' + F(sh.b) + '}') + '. Divide the top and bottom by the GCF ' + t(F(sh.g)) + ':<br>' + t('\\frac{' + F(sh.a) + '\\div ' + sh.g + '}{' + F(sh.b) + '\\div ' + sh.g + '}=' + ex.texRat(red)),
@@ -591,7 +591,7 @@
               { html: 'The smallest shared prime, ' + t('2'), why: 'Dividing by ' + t('2') + ' is a start, but it doesn’t finish the job in one step. Which number contains <i>every</i> shared factor?' }],
               'Dividing the top and bottom by the <b>GCF</b> (' + t(F(sh.g)) + ') removes every shared factor at once: ' + t('\\frac{' + F(sh.a) + '}{' + F(sh.b) + '}=' + ex.texRat(ex.norm(sh.a, sh.b))) + '.', ['Which number is the biggest one that divides both ' + t('a') + ' and ' + t('b') + '?'], 'reduce using GCF');
           } },
-          { id: 'e3e', level: 'PRG', make: function (r, sh) {
+          { id: 'e3e', level: 'EMG', make: function (r, sh) {
             var red = ex.norm(sh.a, sh.b);
             return P.mc(r, 'Factor the <b>reduced</b> denominator of ' + t('\\frac{a}{b}') + ' and use it to predict: does the decimal terminate or repeat?', [
               { html: 'Repeats: the reduced denominator has a prime factor other than ' + t('2') + ' and ' + t('5') + '.', right: true },
@@ -601,11 +601,11 @@
               'Reduced: ' + t('\\frac{a}{b}=' + ex.texRat(red)) + '. Denominator ' + t(denEq(red[1])) + ' contains ' + t('3') + ', which is neither ' + t('2') + ' nor ' + t('5') + ', so the decimal <b>repeats</b>.',
               ['A fraction in lowest terms terminates exactly when its denominator has no prime factors other than ' + t('2') + ' and ' + t('5') + '.'], 'predict a/b decimal');
           } },
-          { id: 'e3f', level: 'PRG', make: function (r, sh) {
+          { id: 'e3f', level: 'BEG', make: function (r, sh) {
             var red = ex.norm(sh.a, sh.b);
             return P.repeating('Write ' + t('\\frac{a}{b}') + ' as a decimal (use bar notation).', red, {}, t(ex.texRat(red) + '=' + red[0] + '\\div ' + red[1] + '=' + K.decTex(red)) + ' — it repeats, as predicted ✓', ['Divide the reduced numerator by the reduced denominator and watch for the repeating block.'], 'decimal of a/b');
           } },
-          { id: 'e3g', level: 'PRG', make: function (r, sh) {
+          { id: 'e3g', level: 'BEG', make: function (r, sh) {
             var red = ex.norm(sh.a, sh.b);
             return setsPart('List every set ' + t('\\frac{a}{b}') + ' belongs to. (The strictest set is the smallest one in the chain ' + t('N\\subset W\\subset I\\subset Q\\subset R') + '.)', [{ id: 'ab', tex: '\\frac{a}{b}', cls: 'frac', note: '\\frac{a}{b}=' + ex.texRat(red) }], false, 'classify a/b', '<br>The strictest set is ' + t('Q') + ': ' + t(ex.texRat(red)) + ' is a ratio of integers, but not an integer.');
           } }] },
@@ -614,26 +614,26 @@
         stem: function (sh) { return 'Let ' + t('N=' + F(sh.N)) + '.'; },
         parts: [
           { id: 'e4a', level: 'PRG', outcome: 'AN1', make: function (r, sh) {
-            return P.fields('Find the prime factorization of ' + t('N') + ' in exponent form, and state how many factors ' + t('N') + ' has.', [{ label: t('N='), mode: 'text', wide: true, name: 'Factorization', placeholder: 'e.g. 2^3 × 3' }, { label: 'Number of factors:', name: 'Factors' }],
+            return P.fields('Find the prime factorization of ' + t('N') + ' in exponent form, and state how many factors ' + t('N') + ' has.', [{ label: t('N='), mode: 'math', wide: true, name: 'Factorization', placeholder: 'e.g. 2^3 × 3' }, { label: 'Number of factors:', name: 'Factors' }],
               [K.product(sh.N, 'required'), numChk(nDiv(sh.f), countAlts(sh.f))], [fTex(sh.f), String(nDiv(sh.f))], t('N=' + fTex(sh.f)) + ', ' + t(nDiv(sh.f)) + ' factors',
               'Divide by the smallest prime each time:' + K.ladderSolution(sh.N) + t(F(sh.N) + '=' + fTex(sh.f)) + '<br>' + countSol('N', sh.f),
               ['Start dividing by ' + t('2') + ', then ' + t('3') + ', ' + t('5') + ', ' + t('7') + ', …', 'Number of factors: add 1 to each exponent and multiply.'], 'factor N, count');
           } },
-          { id: 'e4b', level: 'PRG', outcome: 'AN1', make: function (r, sh) { return sqCubePart(r, 'N', sh.f); } },
+          { id: 'e4b', level: 'EMG', outcome: 'AN1', make: function (r, sh) { return sqCubePart(r, 'N', sh.f); } },
           { id: 'e4c', level: 'PRG', make: function (r, sh) {
             var mx = mixedOf(sh.f, 2);
             return P.radical('Write ' + t('\\sqrt{N}') + ' in simplest mixed radical form.', { k: mx.k, n: 2, m: mx.m }, 'mixed',
               t('N=' + fTex(sh.f.map(function (pe) { return [pe[0], pe[1] - pe[1] % 2]; })) + '\\times(' + fTex(sh.f.map(function (pe) { return [pe[0], pe[1] % 2]; })) + ')') + '<br>' + t('\\sqrt{N}=' + fTex(sh.f.map(function (pe) { return [pe[0], Math.floor(pe[1] / 2)]; })) + '\\sqrt{' + fTex(sh.f.map(function (pe) { return [pe[0], pe[1] % 2]; })) + '}=' + rad(mx.k, 2, mx.m)),
               ['Use the prime factorization: each pair of equal primes comes out as one.'], 'sqrt(N) simplest');
           } },
-          { id: 'e4d', level: 'PRG', make: function (r, sh) { var mx = mixedOf(sh.f, 2); return setsPart('Classify ' + t('\\sqrt{N}') + ': tick every set it belongs to.', [{ id: 'sN', tex: '\\sqrt{N}', cls: 'irr', note: '\\sqrt{N}=' + rad(mx.k, 2, mx.m) }], false, 'classify sqrt N'); } },
+          { id: 'e4d', level: 'EMG', make: function (r, sh) { var mx = mixedOf(sh.f, 2); return setsPart('Classify ' + t('\\sqrt{N}') + ': tick every set it belongs to.', [{ id: 'sN', tex: '\\sqrt{N}', cls: 'irr', note: '\\sqrt{N}=' + rad(mx.k, 2, mx.m) }], false, 'classify sqrt N'); } },
           { id: 'e4e', level: 'ADV', outcome: 'AN1', make: function (r, sh) {
             var u = powerUp(sh.f, 2);
             return P.fields('Find the smallest natural number ' + t('k') + ' for which ' + t('kN') + ' is a perfect square, and state ' + t('\\sqrt{kN}') + '.', [{ label: t('k='), name: 'k' }, { label: t('\\sqrt{kN}='), name: '√(kN)' }],
               [numChk(u.k, kAlts(sh.f, 2)), numChk(u.root, [{ v: sh.N * u.k, code: 'root-of-k', hint: 'That’s ' + t('kN') + ' itself. Now take its square root.' }])], [String(u.k), String(u.root)], t('k=' + u.k) + ', ' + t('\\sqrt{kN}=' + u.root),
               powerSol('N', sh.f, 2), ['Which exponents of ' + t('N') + ' are odd?'], 'k for kN square');
           } },
-          { id: 'e4f', level: 'MAS', make: function (r, sh) {
+          { id: 'e4f', level: 'PRG', make: function (r, sh) {
             var mx = mixedOf(sh.f, 2);
             return P.mc(r, 'What does the radicand left under the root in ' + t('\\sqrt{N}=' + rad(mx.k, 2, mx.m)) + ' tell you about ' + t('k') + '?', [
               { html: 'They are the same number: the leftover radicand ' + t(mx.m) + ' is the product of the primes with odd exponents — exactly what ' + t('k') + ' must supply.', right: true },
@@ -656,27 +656,27 @@
         },
         stem: 'Take each fraction through the whole chain: reduce it, factor the <b>reduced</b> denominator, predict terminating or repeating, write the decimal, and classify it.',
         parts: [0, 1, 2, 3].map(function (i) {
-          return { id: 'e5' + 'abcd'[i], level: i === 1 || i === 3 ? 'PRG' : 'EMG', outcome: 'AN1', make: function (r, sh) {
+          return { id: 'e5' + 'abcd'[i], level: 'EMG', outcome: 'AN1', make: function (r, sh) {
             var f = sh.fr[i];
             return P.fraction('Reduce ' + t(f.tex) + ' to lowest terms.', [f.n, f.d], {},
               t(F(f.n) + '=' + K.fac(f.n)) + ', ' + t(F(f.d) + '=' + K.fac(f.d)) + '. The GCF is ' + t(F(f.g)) + ':<br>' + t(f.tex + '=\\frac{' + F(f.n) + '\\div ' + F(f.g) + '}{' + F(f.d) + '\\div ' + F(f.g) + '}=' + ex.texRat(f.red)),
               ['Find the GCF of the numerator and denominator (prime factorizations help), then divide both by it.'], 'reduce ' + f.n + '/' + f.d);
           } };
         }).concat([
-          { id: 'e5e', level: 'PRG', make: function (r, sh) {
+          { id: 'e5e', level: 'EMG', make: function (r, sh) {
             var want = {}, by = {}; sh.fr.forEach(function (f) { want[f.id] = f.term ? 'T' : 'R'; by[f.id] = f; });
             return P.grid('Using the factored <b>reduced</b> denominators, predict whether each decimal terminates or repeats.', sh.fr.map(function (f) { return { id: f.id, html: t(f.tex), label: f.n + '/' + f.d }; }), [{ id: 'T', html: 'Terminates', label: 'Terminates' }, { id: 'R', html: 'Repeats', label: 'Repeats' }], want,
               { why: function (id) { var f = by[id]; return { code: 'term-test', hint: 'Reduce first: ' + t(f.tex + '=' + ex.texRat(f.red)) + '. The reduced denominator ' + t(denEq(f.red[1])) + (f.red[1] === 1 ? ' has no prime factors at all.' : f.term ? ' has only 2s and 5s.' : ' has a prime other than ' + t('2') + ' and ' + t('5') + '.') }; } },
               sh.fr.map(function (f) { return t(f.tex + '=' + ex.texRat(f.red)) + ': denominator ' + t(denEq(f.red[1])) + ' → <b>' + (f.term ? 'terminates' : 'repeats') + '</b>'; }).join('<br>'),
               ['A reduced fraction terminates exactly when its denominator has no prime factors other than ' + t('2') + ' and ' + t('5') + '.'], 'predict terminate/repeat');
           } }]).concat([0, 1, 2, 3].map(function (i) {
-            return { id: 'e5' + 'fghi'[i], level: i === 1 ? 'PRG' : 'EMG', make: function (r, sh) {
+            return { id: 'e5' + 'fghi'[i], level: i % 2 === 0 ? 'BEG' : 'EMG', make: function (r, sh) {
               var f = sh.fr[i];
               return P.repeating('Write ' + t(f.tex) + ' as a decimal (use bar notation if it repeats).', f.red, {}, t(f.tex + '=' + ex.texRat(f.red) + (f.red[1] === 1 ? '' : '=' + K.decTex(f.red))) + (f.term ? ' (terminates)' : ' (repeats)'),
                 ['Use the reduced fraction: divide its numerator by its denominator.'], 'decimal of ' + f.n + '/' + f.d);
             } };
           })).concat([
-            { id: 'e5j', level: 'PRG', make: function (r, sh) {
+            { id: 'e5j', level: 'EMG', make: function (r, sh) {
               return setsPart('List every set each number belongs to.', sh.fr.map(function (f) { return { id: f.id, tex: f.tex, cls: f.red[1] === 1 ? 'nat' : 'frac', note: f.tex + '=' + ex.texRat(f.red) }; }), false, 'classify four fractions');
             } }]) },
       { num: '6',
@@ -694,7 +694,7 @@
         },
         stem: 'Run the chain <b>backwards</b>: convert each decimal to a fraction in lowest terms, factor the denominator to confirm that the decimal <i>had</i> to repeat, and classify the number.',
         parts: [0, 1, 2, 3].map(function (i) {
-          return { id: 'e6' + 'abcd'[i], level: i === 3 ? 'ADV' : 'PRG', make: function (r, sh) {
+          return { id: 'e6' + 'abcd'[i], level: i % 2 === 1 ? 'PRG' : 'EMG', make: function (r, sh) {
             var d = sh.ds[i];
             return P.fraction('Convert ' + t(d.tex) + ' to a fraction in lowest terms.', d.red, { diag: function (v) {
               if (i === 0 && Math.abs(v - d.raw[0] / 100) < 1e-9) return { code: 'decimal-cut', hint: 'That’s ' + t('0.' + d.raw[0]) + ', which ends. The digits repeat forever: let ' + t('x=' + d.tex) + ' and subtract ' + t('100x-x') + '.' };
@@ -706,7 +706,7 @@
           } };
         }).concat([
           { id: 'e6e', level: 'PRG', make: function (r, sh) { return setsPart('List every set each number belongs to.', sh.ds.map(function (d) { return { id: d.id, tex: d.tex, cls: d.red[1] === 1 ? 'nat' : 'frac', note: d.tex + '=' + ex.texRat(d.red) }; }), false, 'classify four repeating decimals'); } },
-          { id: 'e6f', level: 'MAS', make: function (r, sh) {
+          { id: 'e6f', level: 'PRG', make: function (r, sh) {
             var n = sh.n9, X = n + '.\\overline{9}';
             return P.mc(r, 'Part (d) breaks the pattern of the other three. What happens to the denominator test for ' + t(X) + '?', [
               { html: 'Before reducing, the denominator is ' + t('9=3^{2}') + ', but the test uses the <b>reduced</b> fraction: ' + t('\\frac{' + (9 * n + 9) + '}{9}=\\frac{' + (n + 1) + '}{1}') + '. Denominator ' + t('1') + ' has no primes, so it terminates — ' + t(X) + ' and ' + t(n + 1) + ' are the same number.', right: true },
@@ -717,7 +717,7 @@
               ['What fraction did you get for ' + t(X) + '? Reduce it all the way.'], 'why 0.999… = 1');
           } }]) },
       { num: '7', stem: 'Simplify each number first, then sort it as <b>rational</b>, <b>irrational</b>, or <b>not possible in the real number system</b>.', parts: [
-        { id: 'e7', level: 'ADV', make: function (r) {
+        { id: 'e7', level: 'PRG', make: function (r) {
           var items = r.shuffle(e7Items(r)), want = {}, by = {}; items.forEach(function (x) { want[x.id] = x.col; by[x.id] = x; });
           var names = { rat: 'rational', irr: 'irrational', nr: 'not real' };
           return P.grid('Sort the eight numbers.', items.map(function (x) { return { id: x.id, html: t(x.tex), label: x.id }; }), [{ id: 'rat', html: 'Rational', label: 'Rational' }, { id: 'irr', html: 'Irrational', label: 'Irrational' }, { id: 'nr', html: 'Not real', label: 'Not real' }], want,
@@ -733,32 +733,32 @@
         },
         stem: 'Simplify each radical completely.',
         parts: [
-          { id: 'e8a', level: 'PRG', make: function (r, sh) {
+          { id: 'e8a', level: 'EMG', make: function (r, sh) {
             var k = sh.a.k, m = sh.a.m, N = k * k * m;
             return P.radical(t('\\sqrt{' + F(N) + '}'), { k: k, n: 2, m: m }, 'mixed', 'The largest square factor of ' + t(F(N)) + ' is ' + t(k * k + '=' + k + '^{2}') + ':<br>' + t('\\sqrt{' + F(N) + '}=\\sqrt{' + k * k + '\\times ' + m + '}=\\sqrt{' + k * k + '}\\times\\sqrt{' + m + '}=' + rad(k, 2, m)),
               ['Look for the <b>largest</b> perfect square that divides ' + t(F(N)) + '.'], 'simplify sqrt ' + N);
           } },
-          { id: 'e8b', level: 'PRG', make: function (r, sh) {
+          { id: 'e8b', level: 'EMG', make: function (r, sh) {
             var k = sh.b.k, m = sh.b.m, N = k * k * k * m;
             return P.radical(t('\\sqrt[3]{-' + F(N) + '}'), { k: -k, n: 3, m: m }, 'mixed', 'The largest cube factor of ' + t(F(N)) + ' is ' + t(k * k * k + '=' + k + '^{3}') + ':<br>' + t('\\sqrt[3]{-' + F(N) + '}=\\sqrt[3]{-' + k * k * k + '\\times ' + m + '}=' + rad(-k, 3, m)) + ' (an odd root of a negative is negative).',
               ['Look for the largest perfect cube that divides ' + t(F(N)) + ' (' + t('8, 27, 64, 125, 216, 343') + ').', 'A cube root of a negative number is negative.'], 'simplify cbrt -' + N);
           } },
-          { id: 'e8c', level: 'ADV', make: function (r, sh) {
+          { id: 'e8c', level: 'EMG', make: function (r, sh) {
             var k = sh.c.k, m = sh.c.m, N = Math.pow(k, 4) * m;
             return P.radical(t('\\sqrt[4]{' + F(N) + '}'), { k: k, n: 4, m: m }, 'mixed', 'The largest fourth-power factor of ' + t(F(N)) + ' is ' + t(Math.pow(k, 4) + '=' + k + '^{4}') + ':<br>' + t('\\sqrt[4]{' + F(N) + '}=\\sqrt[4]{' + Math.pow(k, 4) + '\\times ' + m + '}=' + rad(k, 4, m)),
               ['Fourth powers: ' + t('16, 81, 256, 625') + '. Which one divides ' + t(F(N)) + '?'], 'simplify 4th root ' + N);
           } },
-          { id: 'e8d', level: 'EMG', make: function (r, sh) {
+          { id: 'e8d', level: 'BEG', make: function (r, sh) {
             var d = sh.d.d, k = sh.d.k;
             return P.math(t('\\sqrt{\\dfrac{' + d * k * k + '}{' + d + '}}'), intChk(k, function (v) { if (Math.abs(v - k * Math.sqrt(d) / d) < 1e-9) return { code: 'inside-first', hint: 'Simplify inside the root first: ' + t('\\frac{' + d * k * k + '}{' + d + '}=' + k * k) + '.' }; return null; }), String(k),
               'Simplify inside first: ' + t('\\frac{' + d * k * k + '}{' + d + '}=' + k * k) + ', so ' + t('\\sqrt{' + k * k + '}=' + k) + '.', ['Do the division under the root first.'], 'sqrt(' + d * k * k + '/' + d + ')', { keys: 'radical' });
           } },
-          { id: 'e8e', level: 'PRG', make: function (r, sh) {
+          { id: 'e8e', level: 'EMG', make: function (r, sh) {
             var d = sh.e.d, k = sh.e.k;
             return P.math(t('\\sqrt[3]{\\dfrac{-' + d * k * k * k + '}{' + d + '}}'), intChk(-k), String(-k),
               'Simplify inside first: ' + t('\\frac{-' + d * k * k * k + '}{' + d + '}=-' + k * k * k) + ', so ' + t('\\sqrt[3]{-' + k * k * k + '}=-' + k) + ', since ' + t('(-' + k + ')^{3}=-' + k * k * k) + '.', ['Do the division under the root first. A cube root of a negative is negative.'], 'cbrt(-' + d * k * k * k + '/' + d + ')', { keys: 'radical' });
           } },
-          { id: 'e8f', level: 'PRG', make: function (r, sh) {
+          { id: 'e8f', level: 'BEG', make: function (r, sh) {
             var k = sh.f.k, K4 = Math.pow(k, 4);
             return P.mc(r, t('\\sqrt[4]{-' + K4 + '}'), [
               { html: 'Not possible in the real number system', right: true },
@@ -779,9 +779,9 @@
               { id: 'f', tex: '\\sqrt[4]{-' + Math.pow(f.k, 4) + '}', cls: 'nonreal', note: null }], false, 'classify six radicals');
           } }] },
       { num: '9', stem: 'Conversions and comparisons. Keep every answer exact.', parts: [
-        { id: 'e9a', level: 'PRG', make: function (r) { var k = r.int(3, 9), m = r.pick([2, 3, 5, 6, 7]); return P.radical('Write ' + t(rad(k, 2, m)) + ' as an entire radical.', { k: k, n: 2, m: m }, 'entire', 'Square the coefficient and multiply it in:<br>' + t(rad(k, 2, m) + '=\\sqrt{' + k + '^{2}\\times ' + m + '}=\\sqrt{' + k * k + '\\times ' + m + '}=\\sqrt{' + k * k * m + '}'), ['A number in front of a square root equals the square root of its square.'], 'entire radical ' + k + 'sqrt' + m); } },
-        { id: 'e9b', level: 'PRG', make: function (r) { var k = r.int(2, 5), m = r.pick([2, 3, 4, 5, 6, 7, 9, 10]); return P.radical('Write ' + t(rad(k, 3, m)) + ' as an entire radical.', { k: k, n: 3, m: m }, 'entire', 'Cube the coefficient and multiply it in:<br>' + t(rad(k, 3, m) + '=\\sqrt[3]{' + k + '^{3}\\times ' + m + '}=\\sqrt[3]{' + k * k * k + '\\times ' + m + '}=\\sqrt[3]{' + k * k * k * m + '}'), ['A number in front of a cube root equals the cube root of its <b>cube</b>.'], 'entire radical ' + k + 'cbrt' + m); } },
-        { id: 'e9c', level: 'ADV', make: function (r) {
+        { id: 'e9a', level: 'EMG', make: function (r) { var k = r.int(3, 9), m = r.pick([2, 3, 5, 6, 7]); return P.radical('Write ' + t(rad(k, 2, m)) + ' as an entire radical.', { k: k, n: 2, m: m }, 'entire', 'Square the coefficient and multiply it in:<br>' + t(rad(k, 2, m) + '=\\sqrt{' + k + '^{2}\\times ' + m + '}=\\sqrt{' + k * k + '\\times ' + m + '}=\\sqrt{' + k * k * m + '}'), ['A number in front of a square root equals the square root of its square.'], 'entire radical ' + k + 'sqrt' + m); } },
+        { id: 'e9b', level: 'EMG', make: function (r) { var k = r.int(2, 5), m = r.pick([2, 3, 4, 5, 6, 7, 9, 10]); return P.radical('Write ' + t(rad(k, 3, m)) + ' as an entire radical.', { k: k, n: 3, m: m }, 'entire', 'Cube the coefficient and multiply it in:<br>' + t(rad(k, 3, m) + '=\\sqrt[3]{' + k + '^{3}\\times ' + m + '}=\\sqrt[3]{' + k * k * k + '\\times ' + m + '}=\\sqrt[3]{' + k * k * k * m + '}'), ['A number in front of a cube root equals the cube root of its <b>cube</b>.'], 'entire radical ' + k + 'cbrt' + m); } },
+        { id: 'e9c', level: 'PRG', make: function (r) {
           var k = r.pick([2, 3]), m = r.pick([2, 3, 5]), M = Math.pow(k, 4) * m;
           var pp = P.math('Write ' + t(rad(-k, 4, m)) + ' as an entire radical.', negEntireChk(k, m), '-\\sqrt[4]{' + M + '}',
             t(rad(-k, 4, m) + '=-\\sqrt[4]{' + k + '^{4}\\times ' + m + '}=-\\sqrt[4]{' + Math.pow(k, 4) + '\\times ' + m + '}=-\\sqrt[4]{' + M + '}') + '.<br>Only the ' + t(k) + ' moves inside; the negative sign stays outside.',
@@ -789,7 +789,7 @@
           pp.bad = ['\\sqrt[4]{-' + M + '}', '\\sqrt[4]{' + M + '}', '-' + k + '\\sqrt[4]{' + m + '}', '-\\sqrt[4]{' + k * m + '}']; pp.good = ['-\\sqrt[4]{' + M + '}'];
           return pp;
         } },
-        { id: 'e9d', level: 'ADV', make: function (r) {
+        { id: 'e9d', level: 'EMG', make: function (r) {
           var k = r.pick([2, 3]);
           return P.mc(r, 'When you write ' + t(rad(-k, 4, r.pick([2, 3, 5]))) + ' as an entire radical, where does the negative sign have to stay, and why?', [
             { html: '<b>Outside</b>: the index ' + t('4') + ' is even, and an even root of a negative number is not a real number.', right: true },
@@ -798,7 +798,7 @@
             { html: 'It disappears, because a fourth power is always positive.', why: 'The original number is negative, so the entire radical must be negative too.' }],
             'Only the ' + t(k) + ' moves inside as ' + t(k + '^{4}') + '. The sign stays <b>outside</b>: the index is even, and a negative radicand under an even index is not possible in the real number system.', ['Is the original number positive or negative? Can ' + t('\\sqrt[4]{\\text{negative}}') + ' be real?'], 'where the negative sign goes');
         } },
-        { id: 'e9e', level: 'PRG', make: function (r) {
+        { id: 'e9e', level: 'EMG', make: function (r) {
           var a, b, c, d, i;
           for (i = 0; i < 400; i++) { a = r.int(2, 7); c = r.int(2, 7); b = r.pick([2, 3, 5, 6, 7, 10, 11]); d = r.pick([2, 3, 5, 6, 7, 10, 11]); var A = a * a * b, C = c * c * d; if (a !== c && b !== d && A !== C && Math.abs(A - C) <= 20) break; }
           var A2 = a * a * b, C2 = c * c * d, X = rad(a, 2, b), Y = rad(c, 2, d), big = A2 > C2 ? X : Y;
@@ -809,7 +809,7 @@
             t(X + '=\\sqrt{' + a * a + '\\times ' + b + '}=\\sqrt{' + A2 + '}') + '<br>' + t(Y + '=\\sqrt{' + c * c + '\\times ' + d + '}=\\sqrt{' + C2 + '}') + '<br>' + t(Math.max(A2, C2) + '>' + Math.min(A2, C2)) + ', so ' + t(big) + ' is larger.',
             ['Turn both into entire radicals, then compare the radicands.'], 'compare ' + X + ' vs ' + Y, true);
         } },
-        { id: 'e9f', level: 'ADV', make: function (r) {
+        { id: 'e9f', level: 'EMG', make: function (r) {
           var a, b, c, i;
           for (i = 0; i < 400; i++) { a = r.pick([2, 3]); b = r.int(3, 12); var A = a * a * a * b; c = A + r.pick([-3, -2, -1, 1, 2, 3]); if (ex.simplest(b, 3) && !isPow(c, 3) && c > 0) break; }
           var A3 = a * a * a * b, X = rad(a, 3, b), Y = '\\sqrt[3]{' + c + '}', big = A3 > c ? X : Y;
@@ -820,7 +820,7 @@
             t(X + '=\\sqrt[3]{' + a + '^{3}\\times ' + b + '}=\\sqrt[3]{' + a * a * a + '\\times ' + b + '}=\\sqrt[3]{' + A3 + '}') + '. ' + t(Math.max(A3, c) + '>' + Math.min(A3, c)) + ', so ' + t(big) + ' is larger.',
             ['Write ' + t(X) + ' as an entire radical (cube the coefficient).'], 'compare cube roots', true);
         } },
-        { id: 'e9g', level: 'PRG', make: function (r) {
+        { id: 'e9g', level: 'EMG', make: function (r) {
           var k = r.int(2, 5), K4 = Math.pow(k, 4), X = '\\sqrt{\\sqrt{' + K4 + '}}';
           return P.mc(r, 'Is ' + t(X) + ' rational? Simplify it and name the <b>strictest</b> set it belongs to.', [
             { html: t(k) + ', strictest set ' + t('N'), right: true },
@@ -839,9 +839,9 @@
         parts: [
           { id: 'e10a', level: 'PRG', make: function (r, sh) { return P.radical('Find the exact side length of the square in simplest mixed radical form.', { k: sh.k, n: 2, m: sh.m }, 'mixed', t('s^{2}=' + sh.A) + ', so ' + t('s=\\sqrt{' + sh.A + '}=\\sqrt{' + sh.k * sh.k + '\\times ' + sh.m + '}=' + rad(sh.k, 2, sh.m)) + ' cm.', ['The side of a square is the square root of its area.'], 'square side from area ' + sh.A); } },
           { id: 'e10b', level: 'PRG', make: function (r, sh) { return P.radical('Find the exact edge length of the cube in simplest mixed radical form.', { k: sh.j, n: 3, m: sh.n }, 'mixed', t('e^{3}=' + F(sh.V)) + ', so ' + t('e=\\sqrt[3]{' + F(sh.V) + '}') + '. ' + t(F(sh.V) + '=' + sh.j * sh.j * sh.j + '\\times ' + sh.n + '=' + sh.j + '^{3}\\times ' + sh.n) + ', so ' + t('e=' + rad(sh.j, 3, sh.n)) + ' cm.', ['The edge of a cube is the cube root of its volume.'], 'cube edge from volume ' + sh.V); } },
-          { id: 'e10c', level: 'PRG', make: function (r, sh) { return setsPart('Classify both lengths: tick every set each belongs to.', [{ id: 's', tex: rad(sh.k, 2, sh.m), cls: 'irr', note: sh.m + '\\text{ is not a perfect square}' }, { id: 'e', tex: rad(sh.j, 3, sh.n), cls: 'irr', note: sh.n + '\\text{ is not a perfect cube}' }], false, 'classify side and edge'); } },
-          { id: 'e10d', level: 'PRG', make: function (r, sh) { return P.radical('Find the exact perimeter of the square.', { k: 4 * sh.k, n: 2, m: sh.m }, 'mixed', t('P=4\\times ' + rad(sh.k, 2, sh.m) + '=' + rad(4 * sh.k, 2, sh.m)) + ' cm — still irrational.', ['Perimeter of a square = 4 × side.'], 'perimeter ' + 4 * sh.k + 'sqrt' + sh.m); } },
-          { id: 'e10e', level: 'MAS', make: function (r, sh) {
+          { id: 'e10c', level: 'EMG', make: function (r, sh) { return setsPart('Classify both lengths: tick every set each belongs to.', [{ id: 's', tex: rad(sh.k, 2, sh.m), cls: 'irr', note: sh.m + '\\text{ is not a perfect square}' }, { id: 'e', tex: rad(sh.j, 3, sh.n), cls: 'irr', note: sh.n + '\\text{ is not a perfect cube}' }], false, 'classify side and edge'); } },
+          { id: 'e10d', level: 'EMG', make: function (r, sh) { return P.radical('Find the exact perimeter of the square.', { k: 4 * sh.k, n: 2, m: sh.m }, 'mixed', t('P=4\\times ' + rad(sh.k, 2, sh.m) + '=' + rad(4 * sh.k, 2, sh.m)) + ' cm — still irrational.', ['Perimeter of a square = 4 × side.'], 'perimeter ' + 4 * sh.k + 'sqrt' + sh.m); } },
+          { id: 'e10e', level: 'PRG', make: function (r, sh) {
             return P.mc(r, 'Is a rational multiple of an irrational number ever rational?', [
               { html: 'Never, unless the rational number is ' + t('0') + ': if ' + t('q\\neq 0') + ' and ' + t('qx') + ' were rational, then ' + t('x=\\frac{qx}{q}') + ' would be rational too.', right: true },
               { html: 'Always: multiplying by a rational number keeps the answer rational.', why: 'Your perimeter ' + t(rad(4 * sh.k, 2, sh.m)) + ' is a rational multiple (' + t('4') + ') of an irrational number — and it is irrational.' },
@@ -851,19 +851,19 @@
               ['Suppose ' + t('qx') + ' were rational. Divide by ' + t('q') + ' — what would that say about ' + t('x') + '?'], 'rational multiple of irrational');
           } }] },
       { num: '11', shared: e11Shared, stem: e11Stem, parts: [
-        { id: 'e11a', level: 'PRG', make: function (r, sh) {
+        { id: 'e11a', level: 'BEG', make: function (r, sh) {
           return P.fields('Write each number as a decimal correct to three decimal places.', sh.items.map(function (x) { return { label: t(x.tex + '\\approx'), name: x.id }; }),
             sh.items.map(function (x) { var base = K.approx(x.v, 3); return function (resp) { var p = HW.parse.number(resp); if (p.ok && Math.abs(p.value - x.v) < 1e-12) return ok(); return base(resp); }; }),
             sh.items.map(function (x) { return d3(x.v); }), sh.items.map(function (x) { return t(x.tex + '\\approx ' + d3(x.v)); }).join(', '),
             sh.items.map(function (x) { return t(x.tex + '\\approx ' + d3(x.v)); }).join('<br>') + '<br>(' + t(sh.items[5].tex + '=\\sqrt{' + sh.k * sh.k + '}=' + sh.k) + ' exactly.)',
             ['Use your calculator. For a repeating decimal, write out four digits and round.'], 'eight decimals to 3 dp');
         } },
-        { id: 'e11b', level: 'PRG', make: function (r, sh) {
+        { id: 'e11b', level: 'EMG', make: function (r, sh) {
           var srt = sh.items.slice().sort(function (a, b) { return a.v - b.v; });
           return P.order(r, 'List all eight numbers in order from <b>least to greatest</b>. (This is the order you would plot them on a number line.)', srt.map(function (x) { return { id: x.id, tex: x.tex }; }), { sep: '<' },
             'Least to greatest: ' + t(srt.map(function (x) { return x.tex; }).join('\\ <\\ ')) + '<br>(' + srt.map(function (x) { return t(d3(x.v)); }).join(', ') + ')', ['Use your three-decimal values from the previous part.'], 'order eight numbers');
         } },
-        { id: 'e11c', level: 'ADV', make: function (r, sh) {
+        { id: 'e11c', level: 'EMG', make: function (r, sh) {
           var th = sh.three, vals = th.map(function (x) { return x.v; });
           var perms = [[0, 1, 2], [0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]], others = r.sample(perms.slice(1), 3);
           var opts = [perms[0]].concat(others).map(function (pp, j) {
@@ -874,7 +874,7 @@
             th.slice().sort(function (a, b) { return a.v - b.v; }).map(function (x) { return t(x.tex + '\\approx ' + d3(x.v)); }).join(', ') + '.<br>' + lineSVG(th.map(function (x) { return { v: x.v, lab: x.lab }; })),
             ['Compare the three decimals from part (a), to the hundredths.'], 'magnified number line');
         } },
-        { id: 'e11d', level: 'PRG', make: function (r, sh) {
+        { id: 'e11d', level: 'EMG', make: function (r, sh) {
           var opts = r.shuffle(sh.items).map(function (x) { return x.tex; }), want = sh.items.filter(function (x) { return x.irr; }).map(function (x) { return x.tex; });
           var by = {}; sh.items.forEach(function (x) { by[x.tex] = x; });
           return { prompt: 'Which of the eight numbers are in ' + t('\\overline{Q}') + ' (irrational)? Decide without a calculator.', input: { type: 'select', options: opts }, key: want, answer: t(want.join(',\\ ')), text: 'which are irrational',
@@ -887,14 +887,14 @@
         } }] },
       /* ===== Part D — Reasoning and error analysis ===== */
       { num: '12', section: 'Extra practice D — Reasoning and error analysis', stem: 'State whether each claim is <b>true</b> or <b>false</b>.', parts: [
-        { id: 'e12a', level: 'PRG', make: function (r) { var ab = r.pick([45, 27, 18, 36, 81, 12, 63]); return P.tf(r, 'Every non-terminating decimal is irrational.', false, 'Counterexample: ' + t('0.\\overline{' + ab + '}=' + ex.texRat(ex.norm(ab, 99))) + ' never terminates, but it repeats, so it is rational.', '<b>False.</b> ' + t('0.\\overline{' + ab + '}=' + ex.texRat(ex.norm(ab, 99))) + ' never terminates, but it repeats, so it is rational. An irrational decimal must be non-terminating <i>and</i> non-repeating.', ['Can a decimal go on forever and still be a fraction?'], 'TF non-terminating → irrational'); } },
-        { id: 'e12b', level: 'ADV', make: function (r) { var k = r.pick([12, 18, 20, 24, 28, 45]), mx = mixedOf(nt.factor(k), 2); return P.tf(r, 'For a natural number ' + t('n') + ', ' + t('\\sqrt{n}') + ' is irrational unless ' + t('n') + ' is a perfect square.', true, 'Try to find a counterexample. If ' + t('n') + ' isn’t a perfect square, some prime has an odd exponent and is left under the root.', '<b>True.</b> Taking ' + t('\\sqrt{n}') + ' halves every exponent in the prime factorization of ' + t('n') + '. The halves are all whole numbers exactly when every exponent is even — when ' + t('n') + ' is a perfect square. Otherwise a prime is left under the root. E.g. ' + t('\\sqrt{36}=6') + ', but ' + t('\\sqrt{' + k + '}=' + rad(mx.k, 2, mx.m)) + '.', ['Think about the exponents in the prime factorization of ' + t('n') + '.'], 'TF sqrt n irrational unless square'); } },
-        { id: 'e12c', level: 'PRG', make: function (r) { var a = r.pick([2, 4, 6]), b = r.pick([2, 4]), v = Math.pow(2, a) * Math.pow(3, b); return P.tf(r, 'If every exponent in a natural number’s prime factorization is even, its square root is a natural number.', true, 'Test an example: ' + t('\\sqrt{2^{' + a + '}\\times 3^{' + b + '}}=' + fTex([[2, a / 2], [3, b / 2]])) + ', a natural number.', '<b>True.</b> Halving each even exponent gives whole-number exponents, and a product of primes to whole-number powers is a natural number. E.g. ' + t('\\sqrt{2^{' + a + '}\\times 3^{' + b + '}}=' + fTex([[2, a / 2], [3, b / 2]]) + '=' + Math.sqrt(v)) + '.', ['Halve each exponent. What kind of number do you get?'], 'TF even exponents → natural root'); } },
+        { id: 'e12a', level: 'EMG', make: function (r) { var ab = r.pick([45, 27, 18, 36, 81, 12, 63]); return P.tf(r, 'Every non-terminating decimal is irrational.', false, 'Counterexample: ' + t('0.\\overline{' + ab + '}=' + ex.texRat(ex.norm(ab, 99))) + ' never terminates, but it repeats, so it is rational.', '<b>False.</b> ' + t('0.\\overline{' + ab + '}=' + ex.texRat(ex.norm(ab, 99))) + ' never terminates, but it repeats, so it is rational. An irrational decimal must be non-terminating <i>and</i> non-repeating.', ['Can a decimal go on forever and still be a fraction?'], 'TF non-terminating → irrational'); } },
+        { id: 'e12b', level: 'EMG', make: function (r) { var k = r.pick([12, 18, 20, 24, 28, 45]), mx = mixedOf(nt.factor(k), 2); return P.tf(r, 'For a natural number ' + t('n') + ', ' + t('\\sqrt{n}') + ' is irrational unless ' + t('n') + ' is a perfect square.', true, 'Try to find a counterexample. If ' + t('n') + ' isn’t a perfect square, some prime has an odd exponent and is left under the root.', '<b>True.</b> Taking ' + t('\\sqrt{n}') + ' halves every exponent in the prime factorization of ' + t('n') + '. The halves are all whole numbers exactly when every exponent is even — when ' + t('n') + ' is a perfect square. Otherwise a prime is left under the root. E.g. ' + t('\\sqrt{36}=6') + ', but ' + t('\\sqrt{' + k + '}=' + rad(mx.k, 2, mx.m)) + '.', ['Think about the exponents in the prime factorization of ' + t('n') + '.'], 'TF sqrt n irrational unless square'); } },
+        { id: 'e12c', level: 'EMG', make: function (r) { var a = r.pick([2, 4, 6]), b = r.pick([2, 4]), v = Math.pow(2, a) * Math.pow(3, b); return P.tf(r, 'If every exponent in a natural number’s prime factorization is even, its square root is a natural number.', true, 'Test an example: ' + t('\\sqrt{2^{' + a + '}\\times 3^{' + b + '}}=' + fTex([[2, a / 2], [3, b / 2]])) + ', a natural number.', '<b>True.</b> Halving each even exponent gives whole-number exponents, and a product of primes to whole-number powers is a natural number. E.g. ' + t('\\sqrt{2^{' + a + '}\\times 3^{' + b + '}}=' + fTex([[2, a / 2], [3, b / 2]]) + '=' + Math.sqrt(v)) + '.', ['Halve each exponent. What kind of number do you get?'], 'TF even exponents → natural root'); } },
         { id: 'e12d', level: 'PRG', make: function (r) { var a = r.pick([2, 3, 5]), j = r.pick([2, 3]); return P.tf(r, 'The product of two irrational numbers is irrational.', false, 'Counterexample: ' + t('\\sqrt{' + a + '}\\times\\sqrt{' + a * j * j + '}=\\sqrt{' + a * a * j * j + '}=' + a * j) + ', which is rational.', '<b>False.</b> ' + t('\\sqrt{' + a + '}\\times\\sqrt{' + a + '}=' + a) + ' and ' + t('\\sqrt{' + a + '}\\times\\sqrt{' + a * j * j + '}=' + a * j) + ' are both rational.', ['Try multiplying ' + t('\\sqrt{2}') + ' by itself.'], 'TF irrational × irrational'); } },
-        { id: 'e12e', level: 'PRG', make: function (r) { var k = r.int(2, 5); return P.tf(r, 'A radical with an odd index always represents a real number.', true, 'Odd powers of negatives are negative: ' + t('\\sqrt[3]{-' + k * k * k + '}=-' + k) + ', since ' + t('(-' + k + ')^{3}=-' + k * k * k) + '.', '<b>True.</b> An odd power of a negative number is negative, so every real radicand — positive, zero or negative — has a real odd-index root. E.g. ' + t('\\sqrt[3]{-' + k * k * k + '}=-' + k) + '. Only an <i>even</i> index over a negative radicand is not real.', ['Try a cube root of a negative number.'], 'TF odd index always real'); } },
-        { id: 'e12f', level: 'PRG', make: function (r) { var k = r.int(4, 12); return P.tf(r, 'An entire radical is always irrational.', false, 'Counterexample: ' + t('\\sqrt{' + k * k + '}') + ' is an entire radical, but it equals ' + t(k) + '.', '<b>False.</b> ' + t('\\sqrt{' + k * k + '}') + ' is an entire radical, but ' + t('\\sqrt{' + k * k + '}=' + k) + ' is rational.', ['Is ' + t('\\sqrt{49}') + ' an entire radical? Is it irrational?'], 'TF entire radical irrational'); } },
-        { id: 'e12g', level: 'ADV', outcome: 'AN1', make: function (r) { var pr = r.pick([[9, 20], [8, 15], [7, 12], [10, 21], [4, 25]]); return P.tf(r, 'If ' + t('\\text{GCF}(a,b)=1') + ', then ' + t('\\text{LCM}(a,b)=ab') + '.', true, 'Use ' + t('\\text{GCF}\\times\\text{LCM}=ab') + ': with a GCF of ' + t('1') + ', the LCM must be ' + t('ab') + '. E.g. ' + t('\\text{LCM}(' + pr[0] + ',' + pr[1] + ')=' + pr[0] * pr[1]) + '.', '<b>True.</b> ' + t('\\text{GCF}(a,b)\\times\\text{LCM}(a,b)=ab') + ' always holds, so a GCF of ' + t('1') + ' gives ' + t('\\text{LCM}(a,b)=ab') + '. E.g. ' + t('\\text{GCF}(' + pr[0] + ',' + pr[1] + ')=1') + ' and ' + t('\\text{LCM}(' + pr[0] + ',' + pr[1] + ')=' + pr[0] * pr[1] + '=' + pr[0] + '\\times ' + pr[1]) + '.', ['Test it with two numbers that share no factor, like ' + t('9') + ' and ' + t('20') + '.'], 'TF GCF 1 → LCM ab'); } },
-        { id: 'e12h', level: 'ADV', make: function (r) { var c = r.pick([3, 6, 7, 9, 11]), y = r.pick([2, 4, 5, 8, 10]), x = coprimeIn(r, 1, y - 1, y); return P.tf(r, 'If a fraction’s denominator contains a prime other than ' + t('2') + ' or ' + t('5') + ', its decimal repeats.', false, 'Counterexample: ' + t('\\frac{' + c * x + '}{' + c * y + '}') + ' has a denominator containing ' + t(nt.factor(c).filter(function (pe) { return pe[0] !== 2 && pe[0] !== 5; })[0][0]) + ', but it reduces to ' + t('\\frac{' + x + '}{' + y + '}=' + K.decTex([x, y])) + ', which terminates.', '<b>False</b> as written — the test applies only to the <b>reduced</b> fraction. ' + t('\\frac{' + c * x + '}{' + c * y + '}=\\frac{' + x + '}{' + y + '}=' + K.decTex([x, y])) + ' terminates.', ['What if the fraction isn’t in lowest terms?'], 'TF denominator test unreduced'); } }] },
+        { id: 'e12e', level: 'EMG', make: function (r) { var k = r.int(2, 5); return P.tf(r, 'A radical with an odd index always represents a real number.', true, 'Odd powers of negatives are negative: ' + t('\\sqrt[3]{-' + k * k * k + '}=-' + k) + ', since ' + t('(-' + k + ')^{3}=-' + k * k * k) + '.', '<b>True.</b> An odd power of a negative number is negative, so every real radicand — positive, zero or negative — has a real odd-index root. E.g. ' + t('\\sqrt[3]{-' + k * k * k + '}=-' + k) + '. Only an <i>even</i> index over a negative radicand is not real.', ['Try a cube root of a negative number.'], 'TF odd index always real'); } },
+        { id: 'e12f', level: 'EMG', make: function (r) { var k = r.int(4, 12); return P.tf(r, 'An entire radical is always irrational.', false, 'Counterexample: ' + t('\\sqrt{' + k * k + '}') + ' is an entire radical, but it equals ' + t(k) + '.', '<b>False.</b> ' + t('\\sqrt{' + k * k + '}') + ' is an entire radical, but ' + t('\\sqrt{' + k * k + '}=' + k) + ' is rational.', ['Is ' + t('\\sqrt{49}') + ' an entire radical? Is it irrational?'], 'TF entire radical irrational'); } },
+        { id: 'e12g', level: 'PRG', outcome: 'AN1', make: function (r) { var pr = r.pick([[9, 20], [8, 15], [7, 12], [10, 21], [4, 25]]); return P.tf(r, 'If ' + t('\\text{GCF}(a,b)=1') + ', then ' + t('\\text{LCM}(a,b)=ab') + '.', true, 'Use ' + t('\\text{GCF}\\times\\text{LCM}=ab') + ': with a GCF of ' + t('1') + ', the LCM must be ' + t('ab') + '. E.g. ' + t('\\text{LCM}(' + pr[0] + ',' + pr[1] + ')=' + pr[0] * pr[1]) + '.', '<b>True.</b> ' + t('\\text{GCF}(a,b)\\times\\text{LCM}(a,b)=ab') + ' always holds, so a GCF of ' + t('1') + ' gives ' + t('\\text{LCM}(a,b)=ab') + '. E.g. ' + t('\\text{GCF}(' + pr[0] + ',' + pr[1] + ')=1') + ' and ' + t('\\text{LCM}(' + pr[0] + ',' + pr[1] + ')=' + pr[0] * pr[1] + '=' + pr[0] + '\\times ' + pr[1]) + '.', ['Test it with two numbers that share no factor, like ' + t('9') + ' and ' + t('20') + '.'], 'TF GCF 1 → LCM ab'); } },
+        { id: 'e12h', level: 'PRG', make: function (r) { var c = r.pick([3, 6, 7, 9, 11]), y = r.pick([2, 4, 5, 8, 10]), x = coprimeIn(r, 1, y - 1, y); return P.tf(r, 'If a fraction’s denominator contains a prime other than ' + t('2') + ' or ' + t('5') + ', its decimal repeats.', false, 'Counterexample: ' + t('\\frac{' + c * x + '}{' + c * y + '}') + ' has a denominator containing ' + t(nt.factor(c).filter(function (pe) { return pe[0] !== 2 && pe[0] !== 5; })[0][0]) + ', but it reduces to ' + t('\\frac{' + x + '}{' + y + '}=' + K.decTex([x, y])) + ', which terminates.', '<b>False</b> as written — the test applies only to the <b>reduced</b> fraction. ' + t('\\frac{' + c * x + '}{' + c * y + '}=\\frac{' + x + '}{' + y + '}=' + K.decTex([x, y])) + ' terminates.', ['What if the fraction isn’t in lowest terms?'], 'TF denominator test unreduced'); } }] },
       { num: '13',
         shared: function (r) {
           var k, s, m, i;
@@ -903,7 +903,7 @@
         },
         stem: function (sh) { var rest = sh.N / (sh.s * sh.s); return 'A student was asked to simplify ' + t('\\sqrt{' + F(sh.N) + '}') + ' and classify the result. Here is the entire submission:\\[\\sqrt{' + F(sh.N) + '}=\\sqrt{' + sh.s * sh.s + '\\times ' + rest + '}=\\sqrt{' + sh.s * sh.s + '}\\times\\sqrt{' + rest + '}=' + rad(sh.s, 2, rest) + '\\]“Because it still has a radical sign, it is irrational, so it belongs to ' + t('\\overline{Q}') + ' and that is the only set it is in.”'; },
         parts: [
-          { id: 'e13a', level: 'ADV', make: function (r, sh) {
+          { id: 'e13a', level: 'PRG', make: function (r, sh) {
             var rest = sh.N / (sh.s * sh.s), T = function (s) { return HW.tex(s); };
             var all = [{ value: 'e1', html: T(t(rad(sh.s, 2, rest)) + ' isn’t finished: ' + t(rest) + ' still has a perfect-square factor.'), err: true },
               { value: 'e2', html: T('A radical sign doesn’t make a number irrational (e.g. ' + t('\\sqrt{9}=3') + ').'), err: true },
@@ -918,13 +918,13 @@
               solution: '1. ' + t(rad(sh.s, 2, rest)) + ' is not finished: ' + t(rest + '=' + (sh.k / sh.s) * (sh.k / sh.s) + '\\times ' + sh.m) + ' still holds a perfect square.<br>2. A radical sign does not make a number irrational (' + t('\\sqrt{9}=3') + '); what matters is whether the radicand is a perfect square.<br>3. Every irrational number is also real, so ' + t('\\overline{Q}') + ' is never the only set — ' + t('R') + ' is missing.',
               hints: ['Check three things: is the radical simplified, is the reason right, and is the list of sets complete?'] };
           } },
-          { id: 'e13b', level: 'PRG', make: function (r, sh) {
+          { id: 'e13b', level: 'EMG', make: function (r, sh) {
             var rest = sh.N / (sh.s * sh.s);
             return P.radical('Give the correct simplest mixed radical form of ' + t('\\sqrt{' + F(sh.N) + '}') + '.', { k: sh.k, n: 2, m: sh.m }, 'mixed', 'Use the <b>largest</b> perfect square factor of ' + t(F(sh.N) + '=' + K.fac(sh.N)) + ', which is ' + t(sh.k * sh.k) + ':<br>' + t('\\sqrt{' + F(sh.N) + '}=\\sqrt{' + sh.k * sh.k + '\\times ' + sh.m + '}=\\sqrt{' + sh.k * sh.k + '}\\times\\sqrt{' + sh.m + '}=' + rad(sh.k, 2, sh.m)),
               ['Find the <b>largest</b> perfect square factor so the job ends in one step.'], 'correct sqrt ' + sh.N);
           } },
-          { id: 'e13c', level: 'PRG', make: function (r, sh) { return setsPart('List every set the simplified number really belongs to.', [{ id: 'x', tex: rad(sh.k, 2, sh.m), cls: 'irr', note: sh.m + '\\text{ is not a perfect square}' }], false, 'classify ' + sh.k + 'sqrt' + sh.m); } },
-          { id: 'e13d', level: 'ADV', make: function (r, sh) {
+          { id: 'e13c', level: 'EMG', make: function (r, sh) { return setsPart('List every set the simplified number really belongs to.', [{ id: 'x', tex: rad(sh.k, 2, sh.m), cls: 'irr', note: sh.m + '\\text{ is not a perfect square}' }], false, 'classify ' + sh.k + 'sqrt' + sh.m); } },
+          { id: 'e13d', level: 'EMG', make: function (r, sh) {
             return P.mc(r, 'Which is a reliable test for deciding whether ' + t('\\sqrt{n}') + ' (for a natural number ' + t('n') + ') is irrational?', [
               { html: t('\\sqrt{n}') + ' is rational exactly when ' + t('n') + ' is a perfect square — every exponent in its prime factorization is even.', right: true },
               { html: 'If the answer still has a radical sign, it is irrational.', why: t('\\sqrt{9}') + ' has a radical sign but equals ' + t('3') + '. You have to check the radicand.' },
@@ -937,13 +937,13 @@
         shared: function (r) { var x1 = r.int(2, 4), x2 = r.int(1, x1 - 1), y1 = r.int(1, 2), y2 = r.int(y1 + 1, 3), af = [[2, x1], [5, y1]], bf = [[2, x2], [5, y2]]; return { af: af, bf: bf, a: fVal(af), b: fVal(bf), g: fVal([[2, x2], [5, y1]]), l: fVal([[2, x1], [5, y2]]), gf: [[2, x2], [5, y1]], lf: [[2, x1], [5, y2]] }; },
         stem: function (sh) { return 'A second student is given ' + t('a=' + fTex(sh.af)) + ' and ' + t('b=' + fTex(sh.bf)) + ' and writes:<br>“' + t('\\text{GCF}(a,b)=' + fTex(sh.lf) + '=' + F(sh.l)) + ' and ' + t('\\text{LCM}(a,b)=' + fTex(sh.gf) + '=' + F(sh.g)) + '. So ' + t('\\frac{a}{b}=\\frac{' + sh.a + '}{' + sh.b + '}') + ', and since the denominator ' + t(sh.b + '=' + fTex(sh.bf)) + ' contains a ' + t('2') + ' and a ' + t('5') + ', the decimal repeats.”'; },
         parts: [
-          { id: 'e14a', level: 'PRG', outcome: 'AN1', make: function (r, sh) {
+          { id: 'e14a', level: 'EMG', outcome: 'AN1', make: function (r, sh) {
             return P.fields('The GCF and LCM have been swapped. State the correct values.', [{ label: t('\\text{GCF}(a,b)='), name: 'GCF' }, { label: t('\\text{LCM}(a,b)='), name: 'LCM' }],
               [numChk(sh.g, [{ v: sh.l, code: 'gcf-lcm', hint: 'That’s the LCM again. The GCF takes the <b>lower</b> exponent of each shared prime.' }]), numChk(sh.l, [{ v: sh.g, code: 'gcf-lcm', hint: 'That’s the GCF. The LCM takes the <b>higher</b> exponent of every prime.' }])], [String(sh.g), String(sh.l)],
               t('\\text{GCF}=' + F(sh.g)) + ', ' + t('\\text{LCM}=' + F(sh.l)),
               t('\\text{GCF}(a,b)=' + fTex(sh.gf) + '=' + F(sh.g)) + ' (lower exponent of each shared prime)<br>' + t('\\text{LCM}(a,b)=' + fTex(sh.lf) + '=' + F(sh.l)) + ' (higher exponent of every prime)', ['GCF: lower exponents. LCM: higher exponents.'], 'swapped GCF/LCM');
           } },
-          { id: 'e14b', level: 'ADV', make: function (r, sh) {
+          { id: 'e14b', level: 'EMG', make: function (r, sh) {
             return P.mc(r, 'The denominator test has been misremembered <i>and</i> misapplied. Which statement gives the correct rule and the step the student skipped?', [
               { html: 'A fraction <b>terminates</b> when its <b>reduced</b> denominator has no prime factors other than ' + t('2') + ' and ' + t('5') + '. The student skipped reducing ' + t('\\frac{' + sh.a + '}{' + sh.b + '}') + ' first.', right: true },
               { html: 'A fraction <b>repeats</b> when its denominator contains a ' + t('2') + ' or a ' + t('5') + '. The student skipped dividing.', why: 'It’s the other way round: 2s and 5s are exactly what <i>allow</i> a decimal to terminate (e.g. ' + t('\\frac{1}{4}=0.25') + ').' },
@@ -952,12 +952,12 @@
               '<b>Rule:</b> a fraction terminates when its <i>reduced</i> denominator has no prime factors other than ' + t('2') + ' and ' + t('5') + '; any other prime makes it repeat. Containing a 2 and a 5 is exactly what allows it to terminate.<br><b>Skipped step:</b> reducing ' + t('\\frac{' + sh.a + '}{' + sh.b + '}') + ' to lowest terms first.',
               ['Which primes in a denominator make a decimal terminate?'], 'denominator test rule');
           } },
-          { id: 'e14c', level: 'PRG', make: function (r, sh) {
+          { id: 'e14c', level: 'BEG', make: function (r, sh) {
             var red = ex.norm(sh.a, sh.b);
             return P.repeating('Give the correct decimal for ' + t('\\frac{a}{b}') + '.', red, {}, t('a=' + sh.a) + ', ' + t('b=' + sh.b) + '. ' + t('\\frac{a}{b}=\\frac{' + sh.a + '}{' + sh.b + '}=' + ex.texRat(red)) + '. Denominator ' + t(denEq(red[1])) + ' — only 2s and 5s, so it terminates: ' + t(ex.texRat(red) + '=' + K.decTex(red)) + '.',
               ['Reduce the fraction first, then divide.'], 'decimal of a/b (terminates)');
           } },
-          { id: 'e14d', level: 'PRG', make: function (r, sh) { var red = ex.norm(sh.a, sh.b); return setsPart('List every set ' + t('\\frac{a}{b}') + ' belongs to.', [{ id: 'ab', tex: '\\frac{a}{b}', cls: 'frac', note: '\\frac{a}{b}=' + K.decTex(red) }], false, 'classify a/b'); } }] },
+          { id: 'e14d', level: 'BEG', make: function (r, sh) { var red = ex.norm(sh.a, sh.b); return setsPart('List every set ' + t('\\frac{a}{b}') + ' belongs to.', [{ id: 'ab', tex: '\\frac{a}{b}', cls: 'frac', note: '\\frac{a}{b}=' + K.decTex(red) }], false, 'classify a/b'); } }] },
       { num: '15', stem: 'Statement 12(b) is worth arguing properly. Let ' + t('n') + ' be a natural number.',
         shared: function (r) {
           var f, n, i;
@@ -965,7 +965,7 @@
           return { f: f, n: n };
         },
         parts: [
-          { id: 'e15a', level: 'MAS', make: function (r, sh) {
+          { id: 'e15a', level: 'PRG', make: function (r, sh) {
             return P.mc(r, 'Using prime factorizations and exponents, why is ' + t('\\sqrt{n}') + ' a natural number exactly when every exponent in ' + t('n') + ' is even — and why can ' + t('\\sqrt{n}') + ' never be a fraction like ' + t('\\frac{7}{2}') + '?', [
               { html: 'Squaring doubles every exponent, so ' + t('\\sqrt{n}') + ' is natural exactly when every exponent of ' + t('n') + ' is even. And if ' + t('\\sqrt{n}=\\frac{c}{d}') + ' in lowest terms with ' + t('d>1') + ', then ' + t('nd^{2}=c^{2}') + ': a prime of ' + t('d') + ' would divide ' + t('c') + ' — impossible.', right: true },
               { html: 'Taking a square root halves the exponents, so ' + t('\\sqrt{n}') + ' always has whole-number exponents and is always natural.', why: 'Halving an odd exponent doesn’t give a whole number. Try ' + t('n=12=2^{2}\\times 3') + '.' },
@@ -974,20 +974,20 @@
               'Write ' + t('n=p_{1}^{e_{1}}\\times p_{2}^{e_{2}}\\times\\cdots') + '. Squaring a natural number doubles every exponent, so a natural ' + t('s') + ' with ' + t('s^{2}=n') + ' must be ' + t('p_{1}^{e_{1}/2}\\times p_{2}^{e_{2}/2}\\times\\cdots') + ' — possible only if every ' + t('e_{i}') + ' is even.<br>A non-whole fraction can’t work either: if ' + t('\\sqrt{n}=\\frac{c}{d}') + ' in lowest terms with ' + t('d>1') + ', then ' + t('nd^{2}=c^{2}') + '. Any prime in ' + t('d') + ' divides ' + t('c^{2}') + ', hence ' + t('c') + ' — but ' + t('c') + ' and ' + t('d') + ' share no primes. So ' + t('\\sqrt{n}') + ' is either natural or irrational.',
               ['What does squaring do to the exponents in a prime factorization?'], 'why sqrt n natural or irrational');
           } },
-          { id: 'e15b', level: 'PRG', outcome: 'AN1', make: function (r, sh) {
+          { id: 'e15b', level: 'BEG', outcome: 'AN1', make: function (r, sh) {
             var opts = sh.f.map(function (pe) { var odd = pe[1] % 2 === 1; return { html: 'The power ' + t(pe[0] + '^{' + pe[1] + '}'), right: odd, why: odd ? null : 'The exponent ' + t(pe[1]) + ' is even, so ' + t(pe[0] + '^{' + pe[1] + '}') + ' comes out of the root completely.' }; });
             opts.push({ html: 'None — ' + t('n') + ' is a perfect square.', why: 'Check each exponent: is every one of them even?' });
             var odd = sh.f.filter(function (pe) { return pe[1] % 2; })[0];
             return P.mc(r, 'Test your reasoning on ' + t('n=' + fTex(sh.f)) + '. Which power spoils it (keeps ' + t('\\sqrt{n}') + ' from being natural)?', opts,
               'Exponents ' + t(fExps(sh.f).join(',\\ ')) + ': the exponent ' + t(odd[1]) + ' on the prime ' + t(odd[0]) + ' is odd, so ' + t('n') + ' is not a perfect square.', ['Which exponent is odd?'], 'which exponent spoils', true);
           } },
-          { id: 'e15c', level: 'PRG', make: function (r, sh) {
+          { id: 'e15c', level: 'EMG', make: function (r, sh) {
             var mx = mixedOf(sh.f, 2);
             return P.radical('Write ' + t('\\sqrt{n}') + ' in simplest mixed radical form, where ' + t('n=' + fTex(sh.f)) + '.', { k: mx.k, n: 2, m: mx.m }, 'mixed',
               t('n=' + fTex(sh.f.map(function (pe) { return [pe[0], pe[1] - pe[1] % 2]; })) + '\\times ' + mx.m) + '<br>' + t('\\sqrt{n}=' + fTex(sh.f.map(function (pe) { return [pe[0], Math.floor(pe[1] / 2)]; })) + '\\sqrt{' + mx.m + '}=' + rad(mx.k, 2, mx.m)) + '<br>(' + t('n=' + F(sh.n)) + ', and ' + t(mx.k + '^{2}\\times ' + mx.m + '=' + F(sh.n)) + ' ✓)',
               ['Halve each even exponent; one copy of the prime with the odd exponent stays under the root.'], 'sqrt n simplest (one odd exponent)');
           } },
-          { id: 'e15d', level: 'PRG', make: function (r, sh) { var mx = mixedOf(sh.f, 2); return setsPart('Classify ' + t('\\sqrt{n}') + ': tick every set it belongs to.', [{ id: 'x', tex: '\\sqrt{n}', cls: 'irr', note: '\\sqrt{n}=' + rad(mx.k, 2, mx.m) }], false, 'classify sqrt n'); } }] },
+          { id: 'e15d', level: 'EMG', make: function (r, sh) { var mx = mixedOf(sh.f, 2); return setsPart('Classify ' + t('\\sqrt{n}') + ': tick every set it belongs to.', [{ id: 'x', tex: '\\sqrt{n}', cls: 'irr', note: '\\sqrt{n}=' + rad(mx.k, 2, mx.m) }], false, 'classify sqrt n'); } }] },
       /* ===== Part E — Challenge ===== */
       { num: '16', section: 'Extra practice E — Challenge',
         shared: function (r) { return { c: r.int(6, 15) }; },
@@ -1003,8 +1003,8 @@
             }, t('\\sqrt{n}=' + c + '\\sqrt{r}') + ' means ' + t('n=' + c + '^{2}\\times r=' + c2 + 'r') + ', where the leftover ' + t('r>1') + ' has no perfect-square factor. The smallest such ' + t('r') + ' is ' + t('2') + ':<br>' + t('n=' + c2 + '\\times 2=' + 2 * c2) + ', and ' + t('\\sqrt{' + 2 * c2 + '}=' + rad(c, 2, 2)) + '.',
             ['If ' + t('\\sqrt{n}=' + c + '\\sqrt{r}') + ', then ' + t('n=' + c + '^{2}\\times r') + '. What is the smallest allowed ' + t('r') + '?'], 'smallest n with coefficient ' + c);
           } },
-          { id: 'e16b', level: 'PRG', make: function (r, sh) { var c = sh.c; return P.radical('Write ' + t('\\sqrt{n}') + ' in simplest mixed radical form for your answer to part (a).', { k: c, n: 2, m: 2 }, 'mixed', t('\\sqrt{' + 2 * c * c + '}=\\sqrt{' + c * c + '\\times 2}=' + rad(c, 2, 2)), ['The coefficient must be ' + t(c) + '.'], 'sqrt ' + 2 * c * c); } },
-          { id: 'e16c', level: 'ADV', make: function (r, sh) {
+          { id: 'e16b', level: 'EMG', make: function (r, sh) { var c = sh.c; return P.radical('Write ' + t('\\sqrt{n}') + ' in simplest mixed radical form for your answer to part (a).', { k: c, n: 2, m: 2 }, 'mixed', t('\\sqrt{' + 2 * c * c + '}=\\sqrt{' + c * c + '\\times 2}=' + rad(c, 2, 2)), ['The coefficient must be ' + t(c) + '.'], 'sqrt ' + 2 * c * c); } },
+          { id: 'e16c', level: 'EMG', make: function (r, sh) {
             var c = sh.c, c2 = c * c;
             return P.mc(r, 'A classmate suggests ' + t('n=' + c2 + '\\times 4=' + F(4 * c2)) + '. Why does that fail?', [
               { html: t('\\sqrt{' + F(4 * c2) + '}=' + c + '\\times 2=' + 2 * c) + ': the leftover ' + t('4') + ' is a perfect square. The leftover radicand must be greater than ' + t('1') + ' with no perfect-square factor.', right: true },
@@ -1014,7 +1014,7 @@
               t('\\sqrt{' + F(4 * c2) + '}=\\sqrt{' + c2 + '\\times 4}=' + c + '\\times 2=' + 2 * c) + '. The leftover ' + t('4') + ' is itself a perfect square, so more comes out: ' + t(F(4 * c2) + '=' + 2 * c + '^{2}') + '.<br><b>Condition:</b> the leftover radicand must be greater than ' + t('1') + ' and have no perfect-square factor other than ' + t('1') + '.',
               ['Simplify ' + t('\\sqrt{' + F(4 * c2) + '}') + ' completely.'], 'why 4c^2 fails');
           } },
-          { id: 'e16d', level: 'ADV', make: function (r, sh) {
+          { id: 'e16d', level: 'PRG', make: function (r, sh) {
             var c2 = sh.c * sh.c;
             return P.fields('Find the next <b>two</b> values of ' + t('n') + ' after your answer to (a), in increasing order.', [{ label: 'Next:', name: 'Next' }, { label: 'After that:', name: 'After that' }],
               [numChk(3 * c2, [{ v: 4 * c2, code: 'leftover-4', hint: 'That’s the classmate’s ' + t(F(4 * c2)) + ' — the leftover ' + t('4') + ' is a perfect square.' }]), numChk(5 * c2, [{ v: 4 * c2, code: 'leftover-4', hint: t(F(4 * c2)) + ' is ruled out by part (c). Skip the leftover ' + t('4') + '.' }, { v: 6 * c2, code: 'skipped', hint: 'Close — but there is an allowed leftover radicand between ' + t('3') + ' and ' + t('6') + '.' }])],
@@ -1022,7 +1022,7 @@
               'The next allowed leftover radicands after ' + t('2') + ' are ' + t('3') + ' and ' + t('5') + ' (' + t('4') + ' is ruled out):<br>' + t('n=' + c2 + '\\times 3=' + F(3 * c2)) + ', ' + t('\\sqrt{' + F(3 * c2) + '}=' + rad(sh.c, 2, 3)) + '<br>' + t('n=' + c2 + '\\times 5=' + F(5 * c2)) + ', ' + t('\\sqrt{' + F(5 * c2) + '}=' + rad(sh.c, 2, 5)),
               ['List the allowed leftover radicands in order: ' + t('2, 3, ?, \\ldots') + '.'], 'next two n');
           } },
-          { id: 'e16e', level: 'PRG', make: function (r, sh) { var c = sh.c; return setsPart('Is ' + t('\\sqrt{n}') + ' rational for your answer in (a)? Tick every set it belongs to.', [{ id: 'x', tex: '\\sqrt{' + F(2 * c * c) + '}', cls: 'irr', note: '=' + rad(c, 2, 2) }], false, 'classify sqrt 2c^2'); } }] },
+          { id: 'e16e', level: 'EMG', make: function (r, sh) { var c = sh.c; return setsPart('Is ' + t('\\sqrt{n}') + ' rational for your answer in (a)? Tick every set it belongs to.', [{ id: 'x', tex: '\\sqrt{' + F(2 * c * c) + '}', cls: 'irr', note: '=' + rad(c, 2, 2) }], false, 'classify sqrt 2c^2'); } }] },
       { num: '17',
         shared: function (r) {
           var G = r.pick([12, 6, 10, 14, 15, 18, 20]), R = r.pick([15, 6, 10, 12, 18, 20]), L = G * R, pairs = [];
@@ -1031,7 +1031,7 @@
         },
         stem: function (sh) { return 'Two natural numbers ' + t('a') + ' and ' + t('b') + ' with ' + t('a<b') + ' satisfy ' + t('\\text{GCF}(a,b)=' + sh.G) + ' and ' + t('\\text{LCM}(a,b)=' + sh.L) + '.'; },
         parts: [
-          { id: 'e17a', level: 'PRG', outcome: 'AN1', make: function (r, sh) {
+          { id: 'e17a', level: 'BEG', outcome: 'AN1', make: function (r, sh) {
             return P.number('Use ' + t('\\text{GCF}\\times\\text{LCM}=ab') + ' to find ' + t('ab') + '.', sh.G * sh.L, function (v) { if (v === sh.G + sh.L) return { code: 'lcm-sum', hint: 'Multiply the GCF and LCM — don’t add them.' }; if (v === sh.L / sh.G) return { code: 'gcf-lcm', hint: 'Multiply, don’t divide.' }; return null; },
               t('ab=\\text{GCF}\\times\\text{LCM}=' + sh.G + '\\times ' + sh.L + '=' + F(sh.G * sh.L)) + '.', ['Multiply the GCF by the LCM.'], 'ab from GCF, LCM');
           } },
@@ -1060,17 +1060,17 @@
               solution: t('(' + G + 'm)(' + G + 'n)=' + F(G * L)) + ', so ' + t(G * G + 'mn=' + F(G * L)) + ' and ' + t('mn=' + sh.R) + '.<br>' + t('m') + ' and ' + t('n') + ' must share no common factor (a shared factor would push the GCF above ' + t(G) + '), and ' + t('m<n') + '.<br>Pairs: ' + sh.pairs.map(function (p) { return t('(m,n)=(' + p[0] / G + ',' + p[1] / G + ')') + ' → ' + t('(' + p[0] + ',\\ ' + p[1] + ')'); }).join('; ') + '.',
               hints: ['Find ' + t('mn') + ' from ' + t('ab') + '. Then list the factor pairs of ' + t('mn') + ' that share no common factor.'] };
           } },
-          { id: 'e17c', level: 'PRG', make: function (r, sh) {
+          { id: 'e17c', level: 'EMG', make: function (r, sh) {
             var p = sh.pairs[0], red = ex.norm(p[0], p[1]);
             return P.repeating('For the pair ' + t('(' + p[0] + ',\\ ' + p[1] + ')') + ', write ' + t('\\frac{a}{b}') + ' as a decimal (reduce first; use bar notation if it repeats).', red, {}, t('\\frac{' + p[0] + '}{' + p[1] + '}=' + ex.texRat(red)) + '. Denominator ' + t(denEq(red[1])) + (terminates(red[1]) ? ' — only 2s and 5s, so it terminates: ' : ' — it has a prime other than 2 and 5, so it repeats: ') + t(K.decTex(red)) + '.',
               ['Reduce, then check the primes in the denominator before you divide.'], 'decimal ' + p[0] + '/' + p[1]);
           } },
-          { id: 'e17d', level: 'PRG', make: function (r, sh) {
+          { id: 'e17d', level: 'BEG', make: function (r, sh) {
             var p = sh.pairs[1], red = ex.norm(p[0], p[1]);
             return P.repeating('For the pair ' + t('(' + p[0] + ',\\ ' + p[1] + ')') + ', write ' + t('\\frac{a}{b}') + ' as a decimal (reduce first; use bar notation if it repeats).', red, {}, t('\\frac{' + p[0] + '}{' + p[1] + '}=' + ex.texRat(red)) + '. Denominator ' + t(denEq(red[1])) + (terminates(red[1]) ? ' — only 2s and 5s, so it terminates: ' : ' — it has a prime other than 2 and 5, so it repeats: ') + t(K.decTex(red)) + '.',
               ['Reduce, then check the primes in the denominator before you divide.'], 'decimal ' + p[0] + '/' + p[1]);
           } },
-          { id: 'e17e', level: 'PRG', make: function (r, sh) { return setsPart('List every set each quotient belongs to.', sh.pairs.map(function (p, i) { return { id: 'q' + i, tex: '\\frac{' + p[0] + '}{' + p[1] + '}', cls: 'frac', note: '=' + ex.texRat(ex.norm(p[0], p[1])) }; }), false, 'classify quotients'); } }] },
+          { id: 'e17e', level: 'BEG', make: function (r, sh) { return setsPart('List every set each quotient belongs to.', sh.pairs.map(function (p, i) { return { id: 'q' + i, tex: '\\frac{' + p[0] + '}{' + p[1] + '}', cls: 'frac', note: '=' + ex.texRat(ex.norm(p[0], p[1])) }; }), false, 'classify quotients'); } }] },
       { num: '18', stem: '<i>(Multiple Choice)</i>', parts: [
         { id: 'e18', level: 'ADV', outcome: 'AN1', make: function (r) {
           var T = r.pick([[15, 4, 2], [21, 6, 2], [27, 8, 2], [35, 6, 4]]), Fc = T[0], A = T[1], B = T[2];
@@ -1086,7 +1086,7 @@
             ['Use ' + t('(a+1)(b+1)') + ' = number of factors. Which exponent pairs give ' + t(Fc) + '?'], 'smallest square with ' + Fc + ' factors', true);
         } }] },
       { num: '19', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: 'e19', level: 'ADV', make: function (r) {
+        { id: 'e19', level: 'EMG', make: function (r) {
           var k, m, V, i;
           for (i = 0; i < 200; i++) { k = r.pick([6, 10, 15]); m = r.pick([2, 3, 5, 7]); V = k * k * k * m; if (V <= 9999) break; }
           var dv = nt.divisors(k).filter(function (d) { return d > 1 && d < k; }), d1 = dv[0], d2 = dv[dv.length - 1];
@@ -1103,7 +1103,7 @@
             'Raise each exponent to a multiple of ' + t('3') + ': ' + f.map(function (pe) { return t(pe[0] + '^{' + pe[1] + '}\\to ' + pe[0] + '^{' + (pe[1] + (3 - pe[1] % 3) % 3) + '}') + ' (' + ((3 - pe[1] % 3) % 3 === 1 ? 'one ' : 'two ') + t(pe[0]) + ')'; }).join(', ') + '.<br>' + t('k=' + fTex(u.kf) + '=' + u.k) + '.',
             ['A perfect cube has every exponent a multiple of ' + t('3') + '. How many more of each prime are needed?'], 'k for kx cube');
         } },
-        { id: 'e20b', level: 'ADV', make: function (r) {
+        { id: 'e20b', level: 'PRG', make: function (r) {
           var items = r.shuffle(e20Items(r)), cnt = items.filter(function (x) { return x.irr; }).length, roots = items.filter(function (x) { return x.root; }).length;
           return P.nr('The number of the twelve numbers below that are irrational is ________.<div class="numlist">' + items.map(function (x) { return '<span>' + t('\\displaystyle ' + x.tex) + '</span>'; }).join('') + '</div>', cnt, function (v) {
             if (v === roots && roots !== cnt) return { code: 'count-radicals', hint: 'A radical sign doesn’t make a number irrational. Simplify each root first — some are whole numbers or fractions.' };

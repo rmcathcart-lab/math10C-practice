@@ -174,7 +174,7 @@
     var bad = [[String(R.c), String(R.n + 1), key[2]], [String(R.hi), String(R.n), key[2]], [key[0], key[1], (Math.abs(R.n)) + '/' + R.c + (R.neg ? '' : '0')]];
     if (R.g > 1) bad.push([key[0], key[1], (R.neg ? '-' : '') + R.n + '/' + R.c]);
     return { prompt: t(R.tex), input: { type: 'fields', fields: [
-        { label: 'Subtract:', after: t('x'), name: labels[0] }, { before: t('='), name: labels[1], wide: true, mode: 'text' }, { label: 'So', before: t('x='), wide: true, name: labels[2], mode: 'text' }] },
+        { label: 'Subtract:', after: t('x'), name: labels[0] }, { before: t('='), name: labels[1], wide: true, mode: 'text' }, { label: 'So', before: t('x='), wide: true, name: labels[2], mode: 'math', keys: 'fraction' }] },
       check: check, key: key, answer: t(F(R.c) + 'x=' + F(R.neg ? -R.n : R.n)) + ', so ' + t('x=' + rTex(X)), solution: algebraSol(R), good: good, bad: bad,
       hints: ['Write ' + t('x=' + R.tex) + '. Multiply by the power of 10 that moves the whole block left of the decimal point' + (R.L ? ', and by the power of 10 that puts the block just right of the point' : '') + '. Subtract.', 'Type the fraction as e.g. ' + t('11/15') + '. Reduce it to lowest terms.'],
       text: text || 'algebraic method ' + R.tex };
@@ -330,27 +330,27 @@
           return patternPart(r, tex, 'RN', { NT: 'The “…” means it keeps going, so it doesn’t terminate.', NN: 'Look at the digits: the block ' + t(bl) + ' copies itself again and again. That’s repeating.' },
             'The block ' + t(bl) + ' copies itself forever: ' + t(tex + '=0.\\overline{' + bl + '}') + '. <b>Repeating, non-terminating.</b>', 'pattern of 0.' + bl + '…');
         } },
-        { id: '1c', level: 'BEG', make: function (r) {
+        { id: '1c', level: 'LIM', make: function (r) {
           var q = r.pick([11, 3, 7, 9]), p = r.pick(coprimeTo(q, 1, q - 1));
           return patternPart(r, '-\\dfrac{' + p + '}{' + q + '}', 'RN', { NT: 'Divide ' + t(p + '\\div ' + q) + ' on your calculator: it never stops. (' + t(q) + ' is not built from 2s and 5s.)', NN: 'Divide it out: ' + t(K.decTex([-p, q])) + '. A block repeats. (The negative sign doesn’t change the pattern.)' },
             t('-\\frac{' + p + '}{' + q + '}=' + K.decTex([-p, q])) + '; ' + badDen(q) + ', so the decimal never stops but repeats. <b>Repeating, non-terminating.</b>', 'pattern of -' + p + '/' + q);
         } },
-        { id: '1d', level: 'EMG', make: function (r) {
+        { id: '1d', level: 'BEG', make: function (r) {
           var b = r.pick([3, 6, 9, 12, 7]), a = r.pick(coprimeTo(b, 1, b - 1));
           return patternPart(r, '\\sqrt{\\dfrac{' + a * a + '}{' + b * b + '}}', 'RN', { NN: 'Both ' + t(a * a) + ' and ' + t(b * b) + ' are perfect squares, so the root simplifies to the fraction ' + t('\\frac{' + a + '}{' + b + '}') + '. What does its decimal do?', NT: 'Simplify the root to ' + t('\\frac{' + a + '}{' + b + '}') + ', then divide. Does it stop?' },
             t('\\sqrt{\\frac{' + a * a + '}{' + b * b + '}}=\\frac{' + a + '}{' + b + '}=' + K.decTex([a, b])) + '; ' + badDen(b) + '. <b>Repeating, non-terminating.</b>', 'pattern of sqrt(' + a * a + '/' + b * b + ')');
         } },
-        { id: '1e', level: 'BEG', make: function (r) {
+        { id: '1e', level: 'LIM', make: function (r) {
           var n = r.pick(nonSquares(11, 99));
           return patternPart(r, '-\\sqrt{' + n + '}', 'NN', { NT: t('-\\sqrt{' + n + '}=-' + cut(Math.sqrt(n), 8) + '\\ldots') + ' — the calculator only shows the first digits. ' + t(n) + ' isn’t a perfect square, so the digits never stop.', RN: 'No block of digits repeats: ' + t(n) + ' isn’t a perfect square, so ' + t('\\sqrt{' + n + '}') + ' is irrational.' },
             t(n) + ' is not a perfect square, so ' + t('-\\sqrt{' + n + '}=-' + cut(Math.sqrt(n), 6) + '\\ldots') + ' is irrational. <b>Non-repeating, non-terminating.</b>', 'pattern of -sqrt' + n);
         } },
-        { id: '1f', level: 'EMG', make: function (r) {
+        { id: '1f', level: 'BEG', make: function (r) {
           var k = r.pick([2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14]), v = k * k / 100, rt = k / 10;
           return patternPart(r, '\\sqrt{' + v + '}', 'NT', { NN: 'Check: ' + t(rt + '\\times ' + rt + '=' + v) + '. So ' + t('\\sqrt{' + v + '}') + ' is exactly ' + t(rt) + ' — not every square root is irrational.', RN: 'Check: ' + t(rt + '^{2}=' + v) + ', so ' + t('\\sqrt{' + v + '}=' + rt) + '. Does that repeat?' },
             t(rt + '^{2}=' + v) + ', so ' + t('\\sqrt{' + v + '}=' + rt) + '. <b>Non-repeating, terminating.</b>', 'pattern of sqrt' + v);
         } },
-        { id: '1g', level: 'BEG', make: function (r) {
+        { id: '1g', level: 'LIM', make: function (r) {
           var q = r.pick([8, 4, 5, 16, 20, 25]), p = r.pick(coprimeTo(q, 1, q - 1)), w = r.int(1, 9), imp = w * q + p;
           return patternPart(r, '-' + w + '\\dfrac{' + p + '}{' + q + '}', 'NT', { RN: t(w + '\\frac{' + p + '}{' + q + '}=' + K.decTex([imp, q])) + ' stops. A decimal that stops is terminating and doesn’t repeat.', NN: 'Divide ' + t(p + '\\div ' + q) + ' — it stops, so it terminates.' },
             t('-' + w + '\\frac{' + p + '}{' + q + '}=' + K.decTex([-imp, q])) + '; ' + t(q + '=' + texFacs(q)) + ' has only 2s and 5s. <b>Non-repeating, terminating.</b>', 'pattern of -' + w + ' ' + p + '/' + q);
@@ -395,7 +395,7 @@
             '<b>True.</b> ' + t('\\pi=3.14159265\\ldots') + ' never terminates and never repeats. ' + t('\\frac{22}{7}') + ' and ' + t('3.14') + ' are rational approximations, not ' + t('\\pi') + ' itself.', [], 'T/F pi irrational');
         } }] },
       { num: '3', stem: 'Is the number rational or irrational? Choose the answer with the correct reason.', parts: [
-        { id: '3a', level: 'BEG', make: function (r) {
+        { id: '3a', level: 'LIM', make: function (r) {
           var q = r.pick([4, 8, 5, 2, 20]), p = r.pick(coprimeTo(q, q + 1, 3 * q)), dec = K.decTex([-p, q]);
           return P.mc(r, t('-\\dfrac{' + p + '}{' + q + '}'), [
             { html: '<b>Rational</b> — it is a ratio of two integers (it equals the terminating decimal ' + t(dec) + ').', right: true },
@@ -404,7 +404,7 @@
             { html: '<b>Rational</b> — because it is negative.', why: 'Right classification, wrong reason: being negative has nothing to do with it. What makes it rational?' }],
             t('-\\frac{' + p + '}{' + q + '}') + ' is already a ratio of integers, and ' + t(q + '=' + texFacs(q)) + ', so it is also the terminating decimal ' + t(dec) + '. <b>Rational.</b>', ['Rational means it can be written as a ratio of two integers.'], 'rational? -' + p + '/' + q);
         } },
-        { id: '3b', level: 'BEG', make: function (r) {
+        { id: '3b', level: 'LIM', make: function (r) {
           var bl = randBlock(r, 3, ''), fr = norm(Number(bl), 999), nd = bl.split('').filter(function (c, j, a) { return a.indexOf(c) === j; }).length;
           return P.mc(r, t('0.\\overline{' + bl + '}'), [
             { html: '<b>Rational</b> — the block ' + t(bl) + ' repeats forever, and every repeating decimal can be written as a fraction.', right: true },
@@ -413,7 +413,7 @@
             { html: '<b>Rational</b> — it uses only ' + ['', 'one digit', 'two different digits', 'three different digits'][nd] + '.', why: 'Right classification, wrong reason: the number of different digits doesn’t matter. What matters is that the block repeats.' }],
             'The block ' + t(bl) + ' repeats forever, and every repeating decimal is a fraction: ' + t('0.\\overline{' + bl + '}=\\frac{' + Number(bl) + '}{999}' + (fr[1] !== 999 ? '=' + rTex(fr) : '')) + '. <b>Rational.</b>', ['Does a fixed block of digits repeat? Repeating decimals can always be written as fractions.'], 'rational? 0.(' + bl + ')');
         } },
-        { id: '3c', level: 'EMG', make: function (r) {
+        { id: '3c', level: 'LIM', make: function (r) {
           var k = r.int(11, 20), n = k * k;
           return P.mc(r, t('\\sqrt{' + n + '}'), [
             { html: '<b>Rational</b> — ' + t(n + '=' + k + '^{2}') + ', so ' + t('\\sqrt{' + n + '}=' + k) + ', an integer.', right: true },
@@ -422,7 +422,7 @@
             { html: '<b>Rational</b> — because ' + t(n) + ' is ' + (n % 2 ? 'odd' : 'even') + '.', why: 'Right classification, wrong reason: odd or even doesn’t matter (' + t('\\sqrt{' + (n % 2 ? 3 : 2) + '}') + ' is irrational). Is ' + t(n) + ' a perfect square?' }],
             t(n + '=' + k + '^{2}') + ', so ' + t('\\sqrt{' + n + '}=' + k) + ', a whole number. <b>Rational.</b>', ['Is ' + t(n) + ' a perfect square?'], 'rational? sqrt' + n);
         } },
-        { id: '3d', level: 'PRG', make: function (r) {
+        { id: '3d', level: 'BEG', make: function (r) {
           var g = randGrow(r), tex = growTex(0, g.stem, g.c, g.k0 + 1, true, g.stem.charAt(0));
           return P.mc(r, t(tex), [
             { html: '<b>Irrational</b> — the run of ' + t(g.c) + '’s keeps growing, so no fixed block ever repeats, and the decimal never ends.', right: true },
@@ -432,7 +432,7 @@
             'Each group has one more ' + t(g.c) + ' than the one before, so no fixed block repeats, and the digits never stop. <b>Irrational.</b>', ['Compare the groups of digits. Are they the same block every time?'], 'rational? growing pattern');
         } }] },
       { num: '4', section: 'Part B — Ordering and calculator conversions', stem: 'Place the irrational numbers in order on a number line, from least to greatest. (' + t('3\\sqrt{8}') + ' means ' + t('3\\times\\sqrt{8}') + '.)', parts: [
-        { id: '4', level: 'PRG', make: function (r) {
+        { id: '4', level: 'EMG', make: function (r) {
           var it, vals;
           for (var g = 0; g < 500; g++) {
             var a = r.int(1, 9), b = r.pick(nonSquares(3, 12)), c = r.pick(nonSquares(13, 35)), d = r.pick(nonSquares(40, 99));
@@ -481,29 +481,29 @@
               keys.map(function (k) { return t(sh[k].tex) + ': <b>' + (sh[k].val ? 'rational' : 'irrational') + '</b>.'; }).join('<br>'),
               ['Simplify each number first (take the roots). A number that stops or repeats, or is a ratio of integers, is rational.'], 'Q5 rational/irrational grid');
           } },
-          { id: '5a', sub: 'a', level: 'BEG', make: function (r, sh) { return q5FracPart(sh, 'a', 'BEG'); } },
-          { id: '5b', sub: 'b', level: 'EMG', make: function (r, sh) { return q5FracPart(sh, 'b', 'EMG'); } },
-          { id: '5c', sub: 'c', level: 'EMG', make: function (r, sh) { return q5FracPart(sh, 'c', 'EMG'); } },
-          { id: '5e', sub: 'e', level: 'EMG', make: function (r, sh) { return q5FracPart(sh, 'e', 'EMG', ['Type the repeating decimal into your calculator with many repeats, then convert it to a fraction.']); } },
-          { id: '5f', sub: 'f', level: 'PRG', make: function (r, sh) { return q5FracPart(sh, 'f', 'PRG', ['Change the mixed number to an improper fraction first, then take the square root of the top and the bottom.']); } },
-          { id: '5g', sub: 'g', level: 'PRG', make: function (r, sh) { return q5FracPart(sh, 'g', 'PRG', ['Type the decimal with the block repeated several times (e.g. ' + t(calcString(sh.g.R)) + ') and convert it to a fraction.']); } },
-          { id: '5i', sub: 'i', level: 'ADV', make: function (r, sh) { return q5FracPart(sh, 'i', 'ADV', ['Work from the inside out: take the inner square root first.']); } }] },
+          { id: '5a', sub: 'a', level: 'LIM', make: function (r, sh) { return q5FracPart(sh, 'a', 'BEG'); } },
+          { id: '5b', sub: 'b', level: 'BEG', make: function (r, sh) { return q5FracPart(sh, 'b', 'EMG'); } },
+          { id: '5c', sub: 'c', level: 'BEG', make: function (r, sh) { return q5FracPart(sh, 'c', 'EMG'); } },
+          { id: '5e', sub: 'e', level: 'BEG', make: function (r, sh) { return q5FracPart(sh, 'e', 'EMG', ['Type the repeating decimal into your calculator with many repeats, then convert it to a fraction.']); } },
+          { id: '5f', sub: 'f', level: 'EMG', make: function (r, sh) { return q5FracPart(sh, 'f', 'PRG', ['Change the mixed number to an improper fraction first, then take the square root of the top and the bottom.']); } },
+          { id: '5g', sub: 'g', level: 'EMG', make: function (r, sh) { return q5FracPart(sh, 'g', 'PRG', ['Type the decimal with the block repeated several times (e.g. ' + t(calcString(sh.g.R)) + ') and convert it to a fraction.']); } },
+          { id: '5i', sub: 'i', level: 'EMG', make: function (r, sh) { return q5FracPart(sh, 'i', 'ADV', ['Work from the inside out: take the inner square root first.']); } }] },
       { num: '6', stem: 'Use a calculator to convert the repeating decimal to an improper fraction in simplest form.', parts: [
         { id: '6a', level: 'BEG', make: function (r) { return calcPart(repInfo(0, '', String(r.int(1, 8)))); } },
-        { id: '6b', level: 'EMG', make: function (r) { return calcPart(repInfo(0, '', randBlock(r, 2, '', true))); } },
+        { id: '6b', level: 'BEG', make: function (r) { return calcPart(repInfo(0, '', randBlock(r, 2, '', true))); } },
         { id: '6c', level: 'EMG', make: function (r) { var l = String(r.int(1, 8)); return calcPart(repInfo(r.int(1, 5), l, randBlock(r, 1, l))); } },
-        { id: '6d', level: 'PRG', make: function (r) { return calcPart(repInfo(0, '', randBlock(r, 3, '', true))); } },
-        { id: '6e', level: 'ADV', make: function (r) { var l = String(r.int(0, 9)) + String(r.int(1, 9)); return calcPart(repInfo(r.int(1, 9), l, randBlock(r, 2, l), true)); } }] },
+        { id: '6d', level: 'EMG', make: function (r) { return calcPart(repInfo(0, '', randBlock(r, 3, '', true))); } },
+        { id: '6e', level: 'EMG', make: function (r) { var l = String(r.int(0, 9)) + String(r.int(1, 9)); return calcPart(repInfo(r.int(1, 9), l, randBlock(r, 2, l), true)); } }] },
       { num: '7', stem: '<i>(Extension)</i> Use the algebraic procedure to convert the repeating decimal to a fraction in simplest form. Fill in the equation you get after subtracting, then the answer.', parts: [
-        { id: '7a', level: 'EMG', make: function (r) { return algebraPart(repInfo(0, '', String(r.int(1, 8)))); } },
-        { id: '7b', level: 'EMG', make: function (r) { return algebraPart(repInfo(0, '', randBlock(r, 2, '', true))); } },
+        { id: '7a', level: 'BEG', make: function (r) { return algebraPart(repInfo(0, '', String(r.int(1, 8)))); } },
+        { id: '7b', level: 'BEG', make: function (r) { return algebraPart(repInfo(0, '', randBlock(r, 2, '', true))); } },
         { id: '7c', level: 'PRG', make: function (r) { var l = String(r.int(1, 9)); return algebraPart(repInfo(0, l, randBlock(r, 1, l))); } }] },
       { num: '8', stem: '<i>(Extension)</i> Use the algebraic procedure to convert the repeating decimal to an improper fraction in simplest form. Fill in the equation you get after subtracting, then the answer.', parts: [
         { id: '8a', level: 'ADV', make: function (r) { var b = r.chance(0.5) ? '0' + r.int(1, 8) : randBlock(r, 2, '0', true); return algebraPart(repInfo(r.int(1, 9), '0', b)); } },
-        { id: '8b', level: 'ADV', make: function (r) { return algebraPart(repInfo(r.int(1, 9), '', randBlock(r, 3, '', true), true)); } },
-        { id: '8c', level: 'ADV', make: function (r) { var l = String(r.int(1, 9)) + String(r.int(1, 9)); return algebraPart(repInfo(r.int(1, 9), l, randBlock(r, 1, l))); } }] },
+        { id: '8b', level: 'PRG', make: function (r) { return algebraPart(repInfo(r.int(1, 9), '', randBlock(r, 3, '', true), true)); } },
+        { id: '8c', level: 'PRG', make: function (r) { var l = String(r.int(1, 9)) + String(r.int(1, 9)); return algebraPart(repInfo(r.int(1, 9), l, randBlock(r, 1, l))); } }] },
       { num: '9', section: 'Part C — Multiple choice and numerical response', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: '9', level: 'PRG', make: function (r) {
+        { id: '9', level: 'BEG', make: function (r) {
           var q = r.pick([12, 6, 15, 18, 22, 24, 30, 36, 44, 45, 60]), p = r.pick(coprimeTo(q, 1, q - 1)), dec = K.decTex([p, q]), m = split25(q).m;
           return P.mc(r, 'The decimal number representing ' + t('\\dfrac{' + p + '}{' + q + '}') + ' is', [
             { html: 'terminating and repeating', why: 'That combination can’t happen: a decimal that stops can’t also repeat forever.' },
@@ -513,7 +513,7 @@
             t(q + '=' + texFacs(q)) + '. The prime ' + t(nt0(m)) + ' is not 2 or 5, so the decimal never ends — but ' + t('\\frac{' + p + '}{' + q + '}') + ' is rational, so it repeats: ' + t('\\frac{' + p + '}{' + q + '}=' + dec) + '.', ['Factor the denominator. Then remember: every fraction is rational, so its decimal terminates or repeats.'], 'MC pattern of ' + p + '/' + q, true);
         } }] },
       { num: '10', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: '10', level: 'PRG', make: function (r) {
+        { id: '10', level: 'BEG', make: function (r) {
           var decs = ['0.045', '0.4', '0.9', '0.016', '1.6', '0.08', '0.5', '2.5', '0.009', '0.12', '0.18'];
           var ir = r.pick(decs), right = r.chance(0.8) ? { html: t('\\sqrt{' + ir + '}'), right: true } : { html: t(growTex(0, '1', '0', 1, false, '1')), right: true };
           var k = r.int(11, 19), sqd = r.pick([[0.49, 0.7], [1.44, 1.2], [0.0036, 0.06], [0.81, 0.9], [2.25, 1.5]]), p9 = r.pick([[7, 9], [5, 9], [4, 11], [3, 7], [5, 7]]), td = r.pick(['2.71', '3.14', '1.41', '1.73']), bl = randBlock(r, 2, '');
@@ -530,7 +530,7 @@
             ['Simplify each option. Which one can’t be written as a ratio of integers?'], 'MC which is irrational');
         } }] },
       { num: '11', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: '11', level: 'ADV', make: function (r) {
+        { id: '11', level: 'EMG', make: function (r) {
           var I = r.int(1, 9);
           return P.mc(r, t(I + '.\\overline{9}') + ' is equal to', [
             { html: t('\\dfrac{' + (10 * I + 9) + '}{10}'), why: t('\\frac{' + (10 * I + 9) + '}{10}=' + I + '.9') + ' stops after one 9. The bar means the 9s go on forever.' },
@@ -540,11 +540,11 @@
             'Let ' + t('x=' + I + '.999\\ldots') + '. Then ' + t('10x=' + (10 * I + 9) + '.999\\ldots') + '. Subtract: ' + t('9x=' + (9 * I + 9)) + ', so ' + t('x=' + (I + 1)) + ' exactly. The other options all stop after a few 9s.', ['Use the algebraic method: ' + t('x=' + I + '.\\overline{9}') + ', ' + t('10x=?') + ', subtract.'], 'MC ' + I + '.(9)', true);
         } }] },
       { num: '12', stem: '<i>(Numerical Response)</i>', parts: [
-        { id: '12', level: 'ADV', make: function (r) { return nrRepPart(r); } }] }
+        { id: '12', level: 'EMG', make: function (r) { return nrRepPart(r); } }] }
     ],
     extra: [
       { num: '1', section: 'Extra practice A — The denominator test', stem: 'A fraction <b>in lowest terms</b> terminates exactly when its denominator is built from 2s and 5s alone. <b>Reduce first</b>, factor the new denominator, then predict. Don’t divide yet.', parts: [
-        { id: 'e1', level: 'PRG', make: function (r) {
+        { id: 'e1', level: 'EMG', make: function (r) {
           var specs = [
             { p: r.pick([7, 3, 9, 11]), q: r.pick([40, 16, 25]) },
             (function () { var b = r.pick([[5, 8], [3, 8], [7, 20], [1, 4]]), k = r.pick([3, 7, 9]); return { p: b[0] * k, q: b[1] * k }; })(),
@@ -566,17 +566,17 @@
             ['Reduce each fraction, then factor the new denominator. Only 2s and 5s → terminates.'], 'denominator test');
         } }] },
       { num: '2', stem: 'Confirm by dividing. Write the decimal exactly, with the bar over the repeating block <b>only</b>.', parts: [
-        { id: 'e2a', level: 'EMG', make: function (r) { var b = r.pick([[5, 8], [3, 8], [7, 16], [9, 20], [3, 40]]), k = r.pick([3, 7, 9]); return decPart(b[0] * k, b[1] * k); } },
-        { id: 'e2b', level: 'PRG', make: function (r) { var q = r.pick([60, 12, 30, 15]); return decPart(r.pick(coprimeTo(q, 1, q - 1)), q); } },
-        { id: 'e2c', level: 'ADV', make: function (r) { var q = r.pick([56, 28, 14, 35]); return decPart(r.pick(coprimeTo(q, 1, q - 1)), q); } },
-        { id: 'e2d', level: 'PRG', make: function (r) { var b = r.pick([[2, 15], [1, 6], [5, 12], [4, 15], [1, 12]]), k = r.pick([11, 7, 13]); return decPart(b[0] * k, b[1] * k); } }] },
+        { id: 'e2a', level: 'BEG', make: function (r) { var b = r.pick([[5, 8], [3, 8], [7, 16], [9, 20], [3, 40]]), k = r.pick([3, 7, 9]); return decPart(b[0] * k, b[1] * k); } },
+        { id: 'e2b', level: 'EMG', make: function (r) { var q = r.pick([60, 12, 30, 15]); return decPart(r.pick(coprimeTo(q, 1, q - 1)), q); } },
+        { id: 'e2c', level: 'PRG', make: function (r) { var q = r.pick([56, 28, 14, 35]); return decPart(r.pick(coprimeTo(q, 1, q - 1)), q); } },
+        { id: 'e2d', level: 'EMG', make: function (r) { var b = r.pick([[2, 15], [1, 6], [5, 12], [4, 15], [1, 12]]), k = r.pick([11, 7, 13]); return decPart(b[0] * k, b[1] * k); } }] },
       { num: '3', stem: 'This denominator contains a prime other than 2 or 5, so <i>most</i> numerators give a repeating decimal. Find a whole-number numerator ' + t('k') + ' (between ' + t('0') + ' and the denominator) that makes the fraction <b>terminate</b>.', parts: [
         { id: 'e3a', level: 'PRG', make: function (r) { return kPart(r.pick([90, 18, 36, 180])); } },
         { id: 'e3b', level: 'PRG', make: function (r) { return kPart(r.pick([70, 14, 28, 35, 140])); } },
         { id: 'e3c', level: 'PRG', make: function (r) { return kPart(r.pick([24, 12, 48, 15, 30])); } },
         { id: 'e3d', level: 'PRG', make: function (r) { return kPart(r.pick([45, 72, 225])); } }] },
       { num: '4', stem: 'In Question 3 the numerator always had to be a multiple of something.', parts: [
-        { id: 'e4', level: 'ADV', make: function (r) {
+        { id: 'e4', level: 'PRG', make: function (r) {
           var d = r.pick([60, 140, 90, 120, 66, 84]), s = split25(d), m = s.m, tw = d / m;
           return P.mc(r, 'For the denominator ' + t(d + '=' + texFacs(d)) + ', which numerators ' + t('k') + ' make ' + t('\\dfrac{k}{' + d + '}') + ' terminate?', [
             { html: 'Multiples of ' + t(m) + ' — the part of ' + t(d) + ' left after removing every 2 and 5 — because then all of ' + t(m) + ' cancels when you reduce.', right: true },
@@ -587,17 +587,17 @@
             ['Which primes in the denominator cause a repeating decimal? What must happen to them?'], 'rule for terminating k/' + d);
         } }] },
       { num: '5', section: 'Extra practice B — How long is the repeating block?', stem: 'When you long-divide by ' + t('n') + ', the only possible remainders are ' + t('1, 2, \\ldots, n-1') + '. As soon as a remainder repeats, the digits repeat — so the block is <b>at most</b> ' + t('n-1') + ' digits long. State the maximum, then divide and record the actual length of the block.', parts: [
-        { id: 'e5a', level: 'EMG', make: function (r) { return blockLenPart(r.pick([[1, 9], [2, 9], [4, 9], [1, 3], [2, 3]])); } },
+        { id: 'e5a', level: 'BEG', make: function (r) { return blockLenPart(r.pick([[1, 9], [2, 9], [4, 9], [1, 3], [2, 3]])); } },
         { id: 'e5b', level: 'EMG', make: function (r) { return blockLenPart(r.pick([[1, 11], [3, 11], [5, 11], [1, 33]])); } },
-        { id: 'e5c', level: 'PRG', make: function (r) { return blockLenPart(r.pick([[1, 7], [2, 7], [3, 7], [5, 7]])); } },
-        { id: 'e5d', level: 'PRG', make: function (r) { return blockLenPart(r.pick([[1, 13], [2, 13], [5, 13], [1, 27], [1, 37], [1, 41]])); } }] },
+        { id: 'e5c', level: 'EMG', make: function (r) { return blockLenPart(r.pick([[1, 7], [2, 7], [3, 7], [5, 7]])); } },
+        { id: 'e5d', level: 'EMG', make: function (r) { return blockLenPart(r.pick([[1, 13], [2, 13], [5, 13], [1, 27], [1, 37], [1, 41]])); } }] },
       { num: '6', stem: 'Write the fraction as a repeating decimal, using ' + t('\\dfrac{1}{7}=0.\\overline{142857}') + ' as a starting point.',
         shared: function (r) { var ks = r.shuffle([2, 3, 4, 5, 6]), abc = ks.slice(0, 3).sort(); return abc.concat([ks[3]]); },
         parts: [
-        { id: 'e6a', level: 'EMG', make: function (r, sh) { return sevenPart(sh[0]); } },
-        { id: 'e6b', level: 'EMG', make: function (r, sh) { return sevenPart(sh[1]); } },
-        { id: 'e6c', level: 'EMG', make: function (r, sh) { return sevenPart(sh[2]); } },
-        { id: 'e6d', level: 'ADV', make: function (r, sh) {
+        { id: 'e6a', level: 'BEG', make: function (r, sh) { return sevenPart(sh[0]); } },
+        { id: 'e6b', level: 'BEG', make: function (r, sh) { return sevenPart(sh[1]); } },
+        { id: 'e6c', level: 'BEG', make: function (r, sh) { return sevenPart(sh[2]); } },
+        { id: 'e6d', level: 'EMG', make: function (r, sh) {
           var k = sh[3], p = sevenPart(k);
           p.prompt = 'Every block for sevenths uses the same six digits ' + t('1,4,2,8,5,7') + ' in the same cyclic order — only the starting digit moves. Use the pattern to write ' + t('\\dfrac{' + k + '}{7}') + ' without dividing.';
           p.solution = t('\\frac{' + k + '}{7}') + ' is a little more than ' + t(Math.floor(k / 7 * 10) / 10) + ', so start the cycle ' + t('142857') + ' at the ' + t(String(Math.floor(k / 7 * 10))) + ': ' + t('\\frac{' + k + '}{7}=' + K.decTex([k, 7])) + '.';
@@ -610,24 +610,24 @@
           return qs.map(function (q) { return [r.pick(coprimeTo(q, 1, q - 1)), q]; });
         },
         parts: [
-          { id: 'e7a', level: 'PRG', make: function (r, sh) { return leadPart(sh[0]); } },
-          { id: 'e7b', level: 'PRG', make: function (r, sh) { return leadPart(sh[1]); } },
-          { id: 'e7c', level: 'PRG', make: function (r, sh) { return leadPart(sh[2]); } },
-          { id: 'e7d', level: 'ADV', make: function (r, sh) { return leadPart(sh[3]); } },
-          { id: 'e7e', level: 'ADV', make: function (r, sh) { var p = decPart(sh[3][0], sh[3][1]); p.prompt = 'Now divide and write ' + t('\\dfrac{' + sh[3][0] + '}{' + sh[3][1] + '}') + ' as a decimal with the bar in the right place.'; return p; } }] },
+          { id: 'e7a', level: 'EMG', make: function (r, sh) { return leadPart(sh[0]); } },
+          { id: 'e7b', level: 'EMG', make: function (r, sh) { return leadPart(sh[1]); } },
+          { id: 'e7c', level: 'EMG', make: function (r, sh) { return leadPart(sh[2]); } },
+          { id: 'e7d', level: 'PRG', make: function (r, sh) { return leadPart(sh[3]); } },
+          { id: 'e7e', level: 'PRG', make: function (r, sh) { var p = decPart(sh[3][0], sh[3][1]); p.prompt = 'Now divide and write ' + t('\\dfrac{' + sh[3][0] + '}{' + sh[3][1] + '}') + ' as a decimal with the bar in the right place.'; return p; } }] },
       { num: '8', section: 'Extra practice C — Turning a repeating decimal back into a fraction', stem: 'Use the algebraic method: let ' + t('x') + ' be the decimal, multiply by the power of 10 that shifts the block left of the point, subtract, and solve. Give the answer in lowest terms.', parts: [
-        { id: 'e8a', level: 'EMG', make: function (r) { return algebraPart(repInfo(0, '', String(r.int(1, 8)))); } },
-        { id: 'e8b', level: 'PRG', make: function (r) { var b; do { b = randBlock(r, 2, '', true); } while (gcd(Number(b), 99) === 1); return algebraPart(repInfo(0, '', b)); } },
-        { id: 'e8c', level: 'PRG', make: function (r) { var b; do { b = randBlock(r, 3, '', true); } while (gcd(Number(b), 999) < 9); return algebraPart(repInfo(0, '', b)); } }] },
+        { id: 'e8a', level: 'BEG', make: function (r) { return algebraPart(repInfo(0, '', String(r.int(1, 8)))); } },
+        { id: 'e8b', level: 'EMG', make: function (r) { var b; do { b = randBlock(r, 2, '', true); } while (gcd(Number(b), 99) === 1); return algebraPart(repInfo(0, '', b)); } },
+        { id: 'e8c', level: 'EMG', make: function (r) { var b; do { b = randBlock(r, 3, '', true); } while (gcd(Number(b), 999) < 9); return algebraPart(repInfo(0, '', b)); } }] },
       { num: '9', stem: 'These have a <b>non-repeating lead</b> after the decimal point, so you need two multiples of ' + t('x') + ': one with the block left of the point and one with the block just right of it. Subtract those two.', parts: [
         { id: 'e9a', level: 'PRG', make: function (r) { var l = String(r.int(1, 9)) + String(r.int(1, 9)); return algebraPart(repInfo(0, l, randBlock(r, 1, l))); } },
-        { id: 'e9b', level: 'ADV', make: function (r) { var l = String(r.int(1, 9)); return algebraPart(repInfo(0, l, randBlock(r, 2, l, true))); } },
+        { id: 'e9b', level: 'PRG', make: function (r) { var l = String(r.int(1, 9)); return algebraPart(repInfo(0, l, randBlock(r, 2, l, true))); } },
         { id: 'e9c', level: 'ADV', make: function (r) { var l = String(r.int(1, 9)); return algebraPart(repInfo(r.int(1, 5), l, randBlock(r, 2, l, true))); } }] },
       { num: '10', stem: 'Same method, watching the sign and the whole-number part. Give the answer as an improper fraction in lowest terms.', parts: [
         { id: 'e10a', level: 'ADV', make: function (r) { var l = String(r.int(1, 9)); return algebraPart(repInfo(r.int(1, 9), l, randBlock(r, 1, l), true)); } },
-        { id: 'e10b', level: 'ADV', make: function (r) { return algebraPart(repInfo(r.int(1, 9), '', randBlock(r, 3, '', true))); } }] },
+        { id: 'e10b', level: 'EMG', make: function (r) { return algebraPart(repInfo(r.int(1, 9), '', randBlock(r, 3, '', true))); } }] },
       { num: '11', stem: 'In Question 9 every subtraction left ' + t('990x') + ' or ' + t('900x') + ' on the left side.', parts: [
-        { id: 'e11a', level: 'ADV', make: function (r) {
+        { id: 'e11a', level: 'PRG', make: function (r) {
           return P.mc(r, 'A decimal has ' + t('p') + ' non-repeating digits after the point, then a repeating block of ' + t('q') + ' digits. What is the number in front of ' + t('x') + ' after subtracting?', [
             { html: t('10^{p+q}-10^{p}') + ': ' + t('q') + ' nines followed by ' + t('p') + ' zeros', right: true },
             { html: t('p') + ' nines followed by ' + t('q') + ' zeros', why: 'Test it on ' + t('0.16\\overline{3}') + ' (' + t('p=2') + ', ' + t('q=1') + '): the subtraction gave ' + t('900x') + '. How many nines and zeros is that?' },
@@ -636,7 +636,7 @@
             t('10^{p+q}x') + ' moves the block left of the point and ' + t('10^{p}x') + ' puts it just right of the point, so their tails cancel. ' + t('10^{p+q}-10^{p}=10^{p}(10^{q}-1)') + ': ' + t('10^{q}-1') + ' is ' + t('q') + ' nines (one per block digit) and ' + t('10^{p}') + ' adds ' + t('p') + ' zeros (one per lead digit). Check: ' + t('p=1,\\ q=2') + ' gives ' + t('990') + '; ' + t('p=2,\\ q=1') + ' gives ' + t('900') + '.',
             ['Test each rule on ' + t('0.4\\overline{27}') + ' (which gave ' + t('990x') + ') and ' + t('0.16\\overline{3}') + ' (which gave ' + t('900x') + ').'], 'multiplier rule');
         } },
-        { id: 'e11b', level: 'ADV', make: function (r) {
+        { id: 'e11b', level: 'EMG', make: function (r) {
           var L = r.int(1, 3), B = r.int(1, 3), lead = digitsStr(r, L), R = repInfo(0, lead, randBlock(r, B, lead, true));
           return P.number('Without doing the subtraction: for ' + t('x=' + R.tex) + ', what number is in front of ' + t('x') + ' after subtracting?', R.c, function (v) {
             var rev = Math.pow(10, L + B) - Math.pow(10, B); if (v === rev && rev !== R.c) return { code: 'swap', hint: 'Nines for the <b>repeating</b> digits (' + B + ') and zeros for the <b>non-repeating</b> digits (' + L + ').' };
@@ -645,16 +645,16 @@
           }, 'The lead has ' + L + ' digit' + (L > 1 ? 's' : '') + ' and the block has ' + B + ', so the number is ' + B + ' nine' + (B > 1 ? 's' : '') + ' followed by ' + L + ' zero' + (L > 1 ? 's' : '') + ': ' + t(F(R.hi) + '-' + F(R.lo) + '=' + F(R.c)) + '.', ['One nine for each repeating digit, then one zero for each non-repeating digit.'], 'multiplier for ' + R.tex);
         } }] },
       { num: '12', section: 'Extra practice D — Rational or irrational?', stem: 'Several of these are traps — <b>simplify first</b>, then decide.', parts: [
-        { id: 'e12a', level: 'PRG', make: function (r) { return ratGrid(r, e12Rows(r, ['sq', 'nsq', 'pipi', 'prod', 'sqfr']), 'traps grid 1'); } },
-        { id: 'e12b', level: 'PRG', make: function (r) { return ratGrid(r, e12Rows(r, ['negdec', 'rep', 'pihalf', 'grow', 'sum']), 'traps grid 2'); } }] },
+        { id: 'e12a', level: 'EMG', make: function (r) { return ratGrid(r, e12Rows(r, ['sq', 'nsq', 'pipi', 'prod', 'sqfr']), 'traps grid 1'); } },
+        { id: 'e12b', level: 'EMG', make: function (r) { return ratGrid(r, e12Rows(r, ['negdec', 'rep', 'pihalf', 'grow', 'sum']), 'traps grid 2'); } }] },
       { num: '13', stem: 'Decide whether the statement is <i>always</i>, <i>sometimes</i> or <i>never</i> true.', parts: [
-        { id: 'e13a', level: 'ADV', make: function (r) {
+        { id: 'e13a', level: 'PRG', make: function (r) {
           var n = r.pick([2, 3, 5, 7]);
           return P.mc(r, 'The <b>sum</b> of two irrational numbers is irrational.', [
             { html: 'Always', why: 'Try ' + t('\\sqrt{' + n + '}+(-\\sqrt{' + n + '})') + '.' }, { html: 'Sometimes', right: true }, { html: 'Never', why: 'Try ' + t('\\sqrt{' + n + '}+\\sqrt{' + n + '}') + '.' }],
             '<b>Sometimes.</b> Holds: ' + t('\\sqrt{' + n + '}+\\sqrt{' + n + '}=2\\sqrt{' + n + '}') + ' (irrational). Fails: ' + t('\\sqrt{' + n + '}+(-\\sqrt{' + n + '})=0') + ' (rational).', ['Look for one example where it works and one where it doesn’t.'], 'sum of irrationals', true);
         } },
-        { id: 'e13b', level: 'ADV', make: function (r) {
+        { id: 'e13b', level: 'EMG', make: function (r) {
           var n = r.pick([2, 3, 5, 7]), m = r.pick([2, 3, 5, 6, 7].filter(function (x) { return x !== n; })), s = r.pick([[2, 7], [3, 6], [5, 11], [2, 14], [3, 13]]);
           return P.mc(r, 'Which pair of irrational numbers has a <b>rational</b> sum?', [
             { html: t('\\sqrt{' + n + '}') + ' and ' + t('-\\sqrt{' + n + '}'), right: true },
@@ -663,13 +663,13 @@
             { html: t('\\pi') + ' and ' + t('\\sqrt{' + m + '}'), why: t('\\pi+\\sqrt{' + m + '}=' + cut(Math.PI + Math.sqrt(m), 4) + '\\ldots') + ' — nothing cancels.' }],
             t('\\sqrt{' + n + '}+(-\\sqrt{' + n + '})=0') + ', which is rational. (Roots don’t add like that: ' + t('\\sqrt{a}+\\sqrt{b}\\neq\\sqrt{a+b}') + '.)', ['Look for a pair where the irrational parts cancel.'], 'example rational sum');
         } },
-        { id: 'e13c', level: 'ADV', make: function (r) {
+        { id: 'e13c', level: 'PRG', make: function (r) {
           var n = r.pick([2, 3, 5]);
           return P.mc(r, 'The <b>product</b> of two irrational numbers is irrational.', [
             { html: 'Always', why: 'Try ' + t('\\sqrt{' + n + '}\\times\\sqrt{' + n + '}') + '.' }, { html: 'Sometimes', right: true }, { html: 'Never', why: 'Try ' + t('\\sqrt{2}\\times\\sqrt{3}') + '.' }],
             '<b>Sometimes.</b> Holds: ' + t('\\sqrt{2}\\times\\sqrt{3}=\\sqrt{6}') + ' (irrational). Fails: ' + t('\\sqrt{' + n + '}\\times\\sqrt{' + n + '}=' + n) + ' (rational).', ['Look for one example where it works and one where it doesn’t.'], 'product of irrationals', true);
         } },
-        { id: 'e13d', level: 'ADV', make: function (r) {
+        { id: 'e13d', level: 'EMG', make: function (r) {
           var pr = r.pick([[2, 8], [3, 12], [2, 18], [5, 20], [3, 27]]), q = r.pick([[2, 3], [2, 5], [3, 5], [3, 7]]), s = r.pick([[2, 7], [3, 6], [5, 11]]);
           return P.mc(r, 'Which pair of irrational numbers has a <b>rational</b> product?', [
             { html: t('\\sqrt{' + pr[0] + '}') + ' and ' + t('\\sqrt{' + pr[1] + '}'), right: true },
@@ -679,7 +679,7 @@
             t('\\sqrt{' + pr[0] + '}\\times\\sqrt{' + pr[1] + '}=\\sqrt{' + pr[0] * pr[1] + '}=' + Math.sqrt(pr[0] * pr[1])) + ', which is rational.', ['Multiply under one root: ' + t('\\sqrt{a}\\times\\sqrt{b}=\\sqrt{ab}') + '. When is that a whole number?'], 'example rational product');
         } }] },
       { num: '14', stem: 'The sum of a rational number and an irrational number is <i>always</i> irrational.', parts: [
-        { id: 'e14', level: 'MAS', make: function (r) {
+        { id: 'e14', level: 'PRG', make: function (r) {
           return P.mc(r, 'Suppose ' + t('r') + ' is rational, ' + t('s') + ' is irrational, and ' + t('r+s') + ' came out rational. Which argument shows this can’t happen?', [
             { html: 'Then ' + t('s=(r+s)-r') + ' would be a difference of two rational numbers, which is rational — but ' + t('s') + ' is irrational. Contradiction.', right: true },
             { html: 'Try an example: ' + t('1+\\sqrt{2}=2.414\\ldots') + ' is irrational, so it can never happen.', why: 'One example can’t show something is <b>always</b> true. You need an argument that works for every ' + t('r') + ' and ' + t('s') + '.' },
@@ -688,12 +688,12 @@
             'If ' + t('r+s=t') + ' were rational, then ' + t('s=t-r') + '. A difference of rationals is rational: ' + t('\\frac{a}{b}-\\frac{c}{d}=\\frac{ad-bc}{bd}') + '. So ' + t('s') + ' would be rational — but it isn’t. So ' + t('r+s') + ' must be irrational.', ['Use the hint ' + t('s=(r+s)-r') + '. What kind of number is a difference of two rationals?'], 'proof rational + irrational');
         } }] },
       { num: '15', stem: 'Between any two different numbers there is always a rational number.', parts: [
-        { id: 'e15a', level: 'PRG', make: function (r) { var n = r.pick(nonSquares(5, 30).filter(function (x) { return !isSq(x + 1); })); return betweenPart('\\sqrt{' + n + '}', Math.sqrt(n), '\\sqrt{' + (n + 1) + '}', Math.sqrt(n + 1), 'rational between √' + n + ' and √' + (n + 1)); } },
-        { id: 'e15b', level: 'ADV', make: function (r) { var v = r.pick([['\\pi', Math.PI, '\\sqrt{10}', Math.sqrt(10)], ['2\\pi', 2 * Math.PI, '\\sqrt{40}', Math.sqrt(40)], ['\\sqrt{2.4}', Math.sqrt(2.4), '\\dfrac{\\pi}{2}', Math.PI / 2]]); return betweenPart(v[0], v[1], v[2], v[3], 'rational between ' + v[0] + ' and ' + v[2]); } }] },
+        { id: 'e15a', level: 'EMG', make: function (r) { var n = r.pick(nonSquares(5, 30).filter(function (x) { return !isSq(x + 1); })); return betweenPart('\\sqrt{' + n + '}', Math.sqrt(n), '\\sqrt{' + (n + 1) + '}', Math.sqrt(n + 1), 'rational between √' + n + ' and √' + (n + 1)); } },
+        { id: 'e15b', level: 'EMG', make: function (r) { var v = r.pick([['\\pi', Math.PI, '\\sqrt{10}', Math.sqrt(10)], ['2\\pi', 2 * Math.PI, '\\sqrt{40}', Math.sqrt(40)], ['\\sqrt{2.4}', Math.sqrt(2.4), '\\dfrac{\\pi}{2}', Math.PI / 2]]); return betweenPart(v[0], v[1], v[2], v[3], 'rational between ' + v[0] + ' and ' + v[2]); } }] },
       { num: '16', section: 'Extra practice E — Error analysis and challenge', stem: function (sh) { return 'Amira divides ' + t(sh[0] + '\\div ' + sh[1]) + ' on her calculator and the display reads ' + t((sh[0] / sh[1]).toFixed(10)) + '. She writes: “The digits never repeat on the screen, so ' + t('\\frac{' + sh[0] + '}{' + sh[1] + '}') + ' is irrational.”'; },
         shared: function (r) { var n = r.pick([17, 19, 23]); return [r.pick(coprimeTo(n, 2, n - 1)), n]; },
         parts: [
-          { id: 'e16a', level: 'PRG', make: function (r, sh) {
+          { id: 'e16a', level: 'EMG', make: function (r, sh) {
             return P.mc(r, 'What is wrong with her reasoning?', [
               { html: t('\\frac{' + sh[0] + '}{' + sh[1] + '}') + ' is a ratio of two integers, so it is rational whatever the screen shows — the repeating block is just longer than the display.', right: true },
               { html: 'Nothing: if no repeat shows in ten digits, the number is irrational.', why: 'A calculator shows only about ten digits. A fraction’s block can be longer than that.' },
@@ -701,7 +701,7 @@
               { html: 'Her calculator is broken: every fraction repeats within ten digits.', why: 'Blocks can be long: ' + t('\\frac{1}{' + sh[1] + '}') + '’s block is ' + period(sh[1]) + ' digits.' }],
               t('\\frac{' + sh[0] + '}{' + sh[1] + '}') + ' is a ratio of two integers with a non-zero denominator — that is the definition of rational. The screen shows only the first ten decimal places; its block is ' + t(period(sh[1])) + ' digits long, so the repeat never appears on screen: ' + t('\\frac{' + sh[0] + '}{' + sh[1] + '}=' + K.decTex(sh)) + '.', ['What is the definition of a rational number? Is ' + t('\\frac{' + sh[0] + '}{' + sh[1] + '}') + ' one?'], 'Amira error');
           } },
-          { id: 'e16b', level: 'ADV', make: function (r, sh) {
+          { id: 'e16b', level: 'BEG', make: function (r, sh) {
             var n = sh[1];
             return P.number('When you divide by ' + t(n) + ', how many different non-zero remainders are possible? (That is the longest the repeating block can be.)', n - 1, function (v) {
               if (v === n) return { code: 'n-not-n-1', hint: 'The remainder is always less than ' + t(n) + ', and it is never ' + t('0') + ' here (' + t(n) + ' has no factor 2 or 5). So the possible remainders are ' + t('1') + ' to ' + t(n - 1) + '.' };
@@ -712,27 +712,27 @@
       { num: '17', stem: function (sh) { var pr = decParts(sh[0], sh[1]); return 'Devon divides and gets ' + t('\\frac{' + sh[0] + '}{' + sh[1] + '}=' + digitsOf(sh[0], sh[1], pr.lead.length + 3) + '\\ldots') + ', then writes the answer as ' + t('0.\\overline{' + pr.lead + pr.block + '}') + '.'; },
         shared: function (r) { return r.pick([[7, 12], [5, 12], [1, 6], [5, 6], [11, 30], [7, 15], [13, 15], [1, 12], [11, 12]]); },
         parts: [
-          { id: 'e17a', level: 'PRG', make: function (r, sh) {
+          { id: 'e17a', level: 'BEG', make: function (r, sh) {
             var pr = decParts(sh[0], sh[1]), devon = pr.lead + pr.block, s = ''; while (s.length < 8) s += devon; s = '0.' + s.slice(0, 8);
             var real = digitsOf(sh[0], sh[1], 8);
             return { prompt: 'Write the first eight decimal places of the number Devon’s notation ' + t('0.\\overline{' + devon + '}') + ' actually means.', input: { type: 'number' }, key: s, answer: t(s), text: 'Devon notation ' + devon,
               check: K.number(Number(s), function (v) { if (Math.abs(v - Number(real)) < 1e-9) return { code: 'real-value', hint: 'That’s ' + t('\\frac{' + sh[0] + '}{' + sh[1] + '}') + ' itself. Devon’s bar is over ' + t(devon) + ', so the <b>whole</b> block ' + t(devon) + ' repeats.' }; return null; }),
               solution: 'The bar says the whole block ' + t(devon) + ' repeats: ' + t('0.\\overline{' + devon + '}=' + s + '\\ldots') + ' — a different number from ' + t('\\frac{' + sh[0] + '}{' + sh[1] + '}=' + real + '\\ldots') + '.', hints: ['Write the block ' + t(devon) + ' again and again after the decimal point.'], bad: [real] };
           } },
-          { id: 'e17b', level: 'PRG', make: function (r, sh) {
+          { id: 'e17b', level: 'BEG', make: function (r, sh) {
             var p = decPart(sh[0], sh[1]); p.prompt = 'Write ' + t('\\dfrac{' + sh[0] + '}{' + sh[1] + '}') + ' with the bar in the correct place.';
             p.solution += ' Rule: the bar goes over the repeating block only — the digits before it appear once and never return.';
             return p;
           } }] },
       { num: '18', stem: 'Show that ' + t('0.\\overline{9}=1') + ' exactly — not just “very close to 1”.', parts: [
-        { id: 'e18a', level: 'ADV', make: function (r) {
+        { id: 'e18a', level: 'EMG', make: function (r) {
           var v = r.pick([['0', ''], ['0', ''], ['1', ''], ['2', ''], ['0', '4'], ['0', '2']]), R = repInfo(Number(v[0]), v[1], '9'), val = R.ax[0] / R.ax[1];
           return P.number('Run the algebraic method on ' + t('x=' + R.tex) + '. What exact value of ' + t('x') + ' do you get?', val, function (w) {
             if (w < val && w > val - 0.2) return { code: 'close', hint: 'Follow the algebra exactly: ' + t(F(R.hi) + 'x-' + (R.lo > 1 ? R.lo : '') + 'x') + ' — the 9s cancel completely. What is ' + t('x') + '?' };
             return null;
           }, algebraSol(R) + ' So ' + t(R.tex + '=' + val) + ' exactly.', ['Let ' + t('x=' + R.tex) + ', multiply by ' + t(R.hi) + ', subtract and solve.'], 'algebra on ' + R.tex);
         } },
-        { id: 'e18b', level: 'ADV', make: function (r) {
+        { id: 'e18b', level: 'BEG', make: function (r) {
           var f = r.pick([[3, '3'], [9, '1']]);
           return P.mc(r, 'Start with ' + t('\\frac{1}{' + f[0] + '}=0.\\overline{' + f[1] + '}') + ' and multiply both sides by ' + t(f[0]) + '. What does that show?', [
             { html: t('1=0.\\overline{9}') + ', exactly.', right: true },
@@ -741,7 +741,7 @@
             { html: 'Nothing — you can’t multiply a repeating decimal.', why: 'Multiply digit by digit: ' + t(f[0] + '\\times 0.' + f[1] + f[1] + f[1] + '\\ldots=0.999\\ldots') + '.' }],
             t(f[0] + '\\times\\frac{1}{' + f[0] + '}=1') + ' and ' + t(f[0] + '\\times 0.' + f[1] + f[1] + f[1] + '\\ldots=0.999\\ldots') + ', so ' + t('1=0.\\overline{9}') + '.', ['What is ' + t(f[0] + '\\times\\frac{1}{' + f[0] + '}') + '? What is ' + t(f[0] + '\\times 0.' + f[1] + f[1] + f[1] + '\\ldots') + '?'], '1/3 argument');
         } },
-        { id: 'e18c', level: 'MAS', make: function (r) {
+        { id: 'e18c', level: 'PRG', make: function (r) {
           return P.mc(r, 'If ' + t('0.\\overline{9}') + ' were <b>less</b> than ' + t('1') + ', some number would fit strictly between them. Why can’t any number fit?', [
             { html: 'The gap ' + t('1-0.\\overline{9}') + ' is smaller than ' + t('0.1') + ', ' + t('0.01') + ', ' + t('0.001') + ', … — smaller than every positive number — so the gap is ' + t('0') + '.', right: true },
             { html: 'Because ' + t('0.\\overline{9}') + ' rounds to ' + t('1') + '.', why: 'Rounding changes a number. The claim is that they are <i>exactly</i> equal.' },
@@ -750,7 +750,7 @@
             'For every decimal place, ' + t('0.\\overline{9}') + ' is within ' + t('0.1') + ', ' + t('0.01') + ', ' + t('0.001') + ', … of ' + t('1') + '. A positive gap would have to be smaller than all of these, which is impossible, so the gap is ' + t('0') + ': ' + t('0.\\overline{9}') + ' and ' + t('1') + ' are two names for the same number.', ['How far is ' + t('0.9999') + ' from ' + t('1') + '? ' + t('0.999999') + '?'], 'nothing between 0.(9) and 1');
         } }] },
       { num: '19', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: 'e19', level: 'ADV', make: function (r) {
+        { id: 'e19', level: 'EMG', make: function (r) {
           var pool = [3, 6, 9, 11, 22, 33, 27, 37, 7, 13, 14, 21, 12, 15], pick, lens;
           for (var i = 0; i < 300; i++) { pick = r.sample(pool, 4); lens = pick.map(function (q) { return decParts(1, q).block.length; }); var mx = Math.max.apply(null, lens); if (lens.filter(function (x) { return x === mx; }).length === 1 && Math.max.apply(null, pick) !== pick[lens.indexOf(mx)]) break; pick = null; }
           if (!pick) { pick = [6, 11, 13, 22]; lens = pick.map(function (q) { return decParts(1, q).block.length; }); }
@@ -760,7 +760,7 @@
             pick.map(function (q, j) { return t('\\frac{1}{' + q + '}=' + K.decTex([1, q])) + ': ' + lens[j] + '-digit block'; }).join('<br>'), ['Divide each one and count the digits under the bar.'], 'longest block');
         } }] },
       { num: '20', stem: '<i>(Numerical Response)</i>', parts: [
-        { id: 'e20', level: 'ADV', make: function (r) { return nrRepPart(r); } }] }
+        { id: 'e20', level: 'EMG', make: function (r) { return nrRepPart(r); } }] }
     ]
   });
 

@@ -188,6 +188,28 @@
   root.addEventListener('hashchange', route);
 
   /* ---------------- home ---------------- */
+  /* the student's level on each outcome of a unit: the highest question level answered correctly on the first try or after a hint */
+  function unitLevels(u) {
+    var LV = HW.LEVELS, best = {}, outs = String(u.outcomes || '').split(/\s*·\s*/).filter(Boolean);
+    u.lessons.forEach(function (c) {
+      var lesson = HW.lessons[c.id]; if (!lesson) return;
+      lesson.items.forEach(function (it) {
+        var r = (S.lessons[lesson.id] || { items: {} }).items[it.id];
+        if (!r || r.s !== 'done' || (r.credit !== 'first' && r.credit !== 'hint')) return;
+        if (outs.indexOf(it.outcome) < 0) outs.push(it.outcome);
+        if (best[it.outcome] == null || LV.indexOf(it.level) > LV.indexOf(best[it.outcome])) best[it.outcome] = it.level;
+      });
+    });
+    var wrap = el('span', 'unit-levels', '<span class="ulv-note">Your level:</span>');
+    wrap.title = 'Your level on each outcome: the hardest level of question you have answered correctly on the first try or after a hint.';
+    outs.forEach(function (o) {
+      var lv = best[o], i = lv ? LV.indexOf(lv) : -1, dots = '';
+      for (var k = 0; k < LV.length; k++) dots += '<i class="' + (k <= i ? 'on lvbg-' + lv : '') + '"></i>';
+      wrap.appendChild(el('span', 'ulv' + (lv ? '' : ' none'), '<b>' + esc(o) + '</b><span class="ulv-dots" aria-hidden="true">' + dots + '</span>' +
+        (lv ? '<span class="lvl lvl-' + lv + '">' + HW.LEVEL_NAMES[lv] + '</span>' : '<span class="ulv-none">No level yet</span>')));
+    });
+    return wrap;
+  }
   function renderHome() {
     leaveLesson(); document.body.className = 'home';
     drawTop(); top.dataset.crumb = '';
@@ -201,7 +223,9 @@
     view.appendChild(legend);
     HW.CATALOG.forEach(function (u) {
       var sec = el('section', 'unit');
-      sec.appendChild(el('h2', 'unit-title', '<span class="unit-num">Unit ' + u.unit + '</span> ' + esc(u.title) + ' <span class="unit-out">' + esc(u.outcomes) + '</span>'));
+      var uh = el('h2', 'unit-title', '<span class="unit-num">Unit ' + u.unit + '</span> ' + esc(u.title) + ' <span class="unit-out">' + esc(u.outcomes) + '</span>');
+      sec.appendChild(uh);
+      if (u.lessons.some(function (c) { return HW.lessons[c.id]; })) uh.appendChild(unitLevels(u));
       if (!u.lessons.length) { sec.classList.add('soon'); sec.appendChild(el('div', 'soon-note', 'Coming soon')); view.appendChild(sec); return; }
       var list = el('div', 'lesson-list');
       u.lessons.forEach(function (c) {
@@ -416,7 +440,7 @@
     if (t === 'classify') return resp.choice === 'prime' ? 'Prime' : 'Composite: ' + HW.k(HW.fmt(inst.input.n) + '=' + resp.a + '\\times ' + resp.b);
     if (t === 'list' || t === 'select') return HW.k((resp || []).join(',\\ '));
     if (t === 'order') { var byH = {}; inst.input.items.forEach(function (x) { byH[x.id] = HW.tex(x.html); }); return (resp || []).map(function (id) { return byH[id] || esc(id); }).join(', '); }
-    if (t === 'fields') return (resp || []).map(function (v, i) { var f = inst.input.fields[i] || {}; return (f.label ? HW.tex(f.label) + ' ' : '') + esc(v); }).join(' &nbsp;·&nbsp; ');
+    if (t === 'fields') return (resp || []).map(function (v, i) { var f = inst.input.fields[i] || {}; return (f.label ? HW.tex(f.label) + ' ' : '') + (f.before ? HW.tex(f.before) + ' ' : '') + (f.mode === 'math' && v !== 'none' ? HW.k(String(v)) : esc(v)); }).join(' &nbsp;·&nbsp; ');
     return esc(txt);
   }
   function logAttempt(it, verdict, code, answer, tryNo) {

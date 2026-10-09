@@ -368,3 +368,14 @@ math-field.mf::part(menu-toggle), math-field.mf::part(virtual-keyboard-toggle) {
 .katex-display { overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
 .nw { white-space: nowrap; }
 .numlist { display: flex; flex-wrap: wrap; gap: 10px 26px; margin: 12px 0; font-size: 1.05em; }
+
+/* ---------- the student's level beside each unit ---------- */
+.unit-levels { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-left: auto; align-self: center; font-size: 13px; font-weight: 500; }
+.ulv { display: inline-flex; align-items: center; gap: 8px; padding: 5px 6px 5px 11px; background: var(--card); border: 1px solid var(--line); border-radius: 999px; font-size: 13px; color: var(--ink2); }
+.ulv.none { padding-right: 11px; }
+.ulv-dots { display: inline-flex; gap: 3px; }
+.ulv-dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--track); }
+.ulv-dots i.on.lvbg-LIM { background: var(--lim); } .ulv-dots i.on.lvbg-BEG { background: var(--beg); } .ulv-dots i.on.lvbg-EMG { background: var(--emg); }
+.ulv-dots i.on.lvbg-PRG { background: var(--prg); } .ulv-dots i.on.lvbg-ADV { background: var(--adv); } .ulv-dots i.on.lvbg-MAS { background: var(--mas); }
+.ulv-none { color: var(--muted); font-size: 12.5px; }
+.ulv-note { font-size: 12.5px; color: var(--muted); }

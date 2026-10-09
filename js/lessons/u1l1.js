@@ -107,39 +107,39 @@
         { id: '2b', level: 'LIM', make: function (r) { return countPart(r.pick(primesIn(11, 31))); } },
         { id: '2c', level: 'BEG', make: function (r) { return countPart(r.pick(primesIn(23, 61))); } },
         { id: '2d', level: 'BEG', make: function (r) { return countPart(r.pick([15, 21, 33, 35, 39, 51, 55, 57, 65, 69, 77, 85, 87, 91, 95])); } },
-        { id: '2e', level: 'EMG', make: function (r) { return countPart(r.pick([24, 30, 40, 42, 54, 56, 66, 70, 78, 88])); } }] },
+        { id: '2e', level: 'BEG', make: function (r) { return countPart(r.pick([24, 30, 40, 42, 54, 56, 66, 70, 78, 88])); } }] },
       { num: '3', stem: function (sh) { return 'Here are five whole numbers like the ones in Question 2: ' + t(K.listTex(sh.nums)) + '. Select the numbers which are'; },
         shared: function (r) {
           var a = r.pick([4, 9, 25, 49]), b = r.pick(primesIn(11, 31)), c = r.pick(primesIn(37, 61)), d = r.pick([15, 21, 33, 35, 39, 51, 55, 57, 65, 77, 85, 91]), e = r.pick([24, 30, 40, 42, 54, 56, 66, 70, 78, 88]);
           return { nums: r.shuffle([a, b, c, d, e]) };
         },
         parts: [
-          { id: '3a', level: 'BEG', make: function (r, sh) { return selectPart(sh.nums, true); } },
-          { id: '3b', level: 'BEG', make: function (r, sh) { return selectPart(sh.nums, false); } }] },
+          { id: '3a', level: 'LIM', make: function (r, sh) { return selectPart(sh.nums, true); } },
+          { id: '3b', level: 'LIM', make: function (r, sh) { return selectPart(sh.nums, false); } }] },
       { num: '4', stem: 'Classify the following whole numbers as prime or composite.', parts: [
         { id: '4a', level: 'LIM', make: function (r) { return classifyPart(2 * r.int(15, 49)); } },
-        { id: '4b', level: 'BEG', make: function (r) { return classifyPart(r.pick(primesIn(41, 97))); } },
+        { id: '4b', level: 'LIM', make: function (r) { return classifyPart(r.pick(primesIn(41, 97))); } },
         { id: '4c', level: 'LIM', make: function (r) { return classifyPart(r.pick([25, 35, 45, 55, 65, 75, 85, 95])); } },
-        { id: '4d', level: 'BEG', make: function (r) { return classifyPart(r.pick([35, 39, 51, 55, 57, 65, 85, 95])); } },
-        { id: '4e', level: 'BEG', make: function (r) { return classifyPart(r.pick(primesIn(53, 113))); } },
-        { id: '4f', level: 'EMG', make: function (r) { return classifyPart(3 * r.pick([17, 19, 23, 29, 31, 37, 41, 43, 47])); } },
-        { id: '4g', level: 'EMG', make: function (r) { return classifyPart(5 * r.pick([17, 19, 23, 29, 31, 37])); } },
-        { id: '4h', level: 'PRG', make: function (r) { return classifyPart(r.pick([91, 119, 133, 143, 161, 187, 203, 209, 217, 221, 247, 253]), true); } }] },
+        { id: '4d', level: 'LIM', make: function (r) { return classifyPart(r.pick([35, 39, 51, 55, 57, 65, 85, 95])); } },
+        { id: '4e', level: 'LIM', make: function (r) { return classifyPart(r.pick(primesIn(53, 113))); } },
+        { id: '4f', level: 'BEG', make: function (r) { return classifyPart(3 * r.pick([17, 19, 23, 29, 31, 37, 41, 43, 47])); } },
+        { id: '4g', level: 'LIM', make: function (r) { return classifyPart(5 * r.pick([17, 19, 23, 29, 31, 37])); } },
+        { id: '4h', level: 'EMG', make: function (r) { return classifyPart(r.pick([91, 119, 133, 143, 161, 187, 203, 209, 217, 221, 247, 253]), true); } }] },
       { num: '5', stem: 'Twin primes are consecutive odd numbers that are both prime (for example, ' + t('3') + ' and ' + t('5') + ').', parts: [
-        { id: '5', level: 'PRG', make: function (r) { return twinPart(r); } }] },
+        { id: '5', level: 'EMG', make: function (r) { return twinPart(r); } }] },
       { num: '6', section: 'Part B — Prime Factors and Prime Factorization', stem: function (sh) { return 'Answer each part for the number ' + t(F(sh.n)) + '.'; },
         shared: function (r) { return { n: r.pick([12, 18, 20, 28, 44, 45, 50, 52, 63, 68, 75, 76, 92, 98, 99]) }; },
         parts: [
           { id: '6a', level: 'BEG', make: function (r, sh) { var p = factorsPart(sh.n); p.prompt = 'State the factors of ' + t(F(sh.n)) + '.'; return p; } },
           { id: '6b', level: 'BEG', make: function (r, sh) { var p = primeFactorsPart(sh.n); p.prompt = 'State the prime factors of ' + t(F(sh.n)) + '.'; return p; } },
-          { id: '6c', level: 'EMG', make: function (r, sh) { var p = productPart(sh.n); p.prompt = 'Express ' + t(F(sh.n)) + ' as a product of prime factors.'; return p; } }] },
+          { id: '6c', level: 'BEG', make: function (r, sh) { var p = productPart(sh.n); p.prompt = 'Express ' + t(F(sh.n)) + ' as a product of prime factors.'; return p; } }] },
       { num: '7', stem: 'State the prime factors of', parts: [
         { id: '7a', level: 'BEG', make: function (r) { return primeFactorsPart(2 * r.pick([11, 13, 17, 19, 23])); } },
         { id: '7b', level: 'BEG', make: function (r) { return primeFactorsPart(r.pick([24, 40, 54, 56, 88, 104])); } },
-        { id: '7c', level: 'EMG', make: function (r) { return primeFactorsPart(r.pick([45, 63, 75, 99, 117, 147, 175])); } },
+        { id: '7c', level: 'BEG', make: function (r) { return primeFactorsPart(r.pick([45, 63, 75, 99, 117, 147, 175])); } },
         { id: '7d', level: 'EMG', make: function (r) { return primeFactorsPart(r.pick([60, 84, 90, 126, 132, 140, 156, 198])); } }] },
       { num: '8', stem: 'Explain why the numbers ' + t('0') + ' and ' + t('1') + ' have no prime factors.', parts: [
-        { id: '8a', level: 'PRG', make: function (r) {
+        { id: '8a', level: 'BEG', make: function (r) {
           return mcPart(r, 'Which statement explains why ' + t('1') + ' has no prime factors?', [
             { html: 'The only factor of ' + t('1') + ' is ' + t('1') + ', and ' + t('1') + ' is not prime.', right: true },
             { html: t('1') + ' is prime, so its only prime factor is itself.', why: 'A prime has <b>exactly two</b> factors. ' + t('1') + ' has only one factor, so it isn’t prime.' },
@@ -147,7 +147,7 @@
             { html: t('1') + ' has too many factors to list.', why: 'Count them: ' + t('1') + ' has just one factor.' }],
             'A prime has exactly two factors. ' + t('1') + ' has only one factor (' + t('1') + ' itself), so it isn’t prime, and it has no other factors that could be prime.', ['How many factors does ' + t('1') + ' have? How many does a prime need?'], 'why 1 has no prime factors');
         } },
-        { id: '8b', level: 'PRG', make: function (r) {
+        { id: '8b', level: 'EMG', make: function (r) {
           return mcPart(r, 'Which statement explains why ' + t('0') + ' has no prime factorization?', [
             { html: 'Multiplying primes never gives ' + t('0') + ', so no product of primes equals ' + t('0') + '.', right: true },
             { html: t('0') + ' has no factors at all.', why: 'Actually every whole number divides into ' + t('0') + ' (for example ' + t('0=5\\times 0') + '), so ' + t('0') + ' has <b>infinitely many</b> factors.' },
@@ -156,22 +156,22 @@
             'Every prime is at least ' + t('2') + ', and a product of numbers that are at least ' + t('2') + ' can never be ' + t('0') + '. So ' + t('0') + ' can’t be written as a product of primes. (It actually has infinitely many factors: ' + t('0=5\\times 0=7\\times 0') + ', …)', ['What do you get when you multiply primes together? Can it ever be ' + t('0') + '?'], 'why 0 has no prime factorization');
         } }] },
       { num: '9', stem: 'Use a division ladder to determine the prime factorization of', parts: [
-        { id: '9a', level: 'PRG', make: function (r) { return ladderPart(r.pick([4 * 3, 4 * 5]) * r.pick([7, 11, 13, 17, 19])); } },
-        { id: '9b', level: 'PRG', make: function (r) { return ladderPart(r.pick([315, 495, 585, 525, 693, 735, 1155])); } },
-        { id: '9c', level: 'ADV', make: function (r) { return ladderPart(prodOf(pickDistinct(r, [7, 11, 13, 17, 19, 23], 3, 1000, 5000))); } },
-        { id: '9d', level: 'ADV', make: function (r) { return ladderPart(25 * prodOf(pickDistinct(r, [7, 11, 13, 17, 19], 2, 40, 360))); } }] },
+        { id: '9a', level: 'BEG', make: function (r) { return ladderPart(r.pick([4 * 3, 4 * 5]) * r.pick([7, 11, 13, 17, 19])); } },
+        { id: '9b', level: 'BEG', make: function (r) { return ladderPart(r.pick([315, 495, 585, 525, 693, 735, 1155])); } },
+        { id: '9c', level: 'EMG', make: function (r) { return ladderPart(prodOf(pickDistinct(r, [7, 11, 13, 17, 19, 23], 3, 1000, 5000))); } },
+        { id: '9d', level: 'EMG', make: function (r) { return ladderPart(25 * prodOf(pickDistinct(r, [7, 11, 13, 17, 19], 2, 40, 360))); } }] },
       { num: '10', stem: 'Use a factor tree to determine the prime factorization of the following.', parts: [
-        { id: '10a', level: 'PRG', make: function (r) { return treePart(r.pick([8 * 3, 8 * 5]) * r.pick([7, 11, 13, 17])); } },
-        { id: '10b', level: 'PRG', make: function (r) { return treePart(25 * r.pick([11, 13, 17, 19, 23])); } },
-        { id: '10c', level: 'ADV', make: function (r) { return treePart(prodOf(pickDistinct(r, [11, 13, 17, 19, 23], 3, 1500, 7000))); } },
-        { id: '10d', level: 'ADV', make: function (r) { var q = r.pick([7, 11, 13]), p = r.pick([3, 7, 11, 13].filter(function (x) { return x !== q; })); return treePart(10 * p * q * q); } }] },
+        { id: '10a', level: 'BEG', make: function (r) { return treePart(r.pick([8 * 3, 8 * 5]) * r.pick([7, 11, 13, 17])); } },
+        { id: '10b', level: 'BEG', make: function (r) { return treePart(25 * r.pick([11, 13, 17, 19, 23])); } },
+        { id: '10c', level: 'EMG', make: function (r) { return treePart(prodOf(pickDistinct(r, [11, 13, 17, 19, 23], 3, 1500, 7000))); } },
+        { id: '10d', level: 'EMG', make: function (r) { var q = r.pick([7, 11, 13]), p = r.pick([3, 7, 11, 13].filter(function (x) { return x !== q; })); return treePart(10 * p * q * q); } }] },
       { num: '11', stem: 'In each case, write the number as a product of prime factors.', parts: [
-        { id: '11a', level: 'EMG', make: function (r) { return productPart(r.pick([175, 245, 147, 275, 363, 325, 117])); } },
-        { id: '11b', level: 'PRG', make: function (r) { return productPart(r.pick([847, 1183, 1573, 605, 845, 1859])); } },
-        { id: '11c', level: 'ADV', make: function (r) { return productPart(prodOf(pickDistinct(r, [3, 5, 7, 11, 13, 17, 19], 4, 1500, 9000))); } },
-        { id: '11d', level: 'ADV', make: function (r) { return productPart(r.pick([5250, 8250, 9750, 3150, 4950, 5850])); } }] },
+        { id: '11a', level: 'BEG', make: function (r) { return productPart(r.pick([175, 245, 147, 275, 363, 325, 117])); } },
+        { id: '11b', level: 'EMG', make: function (r) { return productPart(r.pick([847, 1183, 1573, 605, 845, 1859])); } },
+        { id: '11c', level: 'EMG', make: function (r) { return productPart(prodOf(pickDistinct(r, [3, 5, 7, 11, 13, 17, 19], 4, 1500, 9000))); } },
+        { id: '11d', level: 'EMG', make: function (r) { return productPart(r.pick([5250, 8250, 9750, 3150, 4950, 5850])); } }] },
       { num: '12', section: 'Part C — Multiple Choice and Numerical Response', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: '12', level: 'PRG', make: function (r) {
+        { id: '12', level: 'BEG', make: function (r) {
           var ps = pickDistinct(r, [3, 5, 7, 11, 13, 17, 19], 4, 1000, 20000), n = prodOf(ps);
           var shown = r.sample(ps, 3), out = r.pick(primesIn(7, 23).filter(function (p) { return ps.indexOf(p) < 0; }));
           var opts = shown.concat([out]).sort(function (a, b) { return a - b; }).map(function (v) { return { html: t(v), right: v === out, why: v === out ? null : t(v) + ' does divide ' + t(F(n)) + ': ' + t(F(n) + '\\div ' + v + '=' + F(n / v)) + '. So it <i>is</i> a prime factor.' }; });
@@ -179,7 +179,7 @@
             t(F(n) + '=' + K.fac(n)) + '. The prime factors are ' + t(K.listTex(ps)) + ', so ' + t(out) + ' is not one of them.', ['Divide ' + t(F(n)) + ' by each option. A prime factor divides it evenly.'], 'not a prime factor of ' + n, true);
         } }] },
       { num: '13', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: '13', level: 'ADV', make: function (r) {
+        { id: '13', level: 'EMG', make: function (r) {
           var ps = pickDistinct(r, [2, 3, 5, 7, 11, 13], 5, 1000, 20000), n = prodOf(ps), k = r.int(1, 3);
           var inList = r.sample(ps, 4 - k), notIn = r.sample(primesIn(2, 23).filter(function (p) { return ps.indexOf(p) < 0; }), k);
           var list = inList.concat(notIn).sort(function (a, b) { return a - b; });
@@ -188,7 +188,7 @@
             t(F(n) + '=' + K.fac(n)) + '. From the list, ' + t(notIn.sort(function (a, b) { return a - b; }).join(',\\ ')) + (k === 1 ? ' is' : ' are') + ' not prime factors, so the answer is ' + t(k) + '.', ['Write ' + t(F(n)) + ' as a product of primes first, then check each number in the list.'], 'how many not prime factors of ' + n, true);
         } }] },
       { num: '14', stem: '<i>(Numerical Response)</i>', parts: [
-        { id: '14', level: 'ADV', make: function (r) {
+        { id: '14', level: 'EMG', make: function (r) {
           var ps = pickDistinct(r, [2, 3, 5, 7, 11, 13, 17, 19, 23], r.pick([5, 6]), 2000, 99999), n = prodOf(ps), s = nt.sum(ps);
           return nrPart('The sum of all the prime factors of ' + t(F(n)) + ' is ________.', s, function (v) {
             if (v === s + 1) return { code: 'plus1', hint: 'Did you include ' + t('1') + '? It isn’t prime.' };
@@ -197,7 +197,7 @@
           }, t(F(n) + '=' + K.fac(n)) + '. Sum: ' + t(ps.join('+') + '=' + s) + '.', ['Find the prime factorization of ' + t(F(n)) + ' first.', 'Add each different prime once.'], 'sum of prime factors of ' + n);
         } }] },
       { num: '15', stem: '<i>(Numerical Response)</i> There is only one set of <i>prime triplets</i>: three consecutive odd numbers which are all prime.', parts: [
-        { id: '15', level: 'MAS', make: function (r) {
+        { id: '15', level: 'PRG', make: function (r) {
           var forms = [['abc', function (a, b, c) { return a * b * c; }], ['a+b+c', function (a, b, c) { return a + b + c; }], ['ab+c', function (a, b, c) { return a * b + c; }],
             ['a^{2}+b^{2}+c^{2}', function (a, b, c) { return a * a + b * b + c * c; }], ['bc-a', function (a, b, c) { return b * c - a; }], ['ac+b', function (a, b, c) { return a * c + b; }]];
           var fm = r.pick(forms), ans = fm[1](3, 5, 7);
@@ -210,7 +210,7 @@
           ['Try some: ' + t('3, 5, 7') + '? ' + t('5, 7, 9') + '? ' + t('11, 13, 15') + '? Check whether each number is prime.', 'In any three consecutive odd numbers, one is a multiple of ' + t('3') + '. When can that number be prime?'], 'prime triplets ' + fm[0]);
         } }] },
       { num: '16', stem: '<i>(Numerical Response)</i>', parts: [
-        { id: '16', level: 'MAS', make: function (r) {
+        { id: '16', level: 'EMG', make: function (r) {
           var n, p, q, e;
           for (var i = 0; i < 200; i++) { q = r.pick([5, 7, 11, 13]); e = r.int(2, 4); p = r.pick([2, 3, 5, 7, 11, 13, 17, 19].filter(function (x) { return x !== q; })); n = p * Math.pow(q, e); if (n >= 1000 && n <= 30000) break; }
           var ans = p + q + e;
@@ -225,16 +225,16 @@
     ],
     extra: [
       { num: '1', section: 'Extra practice A — Prime factorization of larger numbers', stem: 'Use a <b>division ladder</b> to find the prime factorization of each number. Start at ' + t('2') + ' and work up through the primes. Write each answer in exponent form.', parts: [
-        { id: 'e1a', level: 'ADV', make: function (r) { return ladderPart(r.pick([6468, 9075, 13860, 5544, 7020, 4860, 8820]), 'required'); } },
-        { id: 'e1b', level: 'ADV', make: function (r) { return ladderPart(Math.pow(r.pick([11, 13, 17, 19, 23]), 3), 'required'); } }] },
+        { id: 'e1a', level: 'EMG', make: function (r) { return ladderPart(r.pick([6468, 9075, 13860, 5544, 7020, 4860, 8820]), 'required'); } },
+        { id: 'e1b', level: 'PRG', make: function (r) { return ladderPart(Math.pow(r.pick([11, 13, 17, 19, 23]), 3), 'required'); } }] },
       { num: '2', stem: 'Use a <b>factor tree</b> for each number. Choose a first factor pair you can see quickly — it does not have to involve a prime.', parts: [
-        { id: 'e2a', level: 'ADV', make: function (r) { return treePart(r.pick([5184, 2592, 1728, 1296, 7776, 3888]), 'required'); } },
-        { id: 'e2b', level: 'MAS', make: function (r) { var p = treePart(Math.pow(r.pick([23, 29]), 3), 'required'); p.hints.unshift('It isn’t even, and its digit sum is not a multiple of ' + t('3') + '. Try the larger primes.'); return p; } }] },
+        { id: 'e2a', level: 'EMG', make: function (r) { return treePart(r.pick([5184, 2592, 1728, 1296, 7776, 3888]), 'required'); } },
+        { id: 'e2b', level: 'PRG', make: function (r) { var p = treePart(Math.pow(r.pick([23, 29]), 3), 'required'); p.hints.unshift('It isn’t even, and its digit sum is not a multiple of ' + t('3') + '. Try the larger primes.'); return p; } }] },
       { num: '3', stem: 'Express each number as a product of prime factors in exponent form.', parts: [
-        { id: 'e3a', level: 'ADV', make: function (r) { return productPart(r.pick([10296, 23400, 29095, 15288, 20790, 17160]), 'required'); } },
-        { id: 'e3b', level: 'ADV', make: function (r) { return productPart(r.pick([74088, 27000, 9261, 3375, 21952]), 'required'); } }] },
+        { id: 'e3a', level: 'EMG', make: function (r) { return productPart(r.pick([10296, 23400, 29095, 15288, 20790, 17160]), 'required'); } },
+        { id: 'e3b', level: 'EMG', make: function (r) { return productPart(r.pick([74088, 27000, 9261, 3375, 21952]), 'required'); } }] },
       { num: '4', stem: 'Two students draw factor trees for the same number and start with different factor pairs.', parts: [
-        { id: 'e4', level: 'PRG', make: function (r) {
+        { id: 'e4', level: 'EMG', make: function (r) {
           var n = r.pick([1176, 1260, 2520, 1512]), d = nt.divisors(n).filter(function (x) { return x > 3 && x * x < n; }), a = d[0], b = d[d.length - 1];
           return mcPart(r, 'One tree for ' + t(F(n)) + ' starts with ' + t(a + '\\times ' + F(n / a)) + ', the other with ' + t(b + '\\times ' + F(n / b)) + '. What will they find?', [
             { html: 'The same primes, ' + t(K.fac(n)) + ': every composite number has exactly one prime factorization.', right: true },
@@ -244,7 +244,7 @@
             'Both trees end at ' + t(F(n) + '=' + K.fac(n)) + '. A number’s prime factorization is unique: whatever pair you start with, you keep splitting until only those primes are left.', ['Finish one of the trees in your head. Would the other tree be allowed to end with different primes?'], 'unique factorization ' + n);
         } }] },
       { num: '5', section: 'Extra practice B — Counting factors from the prime factorization', stem: 'Look for a connection between the exponents in the prime factorization and the number of factors.', parts: [
-        { id: 'e5', level: 'ADV', make: function (r) {
+        { id: 'e5', level: 'PRG', make: function (r) {
           return mcPart(r, 'If a whole number has prime factorization ' + t('n=2^{a}\\times 3^{b}\\times 5^{c}') + ', how many factors does ' + t('n') + ' have?', [
             { html: t('(a+1)(b+1)(c+1)'), right: true },
             { html: t('a\\times b\\times c'), why: 'Test it on ' + t('12=2^{2}\\times 3^{1}') + ' (no 5s, so ' + t('c=0') + '): ' + t('12') + ' has six factors. Does your rule give 6?' },
@@ -254,10 +254,10 @@
             ['Test each rule on a number you know, like ' + t('12=2^{2}\\times 3') + ', which has six factors.'], 'factor-count rule');
         } }] },
       { num: '6', stem: 'Use the rule ' + t('(a+1)(b+1)(c+1)\\ldots') + ' to state how many factors each number has. Find the prime factorization first; do not list the factors.', parts: [
-        { id: 'e6a', level: 'ADV', make: function (r) { return ruleCount(r, r.pick([720, 1176, 1800, 1512, 2700, 3600])); } },
-        { id: 'e6b', level: 'ADV', make: function (r) { return ruleCount(r, r.pick([9261, 16000, 3375, 21952, 10648])); } }] },
+        { id: 'e6a', level: 'PRG', make: function (r) { return ruleCount(r, r.pick([720, 1176, 1800, 1512, 2700, 3600])); } },
+        { id: 'e6b', level: 'PRG', make: function (r) { return ruleCount(r, r.pick([9261, 16000, 3375, 21952, 10648])); } }] },
       { num: '7', stem: '<i>(Numerical Response)</i>', parts: [
-        { id: 'e7', level: 'ADV', make: function (r) {
+        { id: 'e7', level: 'EMG', make: function (r) {
           var es = [r.int(3, 6), r.int(2, 4), r.int(1, 2), 1], ans = es.reduce(function (m, e) { return m * (e + 1); }, 1);
           var tex = '2^{' + es[0] + '}\\times 3^{' + es[1] + '}\\times 5' + (es[2] > 1 ? '^{' + es[2] + '}' : '') + '\\times 7';
           return nrPart('The number of factors of ' + t(tex) + ' is ________. (Don’t multiply it out.)', ans, function (v) {
@@ -268,7 +268,7 @@
           }, t('(' + es.map(function (e) { return e + '+1'; }).join(')(') + ')=' + es.map(function (e) { return e + 1; }).join('\\times ') + '=' + ans), ['Add 1 to each exponent, then multiply.'], 'factor count from exponents');
         } }] },
       { num: '8', stem: 'A bigger number doesn’t always have more factors.', parts: [
-        { id: 'e8', level: 'PRG', make: function (r) {
+        { id: 'e8', level: 'EMG', make: function (r) {
           var a = r.pick([256, 512, 1024]), b = r.pick([180, 360, 420, 210]), ca = nt.numDivisors(a), cb = nt.numDivisors(b);
           return mcPart(r, 'Which number has more factors: ' + t(F(a) + '=2^{' + Math.log2(a) + '}') + ' or ' + t(F(b) + '=' + K.fac(b)) + '?', [
             { html: t(F(b)) + ', with ' + t(cb) + ' factors', right: cb > ca, why: cb > ca ? null : 'Count again with the rule ' + t('(a+1)(b+1)\\ldots') + '.' },
@@ -278,7 +278,7 @@
             ['Use the factor-count rule on each number.'], 'more factors ' + a + ' vs ' + b);
         } }] },
       { num: '9', section: 'Extra practice C — Working backwards from the factor count', stem: '<i>(Numerical Response)</i>', parts: [
-        { id: 'e9a', level: 'MAS', make: function (r) { return smallestWith(r.pick([6, 8, 10, 9])); } },
+        { id: 'e9a', level: 'ADV', make: function (r) { return smallestWith(r.pick([6, 8, 10, 9])); } },
         { id: 'e9b', level: 'MAS', make: function (r) { return smallestWith(r.pick([12, 16, 18, 20])); } }] },
       { num: '10', stem: 'A number with exactly ' + t('3') + ' factors is unusual.', parts: [
         { id: 'e10', level: 'ADV', make: function (r) {
@@ -296,7 +296,7 @@
             hints: ['Try ' + t('4') + ' (factors ' + t('1,2,4') + ') and ' + t('9') + ' (factors ' + t('1,3,9') + '). What do they have in common?', 'They are all squares of primes.'] };
         } }] },
       { num: '11', stem: 'Can a whole number have an odd number of factors?', parts: [
-        { id: 'e11', level: 'ADV', make: function (r) {
+        { id: 'e11', level: 'PRG', make: function (r) {
           var lim = r.pick([20, 30, 50]), want = []; for (var i = 1; i * i <= lim; i++) want.push(i * i);
           return { prompt: 'List every whole number from ' + t('1') + ' to ' + t(lim) + ' that has an <b>odd</b> number of factors.', input: { type: 'list' }, key: want, answer: t(K.listTex(want)), text: 'odd factor count up to ' + lim,
             check: function (resp) {
@@ -311,10 +311,10 @@
             hints: ['Count the factors of ' + t('1') + ' to ' + t('10') + ' and look for a pattern.', 'Think about factor pairs like ' + t('4\\times 4') + '.'] };
         } }] },
       { num: '12', section: 'Extra practice D — Testing a number for primality', stem: 'Decide whether each number is prime or composite. You only need to test the primes up to its square root.', parts: [
-        { id: 'e12a', level: 'ADV', make: function (r) { return classifyPart(r.pick([397, 409, 419, 431, 433, 439, 443])); } },
-        { id: 'e12b', level: 'ADV', make: function (r) { return classifyPart(r.pick([551, 1147, 2209, 667, 899, 1763, 1517]), true); } }] },
+        { id: 'e12a', level: 'BEG', make: function (r) { return classifyPart(r.pick([397, 409, 419, 431, 433, 439, 443])); } },
+        { id: 'e12b', level: 'EMG', make: function (r) { return classifyPart(r.pick([551, 1147, 2209, 667, 899, 1763, 1517]), true); } }] },
       { num: '13', stem: 'Error analysis.', parts: [
-        { id: 'e13', level: 'ADV', make: function (r) {
+        { id: 'e13', level: 'EMG', make: function (r) {
           var pq = r.pick([[23, 29], [29, 31], [31, 37], [23, 31]]), n = pq[0] * pq[1], before = primesIn(2, pq[0] - 1);
           return mcPart(r, 'Kai tested ' + t(F(n)) + ' by dividing it by ' + t(before.join(', ')) + '. None divided evenly, so he concluded that ' + t(F(n)) + ' is prime. What is his error?', [
             { html: 'He stopped too soon: he had to test every prime up to ' + t(sqrtNote(n)) + ', and ' + t(pq[0]) + ' divides it.', right: true },
@@ -326,7 +326,7 @@
       { num: '14', section: 'Extra practice E — Error analysis', stem: function (sh) { return 'A student drew a factor tree for ' + t(F(sh.n)) + ' and wrote ' + t(F(sh.n) + '=2^{2}\\times 3\\times ' + F(sh.m)) + '. Every step is arithmetically correct, but the answer is wrong.'; },
         shared: function (r) { var m = r.pick([693, 1155, 1365, 819, 1001]); return { m: m, n: 12 * m }; },
         parts: [
-          { id: 'e14a', level: 'PRG', make: function (r, sh) {
+          { id: 'e14a', level: 'BEG', make: function (r, sh) {
             return mcPart(r, 'What is the error?', [
               { html: t(F(sh.m)) + ' isn’t prime, so the tree isn’t finished.', right: true },
               { html: t('12') + ' should have been split into ' + t('2\\times 6') + ' instead of ' + t('4\\times 3') + '.', why: 'Any factor pair is allowed — every starting split ends at the same primes.' },
@@ -334,10 +334,10 @@
               { html: t('2^{2}') + ' should be written as ' + t('4') + '.', why: t('4') + ' isn’t prime; ' + t('2^{2}') + ' is the right way to write it.' }],
               t(F(sh.m) + '=' + K.fac(sh.m)) + ' isn’t prime. The rule: keep branching until <b>every</b> branch ends in a prime.', ['Check each number at the end of the branches: is it prime?'], 'error analysis tree ' + sh.n);
           } },
-          { id: 'e14b', level: 'ADV', make: function (r, sh) { var p = treePart(sh.n, 'required'); p.prompt = 'Finish the job: draw a factor tree for ' + t(F(sh.n)) + ' and write its prime factorization in exponent form.'; return p; } },
-          { id: 'e14c', level: 'ADV', make: function (r, sh) { return ruleCount(r, sh.n); } }] },
+          { id: 'e14b', level: 'EMG', make: function (r, sh) { var p = treePart(sh.n, 'required'); p.prompt = 'Finish the job: draw a factor tree for ' + t(F(sh.n)) + ' and write its prime factorization in exponent form.'; return p; } },
+          { id: 'e14c', level: 'PRG', make: function (r, sh) { return ruleCount(r, sh.n); } }] },
       { num: '15', stem: 'Another student argues: “' + t('1') + ' divides into every number, so ' + t('1') + ' is a prime factor of every number. That makes ' + t('1') + ' prime.”', parts: [
-        { id: 'e15', level: 'MAS', make: function (r) {
+        { id: 'e15', level: 'EMG', make: function (r) {
           return mcPart(r, 'If ' + t('1') + ' were counted as prime, what would go wrong with prime factorizations?', [
             { html: 'They would no longer be unique: ' + t('12=2^{2}\\times 3=1\\times 2^{2}\\times 3=1^{5}\\times 2^{2}\\times 3') + ', and so on forever.', right: true },
             { html: 'Nothing would change, because multiplying by ' + t('1') + ' changes nothing.', why: 'That’s exactly the problem: since multiplying by ' + t('1') + ' changes nothing, you could add as many 1s as you like — so a number would have endless different “prime factorizations”.' },
@@ -346,14 +346,14 @@
             'A prime has exactly two factors, and ' + t('1') + ' has only one. If ' + t('1') + ' counted as prime, ' + t('12') + ' could be written as ' + t('2^{2}\\times 3') + ', ' + t('1\\times 2^{2}\\times 3') + ', ' + t('1^{2}\\times 2^{2}\\times 3') + ', … — factorizations would no longer be unique.', ['Write ' + t('12') + ' as a product of primes, then try including some 1s.'], 'why 1 is not prime');
         } }] },
       { num: '16', section: 'Extra practice F — Stretch', stem: 'Recall that ' + t('n!') + ' means ' + t('n\\times(n-1)\\times\\cdots\\times 2\\times 1') + '.', parts: [
-        { id: 'e16', level: 'MAS', make: function (r) {
+        { id: 'e16', level: 'PRG', make: function (r) {
           var m = r.pick([8, 9, 10, 12]), v = 1; for (var i = 2; i <= m; i++) v *= i;
           var p = productPart(v, 'required', m + '!'); p.prompt = 'Write ' + t(m + '!=' + F(v)) + ' as a product of primes in exponent form. (Tip: break each of ' + t('2, 3, \\ldots, ' + m) + ' into primes and collect them.)';
           p.input.before = t(m + '!='); p.solution = 'Break each factor into primes: ' + t([] .concat.apply([], (function () { var a = []; for (var j = 2; j <= m; j++) a.push(j === nt.primeList(j)[0] ? String(j) : '(' + nt.primeList(j).join('\\cdot ') + ')'); return a; })()).join('\\times ')) + '. Collect them: ' + t(m + '!=' + K.fac(v)) + '.';
           return p;
         } }] },
       { num: '17', stem: '<i>(Numerical Response)</i>', parts: [
-        { id: 'e17', level: 'ADV', make: function (r) {
+        { id: 'e17', level: 'EMG', make: function (r) {
           var ps = null, n = 0;
           for (var i = 0; i < 300; i++) { ps = r.sample([3, 5, 7, 11, 13], 3).concat([r.pick([23, 29, 31, 37, 41, 43])]); n = prodOf(ps); if (n <= 99999 && n >= 10000) break; }
           var big = Math.max.apply(null, ps);
@@ -364,7 +364,7 @@
           }, 'Remove the small primes first: ' + t(F(n) + '=' + K.fac(n)) + '. The largest prime factor is ' + t(big) + '.', ['Divide out the small primes one at a time. What is left at the end?'], 'largest prime factor of ' + n);
         } }] },
       { num: '18', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: 'e18', level: 'ADV', make: function (r) {
+        { id: 'e18', level: 'EMG', make: function (r) {
           var cands = [[[2, 3], [3, 3]], [[2, 5], [3, 1]], [[2, 1], [3, 1], [5, 1], [7, 1]], [[2, 2], [3, 2], [5, 1]], [[2, 4], [3, 2]], [[2, 6], [3, 1]], [[2, 2], [3, 1], [5, 1], [7, 1]], [[2, 3], [3, 2], [5, 1]]];
           var pick, counts;
           for (var i = 0; i < 200; i++) { pick = r.sample(cands, 4); counts = pick.map(function (f) { return f.reduce(function (m, pe) { return m * (pe[1] + 1); }, 1); }); var mx = Math.max.apply(null, counts); if (counts.filter(function (c) { return c === mx; }).length === 1) break; }

@@ -173,11 +173,14 @@
       };
       api.kind = 'text';
     }
-    var keys = (typeof opt.keys === 'string' ? W.KEYSETS[opt.keys] : opt.keys) || [
+    var keys = (typeof opt.keys === 'string' && opt.keys !== 'product' ? W.KEYSETS[opt.keys] : typeof opt.keys === 'object' ? opt.keys : null) || [
       [{ label: '7', tex: '7', plain: '7' }, { label: '8', tex: '8', plain: '8' }, { label: '9', tex: '9', plain: '9' }, { label: '×', tex: '\\times', plain: ' × ', title: 'Multiply' }, { label: '⌫', fn: 'del' }],
       [{ label: '4', tex: '4', plain: '4' }, { label: '5', tex: '5', plain: '5' }, { label: '6', tex: '6', plain: '6' }, { label: 'x<sup>n</sup>', tex: '#@^{#?}', plain: '^', title: 'Exponent' }, { label: 'clear', fn: 'clear' }],
       [{ label: '1', tex: '1', plain: '1' }, { label: '2', tex: '2', plain: '2' }, { label: '3', tex: '3', plain: '3' }, { label: '◀', fn: 'left', title: 'Move left' }, { label: '▶', fn: 'right', title: 'Move right (out of an exponent)' }],
       [{ label: '0', tex: '0', plain: '0', wide: true }, { label: 'Check ↵', fn: 'enter', wide: true }]];
+    W.KEYSETS = W.KEYSETS || {}; if (!W.KEYSETS.product) W.KEYSETS.product = keys;
+    api.node = wrap; api.onEnter = function (fn) { enter = fn; };
+    if (opt.keypad === false) return api; // a box inside W.fields, which draws one shared keypad
     var kp = keypad(keys, function (k) { if (k.fn === 'enter') { if (enter) enter(); return; } api.press(k); });
     kp.classList.add('kp-small'); wrap.appendChild(kp);
     var help = typeof opt.keys === 'string' && W.KEYHELP[opt.keys] ? W.KEYHELP[opt.keys][api.kind === 'mathlive' ? 0 : 1] : null;

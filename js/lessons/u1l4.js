@@ -389,10 +389,10 @@
         { id: '2d', level: 'BEG', make: function (r) { var q = r.int(2, 9), p = gen(r, function () { return r.int(q + 1, 4 * q); }, function (p) { return gcd(p, q) === 1; }); return memberPart(fracItem(p, q, true)); } },
         { id: '2e', level: 'BEG', make: function (r) { return memberPart(zeroItem(r, r.int(2, 9))); } },
         { id: '2f', level: 'BEG', make: function (r) { return memberPart(sqrtIrr(gen(r, function () { return r.int(2, 99); }, nonSq))); } },
-        { id: '2g', level: 'EMG', make: function (r) { return memberPart(nonRepItem(r, true)); } },
+        { id: '2g', level: 'BEG', make: function (r) { return memberPart(nonRepItem(r, true)); } },
         { id: '2h', level: 'BEG', make: function (r) { return memberPart(constItem(r, ['e', 'e', '\\pi', '\\pi', '2\\pi', '\\frac{\\pi}{2}', '-e'])); } }] },
       { num: '3', stem: 'Comparing a negative integer with a negative fraction.', parts: [
-        { id: '3', level: 'PRG', make: function (r) {
+        { id: '3', level: 'EMG', make: function (r) {
           var n = r.int(2, 12), d = gen(r, function () { return r.int(2, 9); }, function (d) { return n % d !== 0 && gcd(n, d) === 1; }), f = '-\\frac{' + n + '}{' + d + '}';
           return P.mc(r, 'Which statement explains why ' + t('-' + n) + ' belongs to more number sets than ' + t(f) + '?', [
             { html: t('-' + n) + ' is an integer, so it is in ' + t('I, Q') + ' and ' + t('R') + '. ' + t(f) + ' is not an integer, so it is only in ' + t('Q') + ' and ' + t('R') + '.', right: true },
@@ -403,7 +403,7 @@
             ['List the sets for each number, then compare.'], 'why -' + n + ' in more sets than ' + f);
         } }] },
       { num: '4', stem: 'Check all the sets to which each number belongs.', parts: [
-        { id: '4af', sub: 'a–f', level: 'EMG', make: function (r) {
+        { id: '4af', sub: 'a–f', level: 'BEG', make: function (r) {
           var q = r.int(2, 9), p = gen(r, function () { return r.int(1, q - 1); }, function (p) { return gcd(p, q) === 1; });
           return memberTable([fracItem(p, q, false), natInt(r.int(100000, 999999)), negInt(r.int(2, 12)), repItem(r), termItem(r), sqrtIrr(gen(r, function () { return r.int(11, 99); }, nonSq))], 'Check every set each number belongs to.', 'set table a–f');
         } },
@@ -412,17 +412,17 @@
           return memberTable([constItem(r, ['-\\pi', '-\\pi', '\\frac{\\pi}{2}', '2\\pi', '-e']), fracItem(pq[0], pq[1], true), negSqrt(r.int(2, 12)), smallDec(r), patternItem(r), sqrtDecSq(r)], 'Check every set each number belongs to.', 'set table g–l');
         } }] },
       { num: '5', stem: 'Find one number that satisfies each condition. (Use the keypad for fractions, roots and ' + t('\\pi') + '.)', parts: [
-        { id: '5a', level: 'EMG', make: function (r) {
+        { id: '5a', level: 'BEG', make: function (r) {
           var v = r.chance(0.6) ? 'W' : 'N', k = r.int(2, 9);
           return findPart('An integer, but not ' + ONE[v] + '.', { inS: 'I', notS: v, sol: v === 'W' ? 'Any negative integer, e.g. ' + t('-' + k) + ' — ' + S('W') + ' contains no negatives.' : 'Any negative integer, or ' + t('0') + ' (e.g. ' + t('-' + k) + '): ' + S('N') + ' starts at ' + t('1') + '.', hints: ['The integers are ' + t('\\ldots,-2,-1,0,1,2,\\ldots') + '. Which ones are not ' + NAME[v] + '?'] },
             '-' + k, ['-1', '-17'].concat(v === 'N' ? ['0'] : []), [String(k), '-\\frac{1}{2}'].concat(v === 'W' ? ['0'] : []), 'integer not ' + v);
         } },
-        { id: '5b', level: 'EMG', make: function (r) {
+        { id: '5b', level: 'BEG', make: function (r) {
           var v = r.chance(0.6) ? 'I' : 'W', q = r.int(3, 9), p = gen(r, function () { return r.int(1, q - 1); }, function (p) { return gcd(p, q) === 1; });
           return findPart('A rational number, but not ' + ONE[v] + '.', { inS: 'Q', notS: v, sol: 'Any ' + (v === 'W' ? 'negative number or ' : '') + 'fraction that isn’t ' + (v === 'I' ? 'an integer' : 'whole') + ', e.g. ' + t('\\frac{' + p + '}{' + q + '}') + '.', hints: ['A rational number is a ratio of integers ' + t('\\frac{a}{b}') + '. Pick one that doesn’t simplify to ' + (v === 'I' ? 'an integer' : 'a whole number') + '.'] },
             '\\frac{' + p + '}{' + q + '}', ['0.5', '-\\frac{7}{3}'].concat(v === 'W' ? ['-2'] : []), ['3', '\\sqrt{2}', '\\frac{8}{4}'], 'rational not ' + v);
         } },
-        { id: '5c', level: 'EMG', make: function (r) {
+        { id: '5c', level: 'BEG', make: function (r) {
           var a = r.int(2, 6), v = r.pick(['plain', 'plain', 'between', 'neg']);
           var cond = v === 'between' ? { inS: 'R', notS: 'Q', between: [a, a + 1] } : v === 'neg' ? { inS: 'R', notS: 'Q', neg: true } : { inS: 'R', notS: 'Q' };
           var key = v === 'between' ? '\\sqrt{' + (a * a + a) + '}' : v === 'neg' ? '-\\sqrt{2}' : '\\sqrt{2}';
@@ -431,13 +431,13 @@
           return findPart(v === 'between' ? 'A real number between ' + t(a) + ' and ' + t(a + 1) + ' that is not a rational number.' : v === 'neg' ? 'A negative real number that is not a rational number.' : 'A real number, but not a rational number.', cond, key,
             v === 'between' ? ['\\sqrt{' + (a * a + 1) + '}'] : v === 'neg' ? ['-\\pi'] : ['\\pi', '\\sqrt{3}', '1+\\sqrt{2}'], v === 'neg' ? ['\\sqrt{2}', '-\\sqrt{4}'] : ['\\sqrt{' + (a + 1) * (a + 1) + '}', '0.5'], 'real not rational (' + v + ')');
         } },
-        { id: '5d', level: 'EMG', make: function (r) {
+        { id: '5d', level: 'BEG', make: function (r) {
           return findPart(r.pick(['A whole number, but not a natural number.', 'A number that is in ' + S('W') + ' but not in ' + S('N') + '.']), { inS: 'W', notS: 'N', only: true, sol: t('0') + ' — the only whole number that is not a natural number.', hints: ['Compare ' + t('W=\\{0,1,2,3,\\ldots\\}') + ' with ' + t('N=\\{1,2,3,\\ldots\\}') + '.'] },
             '0', ['\\frac{0}{5}'], ['1', '-1', '\\frac{1}{2}'], 'whole not natural');
         } }] },
       { num: '6', stem: 'Complete each statement with <i>always</i>, <i>sometimes</i> or <i>never</i>.', parts: [
         { id: '6a', level: 'BEG', make: function (r) { var pr = r.pick([['W', 'N'], ['W', 'N'], ['I', 'W'], ['Q', 'I'], ['I', 'N'], ['R', 'Q']]); return asnPart(r, cap(ONE[pr[0]]) + ' is ___ ' + ONE[pr[1]] + '.', setASN(pr[0], pr[1]), 'ASN ' + pr[0] + ' is ' + pr[1]); } },
-        { id: '6b', level: 'PRG', make: function (r) {
+        { id: '6b', level: 'EMG', make: function (r) {
           var V = [['The quotient of two integers is ___ an integer.', asnD('sometimes', t('8\\div 2=4') + ' is an integer.', t('8\\div 3=\\frac{8}{3}') + ' is not.')],
             ['The quotient of two integers is ___ an integer.', asnD('sometimes', t('-12\\div 4=-3') + ' is an integer.', t('5\\div 2=2.5') + ' is not.')],
             ['The quotient of two natural numbers is ___ a natural number.', asnD('sometimes', t('12\\div 4=3') + ' is natural.', t('3\\div 4=0.75') + ' is not.')],
@@ -453,7 +453,7 @@
             ['The difference of two whole numbers is ___ a whole number.', asnD('sometimes', t('9-4=5') + ' is whole.', t('3-8=-5') + ' is not.')]];
           var v = r.pick(r.chance(0.4) ? V.slice(0, 1) : V); return asnPart(r, v[0], v[1], 'ASN ' + v[0]);
         } },
-        { id: '6e', level: 'PRG', make: function (r) {
+        { id: '6e', level: 'EMG', make: function (r) {
           var k = r.int(2, 9), n = gen(r, function () { return r.int(2, 30); }, nonSq);
           var V = [['The square root of a number is ___ in the set ' + S('Qb') + '.', asnD('sometimes', t('\\sqrt{' + n + '}') + ' is irrational.', t('\\sqrt{' + k * k + '}=' + k) + ' is rational.')],
             ['The square root of a natural number is ___ a natural number.', asnD('sometimes', t('\\sqrt{' + k * k + '}=' + k) + ' is natural.', t('\\sqrt{' + n + '}') + ' is irrational.')],
@@ -470,37 +470,37 @@
         { id: '6g', level: 'BEG', make: function (r) { var pr = r.pick([['N', 'R'], ['N', 'R'], ['W', 'Q'], ['Qb', 'R'], ['N', 'I'], ['I', 'W'], ['Qb', 'Q']]); return asnPart(r, 'A number in set ' + S(pr[0]) + ' is ___ a number in set ' + S(pr[1]) + '.', setASN(pr[0], pr[1]), 'ASN in ' + pr[0] + ' in ' + pr[1]); } }] },
       { num: '7', stem: 'Decide whether each statement is true or false.', parts: [
         { id: '7a', level: 'LIM', make: function (r) { var p = r.chance(0.65) ? r.pick([['N', 'I'], ['N', 'Q'], ['W', 'I'], ['N', 'W'], ['W', 'R']]) : pickPair(r, false); return allPart(r, p[0], p[1], 'all ' + p[0] + ' are ' + p[1]); } },
-        { id: '7b', level: 'BEG', make: function (r) {
+        { id: '7b', level: 'LIM', make: function (r) {
           return poolTF(r, [['Real numbers consist of rational numbers together with irrational numbers.', true, 'That is the definition: ' + t('R=\\{Q\\text{ and }\\overline{Q}\\}') + '.'],
             ['Every real number is either rational or irrational.', true, t('R=\\{Q\\text{ and }\\overline{Q}\\}') + ': each real number is in exactly one of ' + S('Q') + ' or ' + S('Qb') + '.'],
             ['Some real numbers are both rational and irrational.', false, 'A decimal either terminates/repeats (rational) or it doesn’t (irrational) — it can’t do both.'],
             ['Real numbers consist of integers together with irrational numbers.', false, 'That leaves out fractions like ' + t('\\frac{1}{2}') + '. Real numbers are the <b>rational</b> numbers together with the irrational numbers.']], 'definition of R');
         } },
-        { id: '7c', level: 'BEG', make: function (r) { var p = r.chance(0.65) ? r.pick([['I', 'Q'], ['W', 'I'], ['N', 'W'], ['Q', 'R'], ['Qb', 'R']]) : pickPair(r, false); return nestedPart(r, p[0], p[1], false, 'nested ' + p[0] + ' in ' + p[1]); } },
-        { id: '7d', level: 'BEG', make: function (r) { var p = r.chance(0.65) ? r.pick([['I', 'Q'], ['W', 'Q'], ['I', 'R'], ['N', 'Q']]) : pickPair(r, false); return allPart(r, p[0], p[1], 'all ' + p[0] + ' are ' + p[1]); } },
-        { id: '7e', level: 'BEG', make: function (r) {
+        { id: '7c', level: 'LIM', make: function (r) { var p = r.chance(0.65) ? r.pick([['I', 'Q'], ['W', 'I'], ['N', 'W'], ['Q', 'R'], ['Qb', 'R']]) : pickPair(r, false); return nestedPart(r, p[0], p[1], false, 'nested ' + p[0] + ' in ' + p[1]); } },
+        { id: '7d', level: 'LIM', make: function (r) { var p = r.chance(0.65) ? r.pick([['I', 'Q'], ['W', 'Q'], ['I', 'R'], ['N', 'Q']]) : pickPair(r, false); return allPart(r, p[0], p[1], 'all ' + p[0] + ' are ' + p[1]); } },
+        { id: '7e', level: 'LIM', make: function (r) {
           return poolTF(r, [['All irrational numbers are real numbers.', true, S('Qb') + ' sits inside ' + S('R') + ': every irrational number has a place on the number line.'],
             ['No irrational number is an integer.', true, 'Every integer is rational (' + t('n=\\frac{n}{1}') + '), and ' + S('Q') + ' and ' + S('Qb') + ' don’t overlap.'],
             ['All real numbers are irrational numbers.', false, t('5') + ' is a real number, but it is rational.'],
             ['Some irrational numbers are rational numbers.', false, S('Q') + ' and ' + S('Qb') + ' don’t overlap: no number is both.']], 'irrationals statement');
         } },
-        { id: '7f', level: 'EMG', make: function (r) { var p = r.chance(0.7) ? r.pick([['R', 'N'], ['R', 'Q'], ['Q', 'I'], ['I', 'W']]) : r.pick(TRUE_PAIRS); return nestedPart(r, p[0], p[1], true, 'nested ' + p[0] + ' in ' + p[1]); } },
-        { id: '7g', level: 'EMG', make: function (r) { var p = r.chance(0.7) ? r.pick([['Q', 'W'], ['I', 'N'], ['W', 'N'], ['Q', 'Qb'], ['R', 'Qb']]) : r.pick(TRUE_PAIRS); return nestedPart(r, p[0], p[1], true, 'nested ' + p[0] + ' in ' + p[1]); } },
-        { id: '7h', level: 'EMG', make: function (r) {
+        { id: '7f', level: 'BEG', make: function (r) { var p = r.chance(0.7) ? r.pick([['R', 'N'], ['R', 'Q'], ['Q', 'I'], ['I', 'W']]) : r.pick(TRUE_PAIRS); return nestedPart(r, p[0], p[1], true, 'nested ' + p[0] + ' in ' + p[1]); } },
+        { id: '7g', level: 'BEG', make: function (r) { var p = r.chance(0.7) ? r.pick([['Q', 'W'], ['I', 'N'], ['W', 'N'], ['Q', 'Qb'], ['R', 'Qb']]) : r.pick(TRUE_PAIRS); return nestedPart(r, p[0], p[1], true, 'nested ' + p[0] + ' in ' + p[1]); } },
+        { id: '7h', level: 'BEG', make: function (r) {
           return poolTF(r, [['There is exactly one number in set ' + S('W') + ' that is not also in set ' + S('N') + '.', true, 'That number is ' + t('0') + '.'],
             ['There are infinitely many numbers in set ' + S('W') + ' that are not in set ' + S('N') + '.', false, S('W') + ' and ' + S('N') + ' differ only by ' + t('0') + ' — exactly one number.'],
             ['There is exactly one number in set ' + S('I') + ' that is not also in set ' + S('W') + '.', false, 'Every negative integer ' + t('-1, -2, -3, \\ldots') + ' is in ' + S('I') + ' but not ' + S('W') + ' — infinitely many.'],
             ['There are infinitely many numbers in set ' + S('I') + ' that are not in set ' + S('W') + '.', true, 'Every negative integer ' + t('-1, -2, -3, \\ldots') + ' is in ' + S('I') + ' but not in ' + S('W') + '.']], 'counting W not N');
         } }] },
       { num: '8', stem: 'Decide whether each statement is true or false.', parts: [
-        { id: '8a', level: 'EMG', make: function (r) {
+        { id: '8a', level: 'BEG', make: function (r) {
           var k = r.int(2, 12);
           return poolTF(r, [['Every positive number has two square roots, but only one cube root.', true, 'A positive number has one positive and one negative square root (e.g. ' + t(k + '^{2}=(-' + k + ')^{2}=' + k * k) + '), but its cube root is unique.'],
             ['The number ' + t(k * k) + ' has two square roots, ' + t(k) + ' and ' + t('-' + k) + '.', true, t(k + '^{2}=' + k * k) + ' and ' + t('(-' + k + ')^{2}=' + k * k) + '. (The symbol ' + t('\\sqrt{' + k * k + '}') + ' means only the positive one, ' + t(k) + '.)'],
             [t('\\sqrt{' + k * k + '}=\\pm ' + k), false, 'The symbol ' + t('\\sqrt{\\ }') + ' means the <b>principal</b> (positive) square root only: ' + t('\\sqrt{' + k * k + '}=' + k) + '.'],
             ['Every positive number has exactly one square root.', false, 'It has two: ' + t(k) + ' and ' + t('-' + k) + ' are both square roots of ' + t(k * k) + '.']], 'square roots of positives', ROOT_TF_HINTS);
         } },
-        { id: '8b', level: 'PRG', make: function (r) {
+        { id: '8b', level: 'EMG', make: function (r) {
           var k = r.int(2, 5), c = k * k * k;
           return poolTF(r, [['Every negative number has one cube root, but no square roots.', true, 'e.g. ' + t('-' + c) + ' has cube root ' + t('-' + k) + ', but no real number squares to a negative.'],
             [t('\\sqrt[3]{-' + c + '}=-' + k), true, t('(-' + k + ')^{3}=-' + c) + '. Cube roots of negative numbers are negative.'],
@@ -510,21 +510,21 @@
 
       /* ================= Part B — Estimating Square Roots ================= */
       { num: '9', section: 'Part B — Estimating Square Roots', stem: 'Use whole-number estimates to show why each statement is true.', parts: [
-        { id: '9a', level: 'PRG', make: function (r) {
+        { id: '9a', level: 'EMG', make: function (r) {
           var c = r.int(5, 8), S2 = c * c, a = gen(r, function () { return r.int(Math.round(S2 * 0.3), Math.round(S2 * 0.5)); }, function (a) { return nonSq(a) && nonSq(S2 - a); }), b = S2 - a;
           return sumEstPart([a, b], c, true);
         } },
-        { id: '9b', level: 'PRG', make: function (r) {
+        { id: '9b', level: 'EMG', make: function (r) {
           var ns = gen(r, function () { return r.sample([2, 3, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15], 3).sort(function (x, y) { return x - y; }); }, function (ns) { var T = ns[0] + ns[1] + ns[2]; return nonSq(T) && fracOK(Math.sqrt(T), 0.4, 0.6); });
           return sumEstPart(ns, null, false);
         } }] },
       { num: '10', stem: 'Decide whether each statement is true or false.',
         shared: function (r) { var b = r.int(2, 5), k = r.int(2, 4), a = b * k; if (a > 12) { b = 2; a = 2 * k; } return { a: a, b: b, A: a * a, B: b * b, k: k }; },
         parts: [
-          { id: '10a', level: 'EMG', make: function (r, sh) { return opTF(r, sh, '+'); } },
-          { id: '10b', level: 'EMG', make: function (r, sh) { return opTF(r, sh, '-'); } },
-          { id: '10c', level: 'EMG', make: function (r, sh) { return opTF(r, sh, '\\times'); } },
-          { id: '10d', level: 'EMG', make: function (r, sh) { return opTF(r, sh, '\\div'); } }] },
+          { id: '10a', level: 'BEG', make: function (r, sh) { return opTF(r, sh, '+'); } },
+          { id: '10b', level: 'BEG', make: function (r, sh) { return opTF(r, sh, '-'); } },
+          { id: '10c', level: 'BEG', make: function (r, sh) { return opTF(r, sh, '\\times'); } },
+          { id: '10d', level: 'BEG', make: function (r, sh) { return opTF(r, sh, '\\div'); } }] },
       { num: '11', stem: 'In each of the following: (i) estimate the value mentally; (ii) use a calculator to find the decimal approximation to the nearest tenth, and decide if the estimate was reasonable.', parts: [
         { id: '11a', level: 'BEG', make: function (r) { var n = gen(r, function () { return r.int(11, 99); }, function (n) { return nonSq(n) && fracOK(Math.sqrt(n), 0.42, 0.58); }); return termsEst([T1(2, n)], 'estimate sqrt ' + n); } },
         { id: '11b', level: 'BEG', make: function (r) { var m = gen(r, function () { return d1(r, 101, 999); }, function (m) { return fracOK(Math.sqrt(m.v), 0.42, 0.58); }); return termsEst([T1(2, m.v, m.s)], 'estimate sqrt ' + m.s); } },
@@ -537,13 +537,13 @@
           });
           return termsEst([T1(2, o.p, null, 1, [o.a, 1]), T1(2, o.q, null, -1, [o.b, 1])], 'estimate ' + o.a + 'sqrt' + o.p + '-' + o.b + 'sqrt' + o.q);
         } },
-        { id: '11d', level: 'PRG', make: function (r) {
+        { id: '11d', level: 'EMG', make: function (r) {
           var c1 = r.pick([[2, 3], [3, 4], [1, 2], [3, 5], [2, 5]]), c2 = r.pick([[1, 4], [1, 3], [1, 2], [1, 5]]), m1 = d1(r, 101, 400), m2 = gen(r, function () { return r.int(3, 15); }, nonSq);
           return termsEst([T1(2, m1.v, m1.s, 1, c1), T1(2, m2, null, 1, c2)], 'estimate fractional coefficients');
         } },
         { id: '11e', level: 'EMG', make: function (r) { var n = gen(r, function () { return r.int(101, 399); }, function (n) { return nonSq(n) && fracOK(Math.sqrt(n), 0.42, 0.58); }); return termsEst([T1(2, n)], 'estimate sqrt ' + n); } },
-        { id: '11f', level: 'PRG', make: function (r) { var m = r.pick([5, 7, 8, 8, 10, 11, 14, 15]), n = m * m + r.pick([-2, -1, 1, 1, 2]); return nestedRootPart(n, m, 'sqrt sqrt ' + n); } },
-        { id: '11g', level: 'ADV', make: function (r) {
+        { id: '11f', level: 'EMG', make: function (r) { var m = r.pick([5, 7, 8, 8, 10, 11, 14, 15]), n = m * m + r.pick([-2, -1, 1, 1, 2]); return nestedRootPart(n, m, 'sqrt sqrt ' + n); } },
+        { id: '11g', level: 'PRG', make: function (r) {
           var a = gen(r, function () { return r.int(5, 50); }, nonSq), b = d1(r, 101, 600), Sx = Math.sqrt(a) + Math.sqrt(b.v), x = Math.sqrt(Sx);
           var mentals = []; cands(Math.sqrt(a)).forEach(function (ca) { cands(Math.sqrt(b.v)).forEach(function (cb) { cands(Math.sqrt(ca + cb)).forEach(function (co) { mentals.push(co); }); }); });
           var ea = Math.round(Math.sqrt(a)), eb = Math.round(Math.sqrt(b.v)), es = Math.round(Math.sqrt(ea + eb)), want = K.roundTo(x, 1);
@@ -554,16 +554,16 @@
             diagEst: function (v) { return Math.abs(v - Sx) < 1 ? { code: 'nested-one-root', hint: 'That’s about ' + t('\\sqrt{' + a + '}+\\sqrt{' + b.s + '}') + '. Don’t forget the big square root over the whole sum.' } : null; },
             diagCalc: function (v) { return Math.abs(v - K.roundTo(Sx, 1)) < 1e-9 ? { code: 'nested-one-root', hint: 'That’s the sum inside. Take its square root too.' } : null; } });
         } },
-        { id: '11h', level: 'PRG', make: function (r) { var k = r.pick([4, 5, 6, 7, 7, 8]), n = 100 * k * k + r.int(1, 9); return nestedRootPart(n, 10 * k, 'sqrt sqrt ' + n); } }] },
+        { id: '11h', level: 'EMG', make: function (r) { var k = r.pick([4, 5, 6, 7, 7, 8]), n = 100 * k * k + r.int(1, 9); return nestedRootPart(n, 10 * k, 'sqrt sqrt ' + n); } }] },
       { num: '12', stem: 'Estimate each square root to one significant digit.', parts: [
-        { id: '12a', level: 'EMG', make: function (r) { return sigPart(gen(r, function () { return r.int(100, 999); }, function (N) { return nonSq(N) && sigOK(N, 0); }), 0); } },
-        { id: '12b', level: 'EMG', make: function (r) { return sigPart(gen(r, function () { return r.int(1000, 9999); }, function (N) { return nonSq(N) && sigOK(N, 0); }), 0); } },
-        { id: '12c', level: 'PRG', make: function (r) { return sigPart(gen(r, function () { return r.int(10000, 99999); }, function (N) { return nonSq(N) && sigOK(N, 0); }), 0); } },
-        { id: '12d', level: 'PRG', make: function (r) { return sigPart(1000 * gen(r, function () { return r.int(101, 999); }, function (N) { return sigOK(1000 * N, 0) && N % 10 !== 0; }), 0); } },
-        { id: '12e', level: 'PRG', make: function (r) { return sigPart(gen(r, function () { return r.int(101, 999); }, function (N) { return N % 10 !== 0 && sigOK(N, 3); }), 3); } },
-        { id: '12f', level: 'ADV', make: function (r) { return sigPart(gen(r, function () { return r.int(101, 999); }, function (N) { return N % 10 !== 0 && sigOK(N, 4); }), 4); } },
-        { id: '12g', level: 'ADV', make: function (r) { return sigPart(gen(r, function () { return r.int(101, 999); }, function (N) { return N % 10 !== 0 && sigOK(N, 5); }), 5); } },
-        { id: '12h', level: 'ADV', make: function (r) { return sigPart(gen(r, function () { return r.int(1001, 9999); }, function (N) { return N % 10 !== 0 && sigOK(N, 7); }), 7); } }] },
+        { id: '12a', level: 'BEG', make: function (r) { return sigPart(gen(r, function () { return r.int(100, 999); }, function (N) { return nonSq(N) && sigOK(N, 0); }), 0); } },
+        { id: '12b', level: 'BEG', make: function (r) { return sigPart(gen(r, function () { return r.int(1000, 9999); }, function (N) { return nonSq(N) && sigOK(N, 0); }), 0); } },
+        { id: '12c', level: 'EMG', make: function (r) { return sigPart(gen(r, function () { return r.int(10000, 99999); }, function (N) { return nonSq(N) && sigOK(N, 0); }), 0); } },
+        { id: '12d', level: 'EMG', make: function (r) { return sigPart(1000 * gen(r, function () { return r.int(101, 999); }, function (N) { return sigOK(1000 * N, 0) && N % 10 !== 0; }), 0); } },
+        { id: '12e', level: 'EMG', make: function (r) { return sigPart(gen(r, function () { return r.int(101, 999); }, function (N) { return N % 10 !== 0 && sigOK(N, 3); }), 3); } },
+        { id: '12f', level: 'EMG', make: function (r) { return sigPart(gen(r, function () { return r.int(101, 999); }, function (N) { return N % 10 !== 0 && sigOK(N, 4); }), 4); } },
+        { id: '12g', level: 'EMG', make: function (r) { return sigPart(gen(r, function () { return r.int(101, 999); }, function (N) { return N % 10 !== 0 && sigOK(N, 5); }), 5); } },
+        { id: '12h', level: 'EMG', make: function (r) { return sigPart(gen(r, function () { return r.int(1001, 9999); }, function (N) { return N % 10 !== 0 && sigOK(N, 7); }), 7); } }] },
 
       /* ================= Part C — Cube Roots and Ordering ================= */
       { num: '13', section: 'Part C — Cube Roots and Ordering', stem: 'In each of the following: (i) estimate the value mentally; (ii) use a calculator to find the decimal approximation to the nearest tenth, and decide if the estimate was reasonable.', parts: [
@@ -574,17 +574,17 @@
           var c = r.int(5, 10), m = gen(r, function () { return d1(r, Math.round(c * c * c * 8), Math.round(c * c * c * 11.5)); }, function (m) { return fracOK(Math.cbrt(m.v), 0.42, 0.58) && Math.round(Math.cbrt(m.v)) === c; });
           return termsEst([T1(3, m.v, fmtDec(m.s))], 'estimate cbrt ' + m.s);
         } },
-        { id: '13e', level: 'PRG', make: function (r) {
+        { id: '13e', level: 'EMG', make: function (r) {
           var o = gen(r, function () { var Pc = r.pick([3, 4, 5]), Qc = r.pick([2, 3].filter(function (q) { return q < Pc; })), p = d1(r, Math.round(Pc * Pc * Pc * 9), Math.round(Pc * Pc * Pc * 11)), q = d1(r, Math.round(Qc * Qc * Qc * 9), Math.round(Qc * Qc * Qc * 12)); return { a: r.int(2, 4), b: r.int(2, 3), p: p, q: q }; },
             function (o) { var x = o.a * Math.cbrt(o.p.v) - o.b * Math.cbrt(o.q.v), mk = o.a * Math.round(Math.cbrt(o.p.v)) - o.b * Math.round(Math.cbrt(o.q.v)); return x > 1.5 && Math.abs(mk - x) <= Math.max(0.65, 0.1 * x); });
           return termsEst([T1(3, o.p.v, o.p.s, 1, [o.a, 1]), T1(3, o.q.v, o.q.s, -1, [o.b, 1])], 'estimate a cbrt p - b cbrt q');
         } },
-        { id: '13f', level: 'ADV', make: function (r) {
+        { id: '13f', level: 'EMG', make: function (r) {
           var o = gen(r, function () { return { c1: r.pick([[3, 5], [2, 3], [3, 4], [2, 5]]), p: r.int(20, 80), c2: r.pick([[1, 3], [1, 2], [1, 4]]), q: r.int(20, 130) }; },
             function (o) { return nonSq(o.p) && nonCube(o.q) && cv(o.c1) * Math.sqrt(o.p) - cv(o.c2) * Math.cbrt(o.q) > 0.6; });
           return termsEst([T1(2, o.p, null, 1, o.c1), T1(3, o.q, null, -1, o.c2)], 'estimate square root minus cube root');
         } },
-        { id: '13g', level: 'ADV', make: function (r) {
+        { id: '13g', level: 'PRG', make: function (r) {
           var a = r.int(2, 5), b = gen(r, function () { return r.int(8, 50); }, function (b) { var inner = a * Math.sqrt(b); return nonSq(b) && inner > 6 && inner < 45; }), inner = a * Math.sqrt(b), x = Math.cbrt(inner);
           var mentals = []; cands(Math.sqrt(b)).forEach(function (cb) { cands(Math.cbrt(a * cb)).forEach(function (co) { mentals.push(co); }); });
           var eb = Math.round(Math.sqrt(b)), want = K.roundTo(x, 1);
@@ -596,13 +596,13 @@
             diagCalc: function (v) { if (Math.abs(v - K.roundTo(inner, 1)) < 1e-9) return { code: 'nested-one-root', hint: 'That’s ' + t(a + '\\sqrt{' + b + '}') + '. Take its cube root too.' }; if (Math.abs(v - K.roundTo(Math.sqrt(inner), 1)) < 1e-9) return { code: 'square-not-cube', hint: 'The outer root is a <b>cube</b> root, not a square root.' }; return null; } });
         } }] },
       { num: '14', stem: 'Order the numbers on a number line from ' + t('0') + ' to ' + t('30') + '.', parts: [
-        { id: '14', level: 'PRG', make: function (r) { return orderRootsPart(r); } }] },
+        { id: '14', level: 'EMG', make: function (r) { return orderRootsPart(r); } }] },
 
       /* ================= Part D — Multiple Choice and Numerical Response ================= */
       { num: '15', section: 'Part D — Multiple Choice and Numerical Response', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: '15', level: 'PRG', make: function (r) { return nestMC(r); } }] },
+        { id: '15', level: 'EMG', make: function (r) { return nestMC(r); } }] },
       { num: '16', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: '16', level: 'PRG', make: function (r) {
+        { id: '16', level: 'EMG', make: function (r) {
           var k = gen(r, function () { return r.int(2, 30); }, function (k) { return nonSq(k) && nonCube(k); });
           var F6 = [['-\\sqrt{' + k + '}', true], ['\\sqrt{-' + k + '}', false], ['-\\sqrt[3]{' + k + '}', true], ['\\sqrt[3]{-' + k + '}', true], ['-\\sqrt{-' + k + '}', false], ['-\\sqrt[3]{-' + k + '}', true]];
           var four = r.chance(0.4) ? F6.slice(0, 4) : r.sample(F6, 4), cnt = four.filter(function (f) { return !f[1]; }).length;
@@ -613,7 +613,7 @@
             ['A square root of a negative number is not real. A cube root of a negative number is real (and negative).'], 'how many not real', true);
         } }] },
       { num: '17', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: '17', level: 'ADV', make: function (r) {
+        { id: '17', level: 'PRG', make: function (r) {
           var k = r.int(2, 9), pq = r.pick([[3, 4], [2, 5], [4, 7], [5, 6], [3, 5], [2, 3]]), kk = k * k;
           var pool = [['\\sqrt{' + kk + '}', true, t('\\sqrt{' + kk + '}=' + k + '=\\frac{' + k + '}{1}') + ' — yes.'], ['\\sqrt{' + fmtDec((kk / 10).toFixed(1).replace(/\.0$/, '')) + '}', false, t(fmtDec((kk / 10).toFixed(1))) + ' is not a perfect square, so its root is irrational — no.'],
             ['\\sqrt{' + (kk / 100).toFixed(2) + '}', true, t('\\sqrt{' + (kk / 100).toFixed(2) + '}=' + k / 10 + '=\\frac{' + k + '}{10}') + ' — yes.'], ['\\sqrt{\\frac{' + pq[0] * pq[0] + '}{' + pq[1] * pq[1] + '}}', true, t('\\sqrt{\\frac{' + pq[0] * pq[0] + '}{' + pq[1] * pq[1] + '}}=\\frac{' + pq[0] + '}{' + pq[1] + '}') + ' — yes.'],
@@ -627,7 +627,7 @@
             t('\\frac{a}{b}') + ' with ' + t('a, b\\in N') + ' means a positive rational number.<br>' + four.map(function (f) { return f[2]; }).join('<br>') + '<br>So ' + t(cnt) + ' of them.', ['Simplify each root. Which are positive and rational?'], 'how many positive rational', true);
         } }] },
       { num: '18', stem: '<i>(Numerical Response)</i>', parts: [
-        { id: '18', level: 'PRG', make: function (r) {
+        { id: '18', level: 'BEG', make: function (r) {
           var o = gen(r, function () { return { a: r.int(2, 6), b: r.int(3, 30) }; }, function (o) { var x = o.a * Math.cbrt(o.b); return nonCube(o.b) && x < 9.9 && Math.abs(frac(x * 100) - 0.5) > 0.03; });
           var x = o.a * Math.cbrt(o.b), want = K.roundTo(x, 2), sq = K.roundTo(o.a * Math.sqrt(o.b), 2), inside = K.roundTo(Math.cbrt(o.a * o.b), 2), early = K.roundTo(o.a * K.roundTo(Math.cbrt(o.b), 2), 2);
           var p = P.approx('To the nearest hundredth, the value of ' + t(o.a + '\\sqrt[3]{' + o.b + '}') + ' is ________.', x, 2, { nr: true, diag: function (v) {
@@ -653,10 +653,10 @@
           { id: '19d', level: 'EMG', make: function (r, sh) { var p = sh.p, q = sh.q; return absPart('|' + p + '|-|' + q + '|', p - q, function (v) { if (v === q - p) return { code: 'abs-each', hint: 'Here the bars go around each number separately: ' + t('|' + p + '|=' + p) + ' and ' + t('|' + q + '|=' + q) + '. Then subtract — there are no bars around the answer.' }; return null; }, 'Each absolute value first: ' + t('|' + p + '|-|' + q + '|=' + p + '-' + q + '=-' + (q - p)) + '. There are no bars around the result, so it stays negative.', '|' + p + '|-|' + q + '|'); } },
           { id: '19e', level: 'EMG', make: function (r, sh) { var p = sh.p, q = sh.q; return absPart('\\big||' + p + '|-|' + q + '|\\big|', q - p, function (v) { if (v === p - q) return { code: 'abs-outer', hint: 'Don’t forget the outer bars: they make the result positive.' }; return null; }, t('|' + p + '|-|' + q + '|=' + p + '-' + q + '=-' + (q - p)) + ', then the outer bars: ' + t('|-' + (q - p) + '|=' + (q - p)) + '.', '||p|-|q||'); } },
           { id: '19f', level: 'EMG', make: function (r, sh) { var c = sh.c, c3 = c * c * c; return absPart('-|\\sqrt[3]{' + c3 + '}|', -c, function (v) { if (v === c) return { code: 'abs-minus-out', hint: 'The minus sign is <b>outside</b> the bars, so it stays: the answer is negative.' }; if (Math.abs(v) === c3) return { code: 'abs-cube', hint: 'Take the cube root first: which number cubed is ' + t(c3) + '?' }; return null; }, t('\\sqrt[3]{' + c3 + '}=' + c) + ' and ' + t('|' + c + '|=' + c) + ', so ' + t('-|\\sqrt[3]{' + c3 + '}|=-' + c) + '.', '-|cbrt ' + c3 + '|'); } },
-          { id: '19g', level: 'EMG', make: function (r, sh) { var c = sh.c, c3 = c * c * c; return absPart('|-\\sqrt[3]{' + c3 + '}|', c, function (v) { if (v === -c) return { code: 'abs-negative', hint: 'The minus sign is <b>inside</b> the bars, and absolute value is never negative.' }; if (Math.abs(v) === c3) return { code: 'abs-cube', hint: 'Take the cube root first.' }; return null; }, t('-\\sqrt[3]{' + c3 + '}=-' + c) + ' and ' + t('|-' + c + '|=' + c) + '.', '|-cbrt ' + c3 + '|'); } },
-          { id: '19h', level: 'PRG', make: function (r, sh) { var c = sh.c, c3 = c * c * c; return absPart('|\\sqrt[3]{-' + c3 + '}|', c, function (v) { if (v === -c) return { code: 'abs-negative', hint: t('\\sqrt[3]{-' + c3 + '}=-' + c) + ' — but then the bars make it positive.' }; if (Math.abs(v) === c3) return { code: 'abs-cube', hint: 'Take the cube root first.' }; return null; }, t('\\sqrt[3]{-' + c3 + '}=-' + c) + ' (cube roots keep the sign), and ' + t('|-' + c + '|=' + c) + '.', '|cbrt -' + c3 + '|'); } }] },
+          { id: '19g', level: 'BEG', make: function (r, sh) { var c = sh.c, c3 = c * c * c; return absPart('|-\\sqrt[3]{' + c3 + '}|', c, function (v) { if (v === -c) return { code: 'abs-negative', hint: 'The minus sign is <b>inside</b> the bars, and absolute value is never negative.' }; if (Math.abs(v) === c3) return { code: 'abs-cube', hint: 'Take the cube root first.' }; return null; }, t('-\\sqrt[3]{' + c3 + '}=-' + c) + ' and ' + t('|-' + c + '|=' + c) + '.', '|-cbrt ' + c3 + '|'); } },
+          { id: '19h', level: 'EMG', make: function (r, sh) { var c = sh.c, c3 = c * c * c; return absPart('|\\sqrt[3]{-' + c3 + '}|', c, function (v) { if (v === -c) return { code: 'abs-negative', hint: t('\\sqrt[3]{-' + c3 + '}=-' + c) + ' — but then the bars make it positive.' }; if (Math.abs(v) === c3) return { code: 'abs-cube', hint: 'Take the cube root first.' }; return null; }, t('\\sqrt[3]{-' + c3 + '}=-' + c) + ' (cube roots keep the sign), and ' + t('|-' + c + '|=' + c) + '.', '|cbrt -' + c3 + '|'); } }] },
       { num: '20', stem: 'Decide whether each statement is true or false.', parts: [
-        { id: '20a', level: 'EMG', make: function (r) {
+        { id: '20a', level: 'BEG', make: function (r) {
           var k = r.int(2, 9);
           return poolTF(r, [[t('|x|=x') + ' if ' + t('x>0'), true, 'If ' + t('x') + ' is positive, its distance from ' + t('0') + ' is ' + t('x') + ' itself, e.g. ' + t('|' + k + '|=' + k) + '.'],
             [t('|x|=x') + ' if ' + t('x\\ge 0'), true, 'For ' + t('x>0') + ' the distance is ' + t('x') + ' itself, and ' + t('|0|=0') + '.'],
@@ -669,8 +669,8 @@
             [t('|-x|=x') + ' for every real number ' + t('x'), false, 'Try ' + t('x=-' + k) + ': ' + t('|-(-' + k + ')|=|' + k + '|=' + k) + ', but ' + t('x=-' + k) + '.']], 'abs negative case', ABS_TF_HINTS);
         } }] },
       { num: '21', stem: 'Choose the graph that represents each absolute value inequality. The variables are defined on the set of real numbers.', parts: [
-        { id: '21a', level: 'EMG', make: function (r) { return absGraphPart(r, true, r.int(2, 7), r.pick(['x', 'x', 'y', 'n'])); } },
-        { id: '21b', level: 'PRG', make: function (r) { return absGraphPart(r, false, r.int(2, 7), r.pick(['a', 'a', 'x', 'm'])); } }] }
+        { id: '21a', level: 'BEG', make: function (r) { return absGraphPart(r, true, r.int(2, 7), r.pick(['x', 'x', 'y', 'n'])); } },
+        { id: '21b', level: 'EMG', make: function (r) { return absGraphPart(r, false, r.int(2, 7), r.pick(['a', 'a', 'x', 'm'])); } }] }
     ],
     extra: [
       /* ================= Extra practice A — Simplify first, then classify ================= */
@@ -678,27 +678,27 @@
         { id: 'e1a', level: 'BEG', make: function (r) { return memberPart(sqrtPerfect(r.int(2, 12))); } },
         { id: 'e1b', level: 'BEG', make: function (r) { return memberPart(cbrtNeg(r.int(2, 5))); } },
         { id: 'e1c', level: 'BEG', make: function (r) { var q = r.int(2, 9), k = r.int(2, 9), tx = '\\frac{' + k * q + '}{' + q + '}'; return memberPart(item(tx, 'nat', t(tx + '=' + k) + ', a counting number.', { whyRat: t(tx + '=' + k) + ' — a ratio of integers that simplifies to a natural number.' })); } },
-        { id: 'e1d', level: 'EMG', make: function (r) { var ab = gen(r, function () { return r.int(10, 98); }, function (n) { return n % 11 !== 0 && gcd(n, 99) > 1; }), fr = ex.norm(ab, 99), tx = '0.\\overline{' + ab + '}'; return memberPart(item(tx, 'rat', t(tx + '=\\frac{' + ab + '}{99}=' + ex.texRat(fr)) + ', a ratio of integers — not an integer.', { whyRat: 'The block ' + t(ab) + ' repeats, so it is rational: ' + t(tx + '=' + ex.texRat(fr)) + '.' })); } },
+        { id: 'e1d', level: 'BEG', make: function (r) { var ab = gen(r, function () { return r.int(10, 98); }, function (n) { return n % 11 !== 0 && gcd(n, 99) > 1; }), fr = ex.norm(ab, 99), tx = '0.\\overline{' + ab + '}'; return memberPart(item(tx, 'rat', t(tx + '=\\frac{' + ab + '}{99}=' + ex.texRat(fr)) + ', a ratio of integers — not an integer.', { whyRat: 'The block ' + t(ab) + ' repeats, so it is rational: ' + t(tx + '=' + ex.texRat(fr)) + '.' })); } },
         { id: 'e1e', level: 'EMG', make: function (r) { return memberPart(sqrtDecSq(r)); } },
         { id: 'e1f', level: 'BEG', make: function (r) { return memberPart(negSqrt(r.int(2, 9))); } }] },
       { num: '2', stem: 'Same instructions. These take one more step of simplifying.', parts: [
         { id: 'e2a', level: 'EMG', make: function (r) { var k = r.int(2, 9), c = scaled(k * k * k, 3), tx = '\\sqrt[3]{' + c + '}'; return memberPart(item(tx, 'rat', t(tx + '=0.' + k) + ' because ' + t('0.' + k + '^{3}=' + c) + ' — it terminates, but it isn’t an integer.', { whyRat: t(tx + '=0.' + k) + ' because ' + t('0.' + k + '^{3}=' + c) + '. It terminates, so it is rational.' })); } },
-        { id: 'e2b', level: 'PRG', make: function (r) { var b = r.pick([2, 3, 5, 6, 7]), k = r.int(2, 5), tx = '\\frac{\\sqrt{' + b * k * k + '}}{\\sqrt{' + b + '}}'; return memberPart(item(tx, 'nat', t(tx + '=\\sqrt{\\frac{' + b * k * k + '}{' + b + '}}=\\sqrt{' + k * k + '}=' + k) + ', a counting number.', { whyRat: t(tx + '=\\sqrt{' + k * k + '}=' + k) + '. Simplify before you decide!' })); } },
+        { id: 'e2b', level: 'EMG', make: function (r) { var b = r.pick([2, 3, 5, 6, 7]), k = r.int(2, 5), tx = '\\frac{\\sqrt{' + b * k * k + '}}{\\sqrt{' + b + '}}'; return memberPart(item(tx, 'nat', t(tx + '=\\sqrt{\\frac{' + b * k * k + '}{' + b + '}}=\\sqrt{' + k * k + '}=' + k) + ', a counting number.', { whyRat: t(tx + '=\\sqrt{' + k * k + '}=' + k) + '. Simplify before you decide!' })); } },
         { id: 'e2c', level: 'EMG', make: function (r) { var x = r.pick(['\\pi', '\\pi', '\\sqrt{' + r.pick([3, 5, 7]) + '}', '\\sqrt[3]{' + r.pick([2, 4, 9]) + '}']), tx = x + '-' + x; return memberPart(item(tx, 'zero', t(tx + '=0') + ': any number minus itself is ' + t('0') + ' — whole, but ' + S('N') + ' starts at ' + t('1') + '.', { whyRat: t(tx + '=0') + ', which is rational.' })); } },
-        { id: 'e2d', level: 'PRG', make: function (r) { var pq = r.pick([[3, 4], [2, 3], [1, 2], [2, 5], [4, 5], [3, 5]]), tx = '\\sqrt[3]{-\\frac{' + pq[0] * pq[0] * pq[0] + '}{' + pq[1] * pq[1] * pq[1] + '}}'; return memberPart(item(tx, 'rat', t(tx + '=-\\frac{' + pq[0] + '}{' + pq[1] + '}') + ', a ratio of integers — not an integer.', { neg: true, whyRat: t(tx + '=-\\frac{' + pq[0] + '}{' + pq[1] + '}') + ', a ratio of integers, so it is rational.' })); } },
-        { id: 'e2e', level: 'PRG', make: function (r) { var a = r.pick([2, 3, 5, 6, 7]), m = r.int(2, 5), tx = '\\sqrt{' + a + '}\\times\\sqrt{' + a * m * m + '}'; return memberPart(item(tx, 'nat', t(tx + '=\\sqrt{' + a * a * m * m + '}=' + a * m) + ', a counting number.', { whyRat: t(tx + '=\\sqrt{' + a * a * m * m + '}=' + a * m) + '. Simplify first!' })); } },
+        { id: 'e2d', level: 'EMG', make: function (r) { var pq = r.pick([[3, 4], [2, 3], [1, 2], [2, 5], [4, 5], [3, 5]]), tx = '\\sqrt[3]{-\\frac{' + pq[0] * pq[0] * pq[0] + '}{' + pq[1] * pq[1] * pq[1] + '}}'; return memberPart(item(tx, 'rat', t(tx + '=-\\frac{' + pq[0] + '}{' + pq[1] + '}') + ', a ratio of integers — not an integer.', { neg: true, whyRat: t(tx + '=-\\frac{' + pq[0] + '}{' + pq[1] + '}') + ', a ratio of integers, so it is rational.' })); } },
+        { id: 'e2e', level: 'EMG', make: function (r) { var a = r.pick([2, 3, 5, 6, 7]), m = r.int(2, 5), tx = '\\sqrt{' + a + '}\\times\\sqrt{' + a * m * m + '}'; return memberPart(item(tx, 'nat', t(tx + '=\\sqrt{' + a * a * m * m + '}=' + a * m) + ', a counting number.', { whyRat: t(tx + '=\\sqrt{' + a * a * m * m + '}=' + a * m) + '. Simplify first!' })); } },
         { id: 'e2f', level: 'EMG', make: function (r) { var k = r.pick([2, 3, 5, 6, 7, 10]), tx = '\\sqrt{' + k + '}+\\sqrt{' + k + '}'; return memberPart(item(tx, 'irr', t(tx + '=2\\sqrt{' + k + '}=' + fx(2 * Math.sqrt(k), 6) + '\\ldots') + ' — ' + t(k) + ' isn’t a perfect square, so it never terminates or repeats.', { whyIrr: t(tx + '=2\\sqrt{' + k + '}') + ', and ' + t(k) + ' isn’t a perfect square, so it is irrational.' })); } }] },
       { num: '3', stem: 'A number belongs to several sets at once, but only one of them is the <b>smallest</b> set that still contains it. Simplify, then name that single set.', parts: [
-        { id: 'e3a', level: 'BEG', make: function (r) { return strictPart(r, sqrtPerfect(r.int(5, 15))); } },
-        { id: 'e3b', level: 'EMG', make: function (r) { return strictPart(r, cbrtNeg(r.pick([2, 3, 4, 5, 10]))); } },
-        { id: 'e3c', level: 'EMG', make: function (r) { var d = r.int(1, 8), fr = ex.norm(d, 9), tx = '0.\\overline{' + d + '}'; return strictPart(r, item(tx, 'rat', t(tx + '=' + ex.texRat(fr)) + ', rational but not an integer.', { whyRat: 'A repeating decimal is rational: ' + t(tx + '=' + ex.texRat(fr)) + '.' })); } },
-        { id: 'e3d', level: 'BEG', make: function (r) { return strictPart(r, sqrtIrr(gen(r, function () { return r.int(2, 30); }, nonSq))); } },
-        { id: 'e3e', level: 'EMG', make: function (r) { var k = r.int(2, 9), tx = '\\sqrt{' + k * k + '}-' + k; return strictPart(r, item(tx, 'zero', t(tx + '=' + k + '-' + k + '=0') + ': whole, but not natural.', { whyRat: t(tx + '=0') + ', which is rational.' })); } },
-        { id: 'e3f', level: 'EMG', make: function (r) { var k = r.int(1, 9), sq = (k * k / 100).toFixed(2), tx = '-\\sqrt{' + sq + '}'; return strictPart(r, item(tx, 'rat', t(tx + '=-0.' + k) + ', a terminating decimal that isn’t an integer.', { neg: true, whyRat: t(tx + '=-0.' + k) + ' terminates, so it is rational.' })); } }] },
+        { id: 'e3a', level: 'LIM', make: function (r) { return strictPart(r, sqrtPerfect(r.int(5, 15))); } },
+        { id: 'e3b', level: 'BEG', make: function (r) { return strictPart(r, cbrtNeg(r.pick([2, 3, 4, 5, 10]))); } },
+        { id: 'e3c', level: 'BEG', make: function (r) { var d = r.int(1, 8), fr = ex.norm(d, 9), tx = '0.\\overline{' + d + '}'; return strictPart(r, item(tx, 'rat', t(tx + '=' + ex.texRat(fr)) + ', rational but not an integer.', { whyRat: 'A repeating decimal is rational: ' + t(tx + '=' + ex.texRat(fr)) + '.' })); } },
+        { id: 'e3d', level: 'LIM', make: function (r) { return strictPart(r, sqrtIrr(gen(r, function () { return r.int(2, 30); }, nonSq))); } },
+        { id: 'e3e', level: 'BEG', make: function (r) { var k = r.int(2, 9), tx = '\\sqrt{' + k * k + '}-' + k; return strictPart(r, item(tx, 'zero', t(tx + '=' + k + '-' + k + '=0') + ': whole, but not natural.', { whyRat: t(tx + '=0') + ', which is rational.' })); } },
+        { id: 'e3f', level: 'BEG', make: function (r) { var k = r.int(1, 9), sq = (k * k / 100).toFixed(2), tx = '-\\sqrt{' + sq + '}'; return strictPart(r, item(tx, 'rat', t(tx + '=-0.' + k) + ', a terminating decimal that isn’t an integer.', { neg: true, whyRat: t(tx + '=-0.' + k) + ' terminates, so it is rational.' })); } }] },
 
       /* ================= Extra practice B — Nesting ================= */
       { num: '4', section: 'Extra practice B — Nesting: why the sets sit inside one another', stem: 'Every natural number is a rational number, but not every rational number is a natural number.', parts: [
-        { id: 'e4a', level: 'PRG', make: function (r) {
+        { id: 'e4a', level: 'EMG', make: function (r) {
           var n = r.int(3, 250);
           return P.mc(r, 'Which explanation shows that <b>every</b> number in ' + S('N') + ' is also in ' + S('Q') + '?', [
             { html: 'Any natural number ' + t('n') + ' can be written as ' + t('\\frac{n}{1}') + ': a ratio of integers with ' + t('b=1\\ne 0') + '. For example, ' + t(n + '=\\frac{' + n + '}{1}') + '.', right: true },
@@ -708,11 +708,11 @@
             'Any natural number ' + t('n') + ' equals ' + t('\\frac{n}{1}') + '. Here ' + t('a=n') + ' and ' + t('b=1') + ' are integers and ' + t('b\\ne 0') + ', so ' + t('n') + ' fits ' + t('Q=\\left\\{\\frac{a}{b},\\ a,b\\in I,\\ b\\ne 0\\right\\}') + '. This works for every natural number, so ' + S('N') + ' sits inside ' + S('Q') + '.',
             ['Look at the definition ' + t('Q=\\left\\{\\frac{a}{b},\\ a,b\\in I,\\ b\\ne 0\\right\\}') + '. How could you write ' + t(n) + ' in that form?'], 'why N inside Q');
         } },
-        { id: 'e4b', level: 'PRG', make: function (r) {
+        { id: 'e4b', level: 'BEG', make: function (r) {
           var a = r.int(3, 9), q = r.int(3, 9), p = gen(r, function () { return r.int(1, q - 1); }, function (p) { return gcd(p, q) === 1; });
           var cN = function (resp) { var o = readReal(resp); if (o.res) return o.res; var k = kindOf(o); if (!o.rational) return wrong('not-in-set', 'That one is irrational. You need a <b>rational</b> number.'); if (!(o.v < 0)) return wrong('sign', describe(o) + ' This box needs a <b>negative</b> rational number.'); return ok(); };
           var cP = function (resp) { var o = readReal(resp); if (o.res) return o.res; var k = kindOf(o); if (!o.rational) return wrong('not-in-set', 'That one is irrational. You need a <b>rational</b> number.'); if (!(o.v > 0)) return wrong('sign', 'This box needs a <b>positive</b> rational number.'); if (k === 'nat') return wrong('in-excluded-set', describe(o) + ' This box needs one that is <b>not</b> an integer, e.g. a fraction.'); return ok(); };
-          var p2 = P.fields('Give two rational numbers that are <b>not</b> natural numbers. (Type fractions like ' + t('3/4') + '.)', [{ label: 'Negative', wide: true, mode: 'text' }, { label: 'Positive, not an integer', wide: true, mode: 'text' }], [cN, cP], ['-' + (2 * a + 1) + '/2', p + '/' + q],
+          var p2 = P.fields('Give two rational numbers that are <b>not</b> natural numbers. (Use the fraction key for fractions.)', [{ label: 'Negative', wide: true, mode: 'math', keys: 'fraction' }, { label: 'Positive, not an integer', wide: true, mode: 'math', keys: 'fraction' }], [cN, cP], ['-' + (2 * a + 1) + '/2', p + '/' + q],
             '(answers vary) e.g. ' + t('-\\frac{' + (2 * a + 1) + '}{2}') + ' and ' + t('\\frac{' + p + '}{' + q + '}'),
             'A rational number only has to be a ratio of integers ' + t('\\frac{a}{b}') + '. Nothing makes it positive or a whole count, but ' + t('N=\\{1,2,3,\\ldots\\}') + ' holds only positive whole counts. Negative: e.g. ' + t('-\\frac{' + (2 * a + 1) + '}{2}=-' + (a + 0.5)) + '. Positive but not an integer: e.g. ' + t('\\frac{' + p + '}{' + q + '}') + '. So ' + S('N') + ' is nested inside ' + S('Q') + ', but is not equal to it.',
             ['Rational numbers can be negative, and they can be fractions.'], 'two rationals not natural');
@@ -720,14 +720,14 @@
           return p2;
         } }] },
       { num: '5', stem: 'The word <i>nested</i> means one set sits entirely inside the next.', parts: [
-        { id: 'e5a', level: 'BEG', make: function (r) {
+        { id: 'e5a', level: 'LIM', make: function (r) {
           var down = r.chance(0.3), items = ['N', 'W', 'I', 'Q', 'R'].map(function (x) { return { id: x, tex: SYM[x] }; }); if (down) items.reverse();
           return P.order(r, 'Put the five sets of the nesting chain in order, ' + (down ? 'largest to smallest' : 'smallest to largest') + '.', items,
             { first: down ? 'largest' : 'smallest', last: down ? 'smallest' : 'largest', sep: down ? '⊃' : '⊂', why: function (a, b) { var big = down ? a : b, small = down ? b : a; return 'Is every ' + NOUN[big] + ' ' + ONE[small] + '? No — but every ' + NOUN[small] + ' is ' + ONE[big] + '. So ' + S(small) + ' is the smaller set.'; } },
             t('N\\subset W\\subset I\\subset Q\\subset R') + '. Each set holds everything in the one before it, plus more: ' + S('W') + ' adds ' + t('0') + ', ' + S('I') + ' adds the negatives, ' + S('Q') + ' adds the non-integer ratios, ' + S('R') + ' adds the irrationals.',
             ['Start with the counting numbers ' + t('1, 2, 3, \\ldots') + '.'], 'nesting chain');
         } },
-        { id: 'e5b', level: 'PRG', make: function (r) {
+        { id: 'e5b', level: 'EMG', make: function (r) {
           return P.mc(r, 'Where does ' + S('Qb') + ' belong relative to the chain ' + t('N\\subset W\\subset I\\subset Q\\subset R') + '?', [
             { html: 'Beside the chain, inside ' + S('R') + ' only: an irrational decimal neither terminates nor repeats, so ' + S('Qb') + ' shares no numbers with ' + S('Q') + ' (or anything inside it).', right: true },
             { html: 'Between ' + S('Q') + ' and ' + S('R') + ', because ' + S('Qb') + ' contains all of ' + S('Q') + '.', why: S('Qb') + ' contains <b>no</b> rational numbers. ' + t('\\frac{1}{2}') + ' is in ' + S('Q') + ' but not in ' + S('Qb') + '.' },
@@ -736,7 +736,7 @@
             S('Qb') + ' sits inside ' + S('R') + ' but <b>beside</b> the chain. A rational decimal terminates or repeats; an irrational one does neither. No number does both, so ' + S('Qb') + ' shares no members with ' + S('Q') + ', or with ' + S('I') + ', ' + S('W') + ', ' + S('N') + ' inside it.',
             ['Can a number be rational and irrational at the same time?'], 'where Q-bar belongs');
         } },
-        { id: 'e5c', level: 'EMG', make: function (r) {
+        { id: 'e5c', level: 'BEG', make: function (r) {
           var k = r.int(4, 15), tx = '\\sqrt{' + k * k + '}';
           var opts = ['N', 'W', 'I', 'Q', 'R'].map(function (x) { return { html: S(x), right: x === 'N', why: x === 'N' ? null : t(tx + '=' + k) + ' is in ' + S(x) + ', but “strictest” means the <b>smallest</b> set in the chain that still contains it.' }; });
           var p = P.mc(r, t(tx) + ' belongs to five sets. In the strictest sense it belongs to just one. Which one?', opts,
@@ -744,7 +744,7 @@
           p.input.columns = 5; return p;
         } }] },
       { num: '6', stem: 'The diagram shows the real number system. Simplify where you need to, then choose the <b>innermost</b> region each number belongs in.', parts: [
-        { id: 'e6', level: 'PRG', make: function (r) {
+        { id: 'e6', level: 'EMG', make: function (r) {
           var k = r.int(2, 5), q = r.pick([3, 7, 8, 9]), p = gen(r, function () { return r.int(1, q - 1); }, function (p) { return gcd(p, q) === 1; }), d = r.int(2, 6), n = gen(r, function () { return r.int(2, 30); }, nonCube), m = r.int(2, 9);
           var its = [sqrtPerfect(r.int(5, 10)), item('-\\sqrt[3]{' + k * k * k + '}', 'negint', t('-\\sqrt[3]{' + k * k * k + '}=-' + k) + ', a negative integer.', { whyRat: t('-\\sqrt[3]{' + k * k * k + '}=-' + k) + ' — a perfect cube root is rational.' }), zeroItem(r, r.int(2, 9)),
             fracItem(p, q, false), constItem(r, ['-\\pi', '\\pi', '2\\pi', 'e']), item('\\sqrt{' + (d * d / 100).toFixed(2) + '}', 'rat', t('\\sqrt{' + (d * d / 100).toFixed(2) + '}=0.' + d) + ', rational but not an integer.', { whyRat: t('\\sqrt{' + (d * d / 100).toFixed(2) + '}=0.' + d) + ' because ' + t('0.' + d + '^{2}=' + (d * d / 100).toFixed(2)) + '. That is rational.' }),
@@ -753,23 +753,23 @@
           return regionTable(its, 'Choose the innermost region for each number.', 'Venn placement of 8 numbers', true);
         } }] },
       { num: '7', stem: 'For each description, decide whether <b>no number</b>, <b>exactly one number</b>, or <b>infinitely many numbers</b> fit it.', parts: [
-        { id: 'e7a', level: 'EMG', make: function (r) { return countPart(r, r.pick([['In ' + S('W') + ' but not in ' + S('N') + '.', 'one', 'Only ' + t('0') + ': ' + t('W=\\{0,1,2,\\ldots\\}') + ' and ' + t('N=\\{1,2,3,\\ldots\\}') + ' differ only by ' + t('0') + '.'], ['In ' + S('I') + ', but neither positive nor negative.', 'one', 'Only ' + t('0') + '.']])); } },
-        { id: 'e7b', level: 'EMG', make: function (r) { return countPart(r, r.pick([['In ' + S('I') + ' but not in ' + S('W') + '.', 'inf', 'Every negative integer, e.g. ' + t('-3') + ': ' + S('I') + ' adds the negatives to ' + S('W') + '.'], ['In ' + S('I') + ' but not in ' + S('N') + '.', 'inf', t('0') + ' and every negative integer, e.g. ' + t('-3') + '.']])); } },
-        { id: 'e7c', level: 'EMG', make: function (r) { return countPart(r, r.pick([['In ' + S('Q') + ' but not in ' + S('I') + '.', 'inf', 'Any ratio of integers that isn’t a whole count, e.g. ' + t('\\frac{2}{5}') + '.'], ['In ' + S('R') + ' but not in ' + S('Q') + '.', 'inf', 'Every irrational number, e.g. ' + t('\\sqrt{2}') + ' or ' + t('\\pi') + '.']])); } },
-        { id: 'e7d', level: 'PRG', make: function (r) { return countPart(r, r.pick([['In ' + S('I') + ' but not in ' + S('Q') + '.', 'none', 'Every integer ' + t('n') + ' is ' + t('\\frac{n}{1}') + ', so ' + S('I') + ' is nested inside ' + S('Q') + '.'], ['In ' + S('N') + ' but not in ' + S('W') + '.', 'none', S('N') + ' is nested inside ' + S('W') + ': every natural number is whole.']])); } },
-        { id: 'e7e', level: 'PRG', make: function (r) { return countPart(r, r.pick([['In ' + S('R') + ' but in neither ' + S('Q') + ' nor ' + S('Qb') + '.', 'none', t('R=\\{Q\\text{ and }\\overline{Q}\\}') + ': every real number is one or the other.'], ['In both ' + S('Q') + ' and ' + S('Qb') + '.', 'none', 'A decimal can’t both terminate/repeat and not — the two sets don’t overlap.']])); } },
-        { id: 'e7f', level: 'PRG', make: function (r) { return countPart(r, r.pick([['In ' + S('Qb') + ' but not in ' + S('R') + '.', 'none', S('Qb') + ' is nested inside ' + S('R') + ' — every irrational number is real.'], ['In both ' + S('Qb') + ' and ' + S('I') + '.', 'none', 'Every integer is rational, and no rational number is irrational.']])); } }] },
+        { id: 'e7a', level: 'BEG', make: function (r) { return countPart(r, r.pick([['In ' + S('W') + ' but not in ' + S('N') + '.', 'one', 'Only ' + t('0') + ': ' + t('W=\\{0,1,2,\\ldots\\}') + ' and ' + t('N=\\{1,2,3,\\ldots\\}') + ' differ only by ' + t('0') + '.'], ['In ' + S('I') + ', but neither positive nor negative.', 'one', 'Only ' + t('0') + '.']])); } },
+        { id: 'e7b', level: 'BEG', make: function (r) { return countPart(r, r.pick([['In ' + S('I') + ' but not in ' + S('W') + '.', 'inf', 'Every negative integer, e.g. ' + t('-3') + ': ' + S('I') + ' adds the negatives to ' + S('W') + '.'], ['In ' + S('I') + ' but not in ' + S('N') + '.', 'inf', t('0') + ' and every negative integer, e.g. ' + t('-3') + '.']])); } },
+        { id: 'e7c', level: 'BEG', make: function (r) { return countPart(r, r.pick([['In ' + S('Q') + ' but not in ' + S('I') + '.', 'inf', 'Any ratio of integers that isn’t a whole count, e.g. ' + t('\\frac{2}{5}') + '.'], ['In ' + S('R') + ' but not in ' + S('Q') + '.', 'inf', 'Every irrational number, e.g. ' + t('\\sqrt{2}') + ' or ' + t('\\pi') + '.']])); } },
+        { id: 'e7d', level: 'EMG', make: function (r) { return countPart(r, r.pick([['In ' + S('I') + ' but not in ' + S('Q') + '.', 'none', 'Every integer ' + t('n') + ' is ' + t('\\frac{n}{1}') + ', so ' + S('I') + ' is nested inside ' + S('Q') + '.'], ['In ' + S('N') + ' but not in ' + S('W') + '.', 'none', S('N') + ' is nested inside ' + S('W') + ': every natural number is whole.']])); } },
+        { id: 'e7e', level: 'EMG', make: function (r) { return countPart(r, r.pick([['In ' + S('R') + ' but in neither ' + S('Q') + ' nor ' + S('Qb') + '.', 'none', t('R=\\{Q\\text{ and }\\overline{Q}\\}') + ': every real number is one or the other.'], ['In both ' + S('Q') + ' and ' + S('Qb') + '.', 'none', 'A decimal can’t both terminate/repeat and not — the two sets don’t overlap.']])); } },
+        { id: 'e7f', level: 'BEG', make: function (r) { return countPart(r, r.pick([['In ' + S('Qb') + ' but not in ' + S('R') + '.', 'none', S('Qb') + ' is nested inside ' + S('R') + ' — every irrational number is real.'], ['In both ' + S('Qb') + ' and ' + S('I') + '.', 'none', 'Every integer is rational, and no rational number is irrational.']])); } }] },
 
       /* ================= Extra practice C — Always, sometimes, never ================= */
       { num: '8', section: 'Extra practice C — Always, sometimes, or never', stem: 'Complete each statement with <i>always</i>, <i>sometimes</i> or <i>never</i>. (For “sometimes”, think of one example that works and one that doesn’t.)', parts: [
-        { id: 'e8a', level: 'PRG', make: function (r) { var V = [['The sum of two integers is ___ a natural number.', asnD('sometimes', t('4+3=7') + ' is natural.', t('4+(-9)=-5') + ' is not.')], ['The product of two integers is ___ a natural number.', asnD('sometimes', t('3\\times 4=12') + ' is natural.', t('(-3)\\times 4=-12') + ' is not.')], ['The difference of two natural numbers is ___ a natural number.', asnD('sometimes', t('9-2=7') + ' is natural.', t('2-9=-7') + ' is not.')]]; var v = r.pick(V); return asnPart(r, v[0], v[1], 'ASN ' + v[0]); } },
-        { id: 'e8b', level: 'PRG', make: function (r) { var V = [['The quotient of two integers is ___ an integer.', asnD('sometimes', t('\\frac{-12}{4}=-3') + ' is an integer.', t('\\frac{4}{-12}=-\\frac{1}{3}') + ' is not.')], ['The quotient of two natural numbers is ___ a natural number.', asnD('sometimes', t('15\\div 5=3') + ' is natural.', t('5\\div 15=\\frac{1}{3}') + ' is not.')]]; var v = r.pick(V); return asnPart(r, v[0], v[1], 'ASN ' + v[0]); } },
-        { id: 'e8c', level: 'ADV', make: function (r) { var V = [['An irrational number times an irrational number is ___ irrational.', asnD('sometimes', t('\\sqrt{2}\\times\\sqrt{3}=\\sqrt{6}') + ' is irrational.', t('\\sqrt{2}\\times\\sqrt{2}=2') + ' is rational.')], ['An irrational number plus an irrational number is ___ irrational.', asnD('sometimes', t('\\sqrt{2}+\\sqrt{3}') + ' is irrational.', t('\\pi+(-\\pi)=0') + ' is rational.')], ['An irrational number divided by an irrational number is ___ irrational.', asnD('sometimes', t('\\sqrt{6}\\div\\sqrt{2}=\\sqrt{3}') + ' is irrational.', t('\\sqrt{5}\\div\\sqrt{5}=1') + ' is rational.')]]; var v = r.pick(V); return asnPart(r, v[0], v[1], 'ASN ' + v[0]); } },
-        { id: 'e8d', level: 'ADV', make: function (r) { var why = 'If a rational ' + t('q') + ' plus an irrational ' + t('x') + ' gave a rational ' + t('r') + ', then ' + t('x=r-q') + ' would be rational — impossible. e.g. ' + t('1+\\sqrt{2}=2.414\\ldots'); var V = [['The sum of a rational number and an irrational number is ___ irrational.', asnD('always', '', '', why)], ['The sum of a rational number and an irrational number is ___ rational.', asnD('never', '', '', why)], ['The difference of a rational number and an irrational number is ___ irrational.', asnD('always', '', '', 'If ' + t('q-x=r') + ' with ' + t('q, r') + ' rational, then ' + t('x=q-r') + ' would be rational — impossible. e.g. ' + t('3-\\sqrt{2}=1.585\\ldots'))]]; var v = r.pick(V); return asnPart(r, v[0], v[1], 'ASN ' + v[0]); } },
-        { id: 'e8e', level: 'PRG', make: function (r) { var V = [['A number whose decimal never terminates is ___ in the set ' + S('Qb') + '.', asnD('sometimes', t('\\pi=3.141\\,59\\ldots') + ' never terminates and is irrational.', t('0.\\overline{45}') + ' never terminates, but it repeats, so it is ' + t('\\frac{5}{11}\\in Q') + '.')], ['A number whose decimal terminates is ___ in the set ' + S('Qb') + '.', asnD('never', '', '', 'A terminating decimal is a fraction over a power of 10, e.g. ' + t('0.37=\\frac{37}{100}') + ' — always rational.')], ['A number whose decimal repeats is ___ in the set ' + S('Q') + '.', asnD('always', '', '', 'Every repeating decimal can be written as a fraction, e.g. ' + t('0.\\overline{45}=\\frac{45}{99}') + '.')]]; var v = r.pick(V); return asnPart(r, v[0], v[1], 'ASN decimal'); } },
-        { id: 'e8f', level: 'ADV', make: function (r) { var V = [['A rational number times an irrational number is ___ irrational.', asnD('sometimes', t('2\\times\\pi=2\\pi') + ' is irrational.', t('0\\times\\pi=0') + ' is rational. (' + t('0') + ' is the only rational that breaks it.)')], ['A non-zero rational number times an irrational number is ___ irrational.', asnD('always', '', '', 'If ' + t('q\\times x=r') + ' with ' + t('q\\ne 0') + ' and ' + t('r') + ' rational, then ' + t('x=\\frac{r}{q}') + ' would be rational — impossible.')]]; var v = r.pick(V); return asnPart(r, v[0], v[1], 'ASN rational times irrational'); } },
-        { id: 'e8g', level: 'EMG', make: function (r) { var pr = r.pick([['Qb', 'R'], ['Qb', 'R'], ['R', 'Qb'], ['Qb', 'I']]); return asnPart(r, 'A number in ' + S(pr[0]) + ' is ___ in the set ' + S(pr[1]) + '.', setASN(pr[0], pr[1]), 'ASN in ' + pr[0] + ' in ' + pr[1]); } },
-        { id: 'e8h', level: 'PRG', make: function (r) { var V = [['The square root of a rational number is ___ rational.', asnD('sometimes', t('\\sqrt{\\frac{9}{16}}=\\frac{3}{4}') + ' is rational.', t('2') + ' is rational, but ' + t('\\sqrt{2}=1.414\\ldots') + ' is irrational.')], ['The cube root of a rational number is ___ rational.', asnD('sometimes', t('\\sqrt[3]{\\frac{8}{27}}=\\frac{2}{3}') + ' is rational.', t('\\sqrt[3]{2}') + ' is irrational.')], ['The square root of a perfect square is ___ rational.', asnD('always', '', '', 'If ' + t('n=k^{2}') + ' then ' + t('\\sqrt{n}=k') + ', an integer — rational.')]]; var v = r.pick(V); return asnPart(r, v[0], v[1], 'ASN roots of rationals'); } }] },
+        { id: 'e8a', level: 'EMG', make: function (r) { var V = [['The sum of two integers is ___ a natural number.', asnD('sometimes', t('4+3=7') + ' is natural.', t('4+(-9)=-5') + ' is not.')], ['The product of two integers is ___ a natural number.', asnD('sometimes', t('3\\times 4=12') + ' is natural.', t('(-3)\\times 4=-12') + ' is not.')], ['The difference of two natural numbers is ___ a natural number.', asnD('sometimes', t('9-2=7') + ' is natural.', t('2-9=-7') + ' is not.')]]; var v = r.pick(V); return asnPart(r, v[0], v[1], 'ASN ' + v[0]); } },
+        { id: 'e8b', level: 'EMG', make: function (r) { var V = [['The quotient of two integers is ___ an integer.', asnD('sometimes', t('\\frac{-12}{4}=-3') + ' is an integer.', t('\\frac{4}{-12}=-\\frac{1}{3}') + ' is not.')], ['The quotient of two natural numbers is ___ a natural number.', asnD('sometimes', t('15\\div 5=3') + ' is natural.', t('5\\div 15=\\frac{1}{3}') + ' is not.')]]; var v = r.pick(V); return asnPart(r, v[0], v[1], 'ASN ' + v[0]); } },
+        { id: 'e8c', level: 'PRG', make: function (r) { var V = [['An irrational number times an irrational number is ___ irrational.', asnD('sometimes', t('\\sqrt{2}\\times\\sqrt{3}=\\sqrt{6}') + ' is irrational.', t('\\sqrt{2}\\times\\sqrt{2}=2') + ' is rational.')], ['An irrational number plus an irrational number is ___ irrational.', asnD('sometimes', t('\\sqrt{2}+\\sqrt{3}') + ' is irrational.', t('\\pi+(-\\pi)=0') + ' is rational.')], ['An irrational number divided by an irrational number is ___ irrational.', asnD('sometimes', t('\\sqrt{6}\\div\\sqrt{2}=\\sqrt{3}') + ' is irrational.', t('\\sqrt{5}\\div\\sqrt{5}=1') + ' is rational.')]]; var v = r.pick(V); return asnPart(r, v[0], v[1], 'ASN ' + v[0]); } },
+        { id: 'e8d', level: 'PRG', make: function (r) { var why = 'If a rational ' + t('q') + ' plus an irrational ' + t('x') + ' gave a rational ' + t('r') + ', then ' + t('x=r-q') + ' would be rational — impossible. e.g. ' + t('1+\\sqrt{2}=2.414\\ldots'); var V = [['The sum of a rational number and an irrational number is ___ irrational.', asnD('always', '', '', why)], ['The sum of a rational number and an irrational number is ___ rational.', asnD('never', '', '', why)], ['The difference of a rational number and an irrational number is ___ irrational.', asnD('always', '', '', 'If ' + t('q-x=r') + ' with ' + t('q, r') + ' rational, then ' + t('x=q-r') + ' would be rational — impossible. e.g. ' + t('3-\\sqrt{2}=1.585\\ldots'))]]; var v = r.pick(V); return asnPart(r, v[0], v[1], 'ASN ' + v[0]); } },
+        { id: 'e8e', level: 'EMG', make: function (r) { var V = [['A number whose decimal never terminates is ___ in the set ' + S('Qb') + '.', asnD('sometimes', t('\\pi=3.141\\,59\\ldots') + ' never terminates and is irrational.', t('0.\\overline{45}') + ' never terminates, but it repeats, so it is ' + t('\\frac{5}{11}\\in Q') + '.')], ['A number whose decimal terminates is ___ in the set ' + S('Qb') + '.', asnD('never', '', '', 'A terminating decimal is a fraction over a power of 10, e.g. ' + t('0.37=\\frac{37}{100}') + ' — always rational.')], ['A number whose decimal repeats is ___ in the set ' + S('Q') + '.', asnD('always', '', '', 'Every repeating decimal can be written as a fraction, e.g. ' + t('0.\\overline{45}=\\frac{45}{99}') + '.')]]; var v = r.pick(V); return asnPart(r, v[0], v[1], 'ASN decimal'); } },
+        { id: 'e8f', level: 'PRG', make: function (r) { var V = [['A rational number times an irrational number is ___ irrational.', asnD('sometimes', t('2\\times\\pi=2\\pi') + ' is irrational.', t('0\\times\\pi=0') + ' is rational. (' + t('0') + ' is the only rational that breaks it.)')], ['A non-zero rational number times an irrational number is ___ irrational.', asnD('always', '', '', 'If ' + t('q\\times x=r') + ' with ' + t('q\\ne 0') + ' and ' + t('r') + ' rational, then ' + t('x=\\frac{r}{q}') + ' would be rational — impossible.')]]; var v = r.pick(V); return asnPart(r, v[0], v[1], 'ASN rational times irrational'); } },
+        { id: 'e8g', level: 'BEG', make: function (r) { var pr = r.pick([['Qb', 'R'], ['Qb', 'R'], ['R', 'Qb'], ['Qb', 'I']]); return asnPart(r, 'A number in ' + S(pr[0]) + ' is ___ in the set ' + S(pr[1]) + '.', setASN(pr[0], pr[1]), 'ASN in ' + pr[0] + ' in ' + pr[1]); } },
+        { id: 'e8h', level: 'BEG', make: function (r) { var V = [['The square root of a rational number is ___ rational.', asnD('sometimes', t('\\sqrt{\\frac{9}{16}}=\\frac{3}{4}') + ' is rational.', t('2') + ' is rational, but ' + t('\\sqrt{2}=1.414\\ldots') + ' is irrational.')], ['The cube root of a rational number is ___ rational.', asnD('sometimes', t('\\sqrt[3]{\\frac{8}{27}}=\\frac{2}{3}') + ' is rational.', t('\\sqrt[3]{2}') + ' is irrational.')], ['The square root of a perfect square is ___ rational.', asnD('always', '', '', 'If ' + t('n=k^{2}') + ' then ' + t('\\sqrt{n}=k') + ', an integer — rational.')]]; var v = r.pick(V); return asnPart(r, v[0], v[1], 'ASN roots of rationals'); } }] },
 
       /* ================= Extra practice D — Error analysis ================= */
       { num: '9', section: 'Extra practice D — Error analysis', stem: function (sh) { return 'A student writes: “' + t('\\sqrt{' + sh.k * sh.k + '}') + ' has a radical sign, so it is irrational. It goes in ' + S('Qb') + '.”'; },
@@ -785,7 +785,7 @@
               'What matters is whether ' + t(n) + ' is a perfect square. It is (' + t(k + '^{2}=' + n) + '), so ' + t('\\sqrt{' + n + '}=' + k) + ' is rational.', ['Evaluate ' + t('\\sqrt{' + n + '}') + ' first.'], 'radical sign error');
           } },
           { id: 'e9b', level: 'BEG', make: function (r, sh) { return memberPart(sqrtPerfect(sh.k), 'Check every set ' + t('\\sqrt{' + sh.k * sh.k + '}') + ' actually belongs to.'); } },
-          { id: 'e9c', level: 'PRG', make: function (r) {
+          { id: 'e9c', level: 'EMG', make: function (r) {
             return P.mc(r, 'Which rule reliably decides when ' + t('\\sqrt{n}') + ', ' + t('n\\in N') + ', is irrational?', [
               { html: t('\\sqrt{n}') + ' is irrational exactly when ' + t('n') + ' is <b>not a perfect square</b>.', right: true },
               { html: t('\\sqrt{n}') + ' is irrational exactly when ' + t('n') + ' is odd.', why: t('\\sqrt{9}=3') + ' is rational, and ' + t('\\sqrt{8}') + ' is irrational.' },
@@ -794,7 +794,7 @@
               t('\\sqrt{n}') + ' is rational exactly when ' + t('n') + ' is a perfect square (' + t('1, 4, 9, 16, 25, \\ldots') + '). For every other ' + t('n\\in N') + ', ' + t('\\sqrt{n}') + ' is irrational, e.g. ' + t('\\sqrt{15}') + ', ' + t('\\sqrt{17}') + '.', ['Test each rule on ' + t('\\sqrt{9}') + ', ' + t('\\sqrt{6}') + ' and ' + t('\\sqrt{144}') + '.'], 'rule for irrational roots');
           } }] },
       { num: '10', stem: 'A second student writes: “' + t('0') + ' is a natural number, because you can count to it.”', parts: [
-        { id: 'e10a', level: 'EMG', make: function (r) {
+        { id: 'e10a', level: 'BEG', make: function (r) {
           return P.mc(r, 'What is the mistake?', [
             { html: t('N=\\{1,2,3,\\ldots\\}') + ': the natural numbers are the counting numbers, and counting starts at ' + t('1') + '. So ' + t('0\\notin N') + '.', right: true },
             { html: 'There is no mistake: ' + t('N=\\{0,1,2,\\ldots\\}') + '.', why: 'That is the set ' + S('W') + ' of whole numbers. In this course ' + S('N') + ' starts at ' + t('1') + '.' },
@@ -806,7 +806,7 @@
       { num: '11', stem: function (sh) { return 'A third student writes: “' + t('0.\\overline{' + sh.ab + '}') + ' is irrational, because its decimal goes on forever.”'; },
         shared: function (r) { return { ab: gen(r, function () { return r.int(10, 98); }, function (n) { return n % 11 !== 0 && gcd(n, 99) > 1; }) }; },
         parts: [
-          { id: 'e11a', level: 'EMG', make: function (r, sh) {
+          { id: 'e11a', level: 'BEG', make: function (r, sh) {
             return P.mc(r, 'Which <b>two</b> conditions must a decimal meet before it is irrational?', [
               { html: 'It must be non-terminating <b>and</b> non-repeating.', right: true },
               { html: 'It must be non-terminating <b>or</b> non-repeating.', why: t('0.\\overline{' + sh.ab + '}') + ' is non-terminating, but it repeats — and it is rational. Both conditions are needed.' },
@@ -843,14 +843,14 @@
             '<b>No.</b> Counterexample: ' + ce + ', which is not an integer. Dividing ' + t('\\frac{a}{b}') + ' by a non-zero ' + t('\\frac{c}{d}') + ' gives ' + t('\\frac{ad}{bc}') + ', another ratio of integers. Smallest set closed under division by non-zero numbers: ' + S('Q') + '.', ['Try a division that doesn’t come out evenly.'], 'I closed under division');
         } }] },
       { num: '13', stem: 'Closed or not closed?', parts: [
-        { id: 'e13a', level: 'EMG', make: function (r) { return closedPart(r, r.pick([['N', '+'], ['N', '×'], ['W', '+'], ['W', '×']])); } },
-        { id: 'e13b', level: 'EMG', make: function (r) { return closedPart(r, r.pick([['W', '−'], ['N', '−']])); } },
-        { id: 'e13c', level: 'EMG', make: function (r) { return closedPart(r, r.pick([['I', '×'], ['I', '+'], ['I', '−']])); } },
-        { id: 'e13d', level: 'ADV', make: function (r) { return closedPart(r, r.pick([['Q', '÷'], ['R', '÷']])); } },
+        { id: 'e13a', level: 'BEG', make: function (r) { return closedPart(r, r.pick([['N', '+'], ['N', '×'], ['W', '+'], ['W', '×']])); } },
+        { id: 'e13b', level: 'BEG', make: function (r) { return closedPart(r, r.pick([['W', '−'], ['N', '−']])); } },
+        { id: 'e13c', level: 'BEG', make: function (r) { return closedPart(r, r.pick([['I', '×'], ['I', '+'], ['I', '−']])); } },
+        { id: 'e13d', level: 'PRG', make: function (r) { return closedPart(r, r.pick([['Q', '÷'], ['R', '÷']])); } },
         { id: 'e13e', level: 'EMG', make: function (r) { return closedPart(r, r.pick([['R', '−'], ['R', '+'], ['R', '×'], ['Q', '−'], ['Q', '+'], ['Q', '×']])); } },
-        { id: 'e13f', level: 'EMG', make: function (r) { return closedPart(r, r.pick([['W', '÷'], ['N', '÷'], ['I', '÷']])); } }] },
+        { id: 'e13f', level: 'BEG', make: function (r) { return closedPart(r, r.pick([['W', '÷'], ['N', '÷'], ['I', '÷']])); } }] },
       { num: '14', stem: 'The irrationals behave worse than any other set here.', parts: [
-        { id: 'e14a', level: 'ADV', make: function (r) {
+        { id: 'e14a', level: 'PRG', make: function (r) {
           var k = r.pick([2, 3, 5, 7]);
           return P.mc(r, 'Which example shows that ' + S('Qb') + ' is <b>not</b> closed under addition?', [
             { html: t(r.pick(['\\pi+(-\\pi)=0', '\\sqrt{' + k + '}+(-\\sqrt{' + k + '})=0', '(1+\\sqrt{' + k + '})+(1-\\sqrt{' + k + '})=2'])), right: true },
@@ -859,7 +859,7 @@
             { html: t('\\sqrt{' + k + '}+1'), why: t('1') + ' is rational. Closure is about adding two members of ' + S('Qb') + '.' }],
             '<b>Not closed.</b> Two irrational numbers can cancel: e.g. ' + t('\\pi+(-\\pi)=0') + ', and ' + t('0') + ' is rational.', ['Look for two irrational numbers whose sum is rational.'], 'Qbar not closed +');
         } },
-        { id: 'e14b', level: 'ADV', make: function (r) {
+        { id: 'e14b', level: 'PRG', make: function (r) {
           var k = r.pick([2, 3, 5, 7]);
           return P.mc(r, 'Which example shows that ' + S('Qb') + ' is <b>not</b> closed under multiplication?', [
             { html: t(r.pick(['\\sqrt{' + k + '}\\times\\sqrt{' + k + '}=' + k, '\\sqrt{2}\\times\\sqrt{8}=4', '\\sqrt{3}\\times\\sqrt{12}=6'])), right: true },
@@ -868,7 +868,7 @@
             { html: t('2\\times\\sqrt{' + k + '}=2\\sqrt{' + k + '}'), why: t('2') + ' is rational, so this isn’t two members of ' + S('Qb') + '.' }],
             '<b>Not closed.</b> e.g. ' + t('\\sqrt{2}\\times\\sqrt{2}=\\sqrt{4}=2') + ': both factors are irrational, but the product is rational.', ['Look for two irrational numbers whose product is rational.'], 'Qbar not closed ×');
         } },
-        { id: 'e14c', level: 'MAS', make: function (r) {
+        { id: 'e14c', level: 'EMG', make: function (r) {
           return P.mc(r, 'Why does ' + S('Qb') + ' fail where ' + S('Q') + ' succeeds?', [
             { html: S('Q') + ' is built from ratios of integers, and ' + t('+,-,\\times,\\div') + ' of two ratios is again a ratio. ' + S('Qb') + ' is defined only by what it is <b>not</b>, so two irrationals can cancel and land back in ' + S('Q') + '.', right: true },
             { html: 'Irrational numbers are too large to add or multiply.', why: t('\\sqrt{2}=1.414\\ldots') + ' isn’t large. Think about what defines each set.' },
@@ -879,10 +879,10 @@
 
       /* ================= Extra practice F — Stretch, MC and NR ================= */
       { num: '15', section: 'Extra practice F — Stretch, multiple choice and numerical response', stem: '<b>Stretch.</b> Find a number for each description.', parts: [
-        { id: 'e15a', level: 'PRG', make: function (r) { var q = r.int(3, 9), p = gen(r, function () { return r.int(1, 2 * q); }, function (p) { return gcd(p, q) === 1 && p % q !== 0; }); return findPart('In ' + S('Q') + ' but not in ' + S('I') + '.', { inS: 'Q', notS: 'I', sol: 'e.g. ' + t('\\frac{' + p + '}{' + q + '}') + ': it is a ratio of integers, but not a whole count, so it is not an integer.', hints: ['Think of a fraction that doesn’t simplify to an integer.'] }, '\\frac{' + p + '}{' + q + '}', ['0.75'], ['4', '\\sqrt{3}'], 'Q not I'); } },
-        { id: 'e15b', level: 'PRG', make: function (r) { var k = r.int(2, 9); return findPart('In ' + S('I') + ' but not in ' + S('W') + '.', { inS: 'I', notS: 'W', sol: 'e.g. ' + t('-' + k) + ': it is negative, and ' + t('W=\\{0,1,2,\\ldots\\}') + ' contains no negatives.', hints: ['Which integers are not whole numbers?'] }, '-' + k, ['-1'], ['0', '3'], 'I not W'); } },
-        { id: 'e15c', level: 'PRG', make: function (r) { var n = r.pick([2, 3, 5, 6, 7]); return findPart('In ' + S('R') + ' but not in ' + S('Q') + '.', { inS: 'R', notS: 'Q', sol: 'e.g. ' + t('\\sqrt{' + n + '}') + ': ' + t(n) + ' is not a perfect square, so ' + t('\\sqrt{' + n + '}') + ' never terminates or repeats and can’t be written as ' + t('\\frac{a}{b}') + '.', hints: ['Think of a square root of a number that isn’t a perfect square.'] }, '\\sqrt{' + n + '}', ['\\pi'], ['\\sqrt{9}', '0.\\overline{3}'], 'R not Q'); } },
-        { id: 'e15e', level: 'MAS', make: function (r) {
+        { id: 'e15a', level: 'BEG', make: function (r) { var q = r.int(3, 9), p = gen(r, function () { return r.int(1, 2 * q); }, function (p) { return gcd(p, q) === 1 && p % q !== 0; }); return findPart('In ' + S('Q') + ' but not in ' + S('I') + '.', { inS: 'Q', notS: 'I', sol: 'e.g. ' + t('\\frac{' + p + '}{' + q + '}') + ': it is a ratio of integers, but not a whole count, so it is not an integer.', hints: ['Think of a fraction that doesn’t simplify to an integer.'] }, '\\frac{' + p + '}{' + q + '}', ['0.75'], ['4', '\\sqrt{3}'], 'Q not I'); } },
+        { id: 'e15b', level: 'BEG', make: function (r) { var k = r.int(2, 9); return findPart('In ' + S('I') + ' but not in ' + S('W') + '.', { inS: 'I', notS: 'W', sol: 'e.g. ' + t('-' + k) + ': it is negative, and ' + t('W=\\{0,1,2,\\ldots\\}') + ' contains no negatives.', hints: ['Which integers are not whole numbers?'] }, '-' + k, ['-1'], ['0', '3'], 'I not W'); } },
+        { id: 'e15c', level: 'BEG', make: function (r) { var n = r.pick([2, 3, 5, 6, 7]); return findPart('In ' + S('R') + ' but not in ' + S('Q') + '.', { inS: 'R', notS: 'Q', sol: 'e.g. ' + t('\\sqrt{' + n + '}') + ': ' + t(n) + ' is not a perfect square, so ' + t('\\sqrt{' + n + '}') + ' never terminates or repeats and can’t be written as ' + t('\\frac{a}{b}') + '.', hints: ['Think of a square root of a number that isn’t a perfect square.'] }, '\\sqrt{' + n + '}', ['\\pi'], ['\\sqrt{9}', '0.\\overline{3}'], 'R not Q'); } },
+        { id: 'e15e', level: 'EMG', make: function (r) {
           return P.mc(r, 'Why is there no number that is in ' + S('Q') + ' and in ' + S('Qb') + ' at the same time? (Base it on the definitions, not on examples.)', [
             { html: 'A number is in ' + S('Q') + ' when its decimal terminates or repeats, and in ' + S('Qb') + ' when it does neither. These are exact opposites, so no number can be in both. Together they make up ' + S('R') + '.', right: true },
             { html: 'Because ' + S('Qb') + ' is nested inside ' + S('Q') + '.', why: 'If ' + S('Qb') + ' were inside ' + S('Q') + ', every irrational number would also be rational — the opposite of what we want.' },
@@ -891,7 +891,7 @@
             'By definition a number is in ' + S('Q') + ' when its decimal <b>terminates or repeats</b>, and in ' + S('Qb') + ' when it <b>neither terminates nor repeats</b>. A number has one decimal expansion, and it either does or doesn’t — so ' + S('Q') + ' and ' + S('Qb') + ' share no members. Together they make up all the real numbers: ' + t('R=\\{Q\\text{ and }\\overline{Q}\\}') + '.', ['Compare the two definitions word for word.'], 'Q and Qbar disjoint');
         } }] },
       { num: '16', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: 'e16', level: 'ADV', make: function (r) {
+        { id: 'e16', level: 'PRG', make: function (r) {
           var k = r.int(5, 9), c = r.int(2, 4), q = r.int(3, 9), b = r.pick([2, 3, 5]), m = r.int(2, 4), d = r.pick([3, 6]), h = r.pick([11, 13, 15, 17]), irr = gen(r, function () { return r.int(10, 40); }, nonSq);
           var ints = [['\\sqrt{' + k * k + '}', t('\\sqrt{' + k * k + '}=' + k)], ['\\sqrt[3]{-' + c * c * c + '}', t('\\sqrt[3]{-' + c * c * c + '}=-' + c)], ['\\frac{' + q * 7 + '}{7}', t('\\frac{' + q * 7 + '}{7}=' + q)], ['\\frac{\\sqrt{' + b * m * m + '}}{\\sqrt{' + b + '}}', t('\\frac{\\sqrt{' + b * m * m + '}}{\\sqrt{' + b + '}}=\\sqrt{' + m * m + '}=' + m)], ['-\\sqrt{' + (k + 1) * (k + 1) + '}', t('-\\sqrt{' + (k + 1) * (k + 1) + '}=-' + (k + 1))]];
           var non = [['0.\\overline{' + d + '}', t('0.\\overline{' + d + '}=' + ex.texRat(ex.norm(d, 9)))], ['\\sqrt{' + (h * h / 100).toFixed(2) + '}', t('\\sqrt{' + (h * h / 100).toFixed(2) + '}=' + (h / 10))], ['\\sqrt{' + irr + '}', t('\\sqrt{' + irr + '}') + ' is irrational']];
@@ -901,9 +901,9 @@
             list.map(function (x) { return x[1] + (ints.indexOf(x) >= 0 ? ' — integer' : ' — not an integer'); }).join('<br>') + '<br>So ' + t(ni) + ' of the ' + t(6) + ' are in ' + S('I') + '.', ['Simplify each number first, then ask: is it an integer?'], 'how many in I', true);
         } }] },
       { num: '17', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: 'e17', level: 'ADV', make: function (r) { return falseStmtMC(r); } }] },
+        { id: 'e17', level: 'PRG', make: function (r) { return falseStmtMC(r); } }] },
       { num: '18', stem: '<i>(Numerical Response)</i>', parts: [
-        { id: 'e18', level: 'ADV', make: function (r) {
+        { id: 'e18', level: 'EMG', make: function (r) {
           var k = r.int(10, 15), c = r.int(2, 6), ab = gen(r, function () { return r.int(12, 98); }, function (n) { return n % 11 !== 0; }), j = r.int(1, 9), b = r.pick([2, 3, 5]), m = r.int(2, 5), h = r.int(11, 19);
           var rats = [['\\sqrt{' + k * k + '}', t('\\sqrt{' + k * k + '}=' + k)], ['-\\frac{8}{3}', t('-\\frac{8}{3}')], ['\\sqrt[3]{-' + c * c * c + '}', t('=-' + c)], ['0.\\overline{' + ab + '}', t('0.\\overline{' + ab + '}=\\frac{' + ab + '}{99}')], ['\\sqrt{' + (j * j / 100).toFixed(2) + '}', t('=' + j / 10)], ['0', t('0')], ['\\frac{\\sqrt{' + b * m * m + '}}{\\sqrt{' + b + '}}', t('=' + m)], ['-\\sqrt{' + (h * h / 100).toFixed(2) + '}', t('=-' + h / 10)]];
           var irrs = [['\\pi', ''], ['\\sqrt{20}', ''], ['2\\sqrt{5}', ''], ['\\sqrt[3]{9}', ''], ['\\sqrt{' + r.pick([7, 11, 13]) + '}', ''], ['-\\sqrt[3]{' + r.pick([4, 10, 25]) + '}', '']];

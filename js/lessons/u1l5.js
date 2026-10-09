@@ -308,27 +308,27 @@
         { id: '1e', level: 'BEG', make: function (r) { var ab = r.pick([[3, 7], [2, 5], [4, 9], [5, 8], [3, 10], [2, 9], [5, 6], [7, 10], [4, 11], [6, 7]]); return rootTyped({ n: 2, num: ab[0] * ab[0], den: ab[1] * ab[1], fraction: true }); } },
         { id: '1f', level: 'EMG', make: function (r) { var b = r.int(2, 5); return rootTyped({ n: 4, num: 1, den: ipow(b, 4), fraction: true }); } },
         { id: '1g', level: 'EMG', make: function (r) { var b = r.int(3, 9), k = r.chance(0.4) ? b : r.pick([2, 3, 4, 6, 8, 10, 12].filter(function (x) { return x !== b; })); return rootTyped({ n: 2, num: 1, den: b * b, k: k, fraction: true }); } },
-        { id: '1h', level: 'BEG', outcome: 'AN1', make: function (r) { var s = r.int(2, 12); return rootMC(r, { n: 2, num: s * s, neg: true }); } },
-        { id: '1i', level: 'EMG', make: function (r) { var s = r.int(2, 9); return rootMC(r, { n: 2, num: -s * s }); } },
-        { id: '1j', level: 'EMG', make: function (r) { var c = r.pick([[5, 2], [5, 3], [7, 2], [3, 4], [3, 5]]); return rootMC(r, { n: c[0], num: -ipow(c[1], c[0]) }); } },
-        { id: '1k', level: 'EMG', outcome: 'AN1', make: function (r) { var s = r.int(2, 5), k = r.int(2, 6); return rootMC(r, { n: 3, num: -s * s * s, k: k, order: ['sign', 'np', 'coef'] }); } },
-        { id: '1l', level: 'PRG', make: function (r) { var c = r.pick([[4, 3], [4, 2], [4, 5], [6, 2], [4, 4]]); return rootMC(r, { n: c[0], num: -1, den: ipow(c[1], c[0]) }); } },
+        { id: '1h', level: 'LIM', outcome: 'AN1', make: function (r) { var s = r.int(2, 12); return rootMC(r, { n: 2, num: s * s, neg: true }); } },
+        { id: '1i', level: 'BEG', make: function (r) { var s = r.int(2, 9); return rootMC(r, { n: 2, num: -s * s }); } },
+        { id: '1j', level: 'BEG', make: function (r) { var c = r.pick([[5, 2], [5, 3], [7, 2], [3, 4], [3, 5]]); return rootMC(r, { n: c[0], num: -ipow(c[1], c[0]) }); } },
+        { id: '1k', level: 'BEG', outcome: 'AN1', make: function (r) { var s = r.int(2, 5), k = r.int(2, 6); return rootMC(r, { n: 3, num: -s * s * s, k: k, order: ['sign', 'np', 'coef'] }); } },
+        { id: '1l', level: 'BEG', make: function (r) { var c = r.pick([[4, 3], [4, 2], [4, 5], [6, 2], [4, 4]]); return rootMC(r, { n: c[0], num: -1, den: ipow(c[1], c[0]) }); } },
         { id: '1m', level: 'BEG', outcome: 'AN1', make: function (r) { var s = r.int(11, 15), k = r.int(2, 9); return rootTyped({ n: 2, num: s * s, k: k }); } },
         { id: '1n', level: 'EMG', make: function (r) { var s = r.pick([2, 3]), k = r.pick([2, 3, 4, 5, 6].filter(function (x) { return x !== s || r.chance(0.6); })); return rootTyped({ n: 5, num: ipow(s, 5), k: [1, k], fraction: true }); } },
-        { id: '1o', level: 'PRG', make: function (r) { var c = r.pick([[9, 1], [7, 1], [5, 1], [11, 1], [5, 2], [3, 3]]); return rootMC(r, { n: c[0], num: -ipow(c[1], c[0]), neg: true }); } },
-        { id: '1p', level: 'PRG', make: function (r) { var ab = r.pick([[3, 4], [2, 3], [2, 5], [1, 4], [3, 5], [4, 5], [5, 6]]); return rootMC(r, { n: 3, num: -ipow(ab[0], 3), den: ipow(ab[1], 3), order: ['sign', 'np', 'flip'] }); } }] },
+        { id: '1o', level: 'EMG', make: function (r) { var c = r.pick([[9, 1], [7, 1], [5, 1], [11, 1], [5, 2], [3, 3]]); return rootMC(r, { n: c[0], num: -ipow(c[1], c[0]), neg: true }); } },
+        { id: '1p', level: 'BEG', make: function (r) { var ab = r.pick([[3, 4], [2, 3], [2, 5], [1, 4], [3, 5], [4, 5], [5, 6]]); return rootMC(r, { n: 3, num: -ipow(ab[0], 3), den: ipow(ab[1], 3), order: ['sign', 'np', 'flip'] }); } }] },
       { num: '2', stem: 'State whether each statement is true or false.',
         shared: function (r) { var s = r.int(4, 12); return { s: s, n: s * s }; },
         parts: [
-          { id: '2a', level: 'BEG', outcome: 'AN1', make: function (r, sh) {
+          { id: '2a', level: 'LIM', outcome: 'AN1', make: function (r, sh) {
             return tf(r, 'The square roots of ' + t(sh.n) + ' are ' + t('\\pm ' + sh.s) + '.', true, 'Check: ' + t(sh.s + '^{2}=' + sh.n) + ' and ' + t('(-' + sh.s + ')^{2}=' + sh.n) + '. Both are square roots of ' + t(sh.n) + '.',
               t(sh.s + '^{2}=' + sh.n) + ' and ' + t('(-' + sh.s + ')^{2}=' + sh.n) + ', so ' + t(sh.n) + ' has two square roots, ' + t('\\pm ' + sh.s) + '. <b>True.</b>', ['Square each of ' + t(sh.s) + ' and ' + t(-sh.s) + '.'], 'square roots of ' + sh.n + ' are ±' + sh.s);
           } },
-          { id: '2b', level: 'EMG', outcome: 'AN1', make: function (r, sh) {
+          { id: '2b', level: 'BEG', outcome: 'AN1', make: function (r, sh) {
             return tf(r, t('\\sqrt{' + sh.n + '}=\\pm ' + sh.s), false, 'The symbol ' + t('\\sqrt{\\ }') + ' means the <b>principal</b> (positive) square root only — one number, not two.',
               t('\\sqrt{\\ }') + ' always means the principal (positive) root, so ' + t('\\sqrt{' + sh.n + '}=' + sh.s) + ' only. <b>False.</b>', ['Is ' + t('\\sqrt{' + sh.n + '}') + ' one number or two?'], '√' + sh.n + ' = ±' + sh.s);
           } },
-          { id: '2c', level: 'PRG', outcome: 'AN1', make: function (r, sh) {
+          { id: '2c', level: 'EMG', outcome: 'AN1', make: function (r, sh) {
             return tf(r, 'If ' + t('x^{2}=' + sh.n + ',\\ x\\in R') + ', then ' + t('x=\\pm ' + sh.s) + '.', true, 'This is an <b>equation</b>: any real number whose square is ' + t(sh.n) + ' is a solution, and ' + t('(-' + sh.s + ')^{2}=' + sh.n) + ' too.',
               'Solving the equation ' + t('x^{2}=' + sh.n) + ' asks for <i>every</i> number whose square is ' + t(sh.n) + ': ' + t(sh.s + '^{2}=' + sh.n) + ' and ' + t('(-' + sh.s + ')^{2}=' + sh.n) + '. So ' + t('x=\\pm ' + sh.s) + '. <b>True.</b> (Only the symbol ' + t('\\sqrt{\\ }') + ' is restricted to the positive root.)',
               ['Try ' + t('x=-' + sh.s) + ' in the equation.'], 'x²=' + sh.n + ' → ±' + sh.s);
@@ -338,16 +338,16 @@
         parts: [
           { id: '3a', level: 'BEG', make: function (r) { return rootTyped({ n: 4, num: ipow(r.int(7, 13), 4), calc: true }); } },
           { id: '3b', level: 'BEG', make: function (r) { return rootTyped({ n: 5, num: -ipow(r.int(3, 6), 5), calc: true }); } },
-          { id: '3c', level: 'EMG', make: function (r, sh) { return rootTyped({ n: 4, num: ipow(sh.s4, 4), neg: true, calc: true }); } },
+          { id: '3c', level: 'BEG', make: function (r, sh) { return rootTyped({ n: 4, num: ipow(sh.s4, 4), neg: true, calc: true }); } },
           { id: '3d', level: 'BEG', outcome: 'AN1', make: function (r) { return rootTyped({ n: 3, num: ipow(r.int(9, 14), 3), neg: true, calc: true }); } },
           { id: '3e', level: 'BEG', outcome: 'AN1', make: function (r) { return rootTyped({ n: 3, num: -ipow(r.int(12, 19), 3), calc: true }); } },
           { id: '3f', level: 'EMG', make: function (r) { var s = r.int(4, 8), m = r.chance(0.5) ? 1 : r.int(2, 3); return rootTyped({ n: 4, num: 1, den: ipow(s, 4), k: -m * s, calc: true }); } },
-          { id: '3g', level: 'PRG', make: function (r) {
+          { id: '3g', level: 'EMG', make: function (r) {
             var c = r.pick([[2, 5], [2, 10], [2, 15], [5, 2], [5, 4], [5, 6], [4, 5], [4, 10], [3, 10]]); // [tenths of the root, coefficient]
             return rootTyped({ n: 6, num: ipow(c[0], 6), den: 1000000, dp: 6, k: c[1], calc: true });
           } },
-          { id: '3h', level: 'PRG', make: function (r, sh) { var p = rootMC(r, { n: 4, num: -ipow(sh.s4, 4), calc: true }); p.solution += ' (The calculator shows an error.)'; return p; } },
-          { id: '3i', level: 'PRG', make: function (r) {
+          { id: '3h', level: 'BEG', make: function (r, sh) { var p = rootMC(r, { n: 4, num: -ipow(sh.s4, 4), calc: true }); p.solution += ' (The calculator shows an error.)'; return p; } },
+          { id: '3i', level: 'EMG', make: function (r) {
             var ab = r.pick([[3, 5], [2, 3], [2, 5], [3, 4], [3, 7], [4, 5]]), m = r.chance(0.5) ? 1 : 2;
             return rootTyped({ n: 4, num: ipow(ab[0], 4), den: ipow(ab[1], 4), k: [m * ab[1], ab[0]], calc: true });
           } }] },
@@ -357,12 +357,12 @@
           return approxPart('\\sqrt{' + n + '}', x, 2, [{ x: n / 2, code: 'divided-index', hint: 'A square root isn’t half the number: ' + t('\\sqrt{' + n + '}') + ' is the number that multiplies by itself to give ' + t(n) + '.' }],
             t('\\sqrt{' + n + '}=' + dots(x) + '\\approx ' + x.toFixed(2)) + '.', ['Use the ' + t('\\sqrt{\\ }') + ' key, then round to two decimal places.'], 'nearest hundredth √' + n);
         } },
-        { id: '4b', level: 'EMG', make: function (r) {
+        { id: '4b', level: 'BEG', make: function (r) {
           var n = r.pick([6, 7, 8, 8, 9]), m = nonPerfect(r, 20, 99, n), x = nroot(m, n), e = rt(n, m);
           return approxPart(e, x, 2, [{ x: Math.sqrt(m), code: 'wrong-index', hint: idxHint(2, n, true) }, { x: Math.cbrt(m), code: 'wrong-index', hint: idxHint(3, n, true) }, { x: m / n, code: 'divided-index', hint: 'Taking a root isn’t dividing by the index. Use ' + XKEY + '.' }, { x: Math.pow(m, n), code: 'wrong-index', hint: 'That’s a power, not a root. Enter the index first, then ' + XKEY + ', then the radicand.' }],
             t(e + '=' + dots(x) + '\\approx ' + x.toFixed(2)) + '. (Enter ' + t(n) + ', then the ' + t('\\sqrt[x]{\\ }') + ' key, then ' + t(m) + '.)', ['Enter the index ' + t(n) + ' first, then ' + XKEY + ', then ' + t(m) + '.'], 'nearest hundredth ' + n + '√' + m);
         } },
-        { id: '4c', level: 'PRG', make: function (r) {
+        { id: '4c', level: 'EMG', make: function (r) {
           var c = r.pick([[4, 3], [3, 2], [5, 4], [2, 3], [3, 4], [5, 2]]), n = r.pick([5, 7, 7]), m = nonPerfect(r, 200, 900, n), k = c[0] / c[1];
           var x = k * nroot(m, n), e = '-' + rTex(c) + rt(n, '-' + m);
           return approxPart(e, x, 2, [
@@ -374,17 +374,17 @@
             ['Find the root first (odd index: a negative radicand gives a negative root), then multiply by the coefficient.', 'Two negatives multiply to a positive.'], 'nearest hundredth ' + e);
         } }] },
       { num: '5', stem: 'Evaluate to the nearest tenth.', parts: [
-        { id: '5a', level: 'EMG', make: function (r) {
+        { id: '5a', level: 'BEG', make: function (r) {
           var m = nonPerfect(r, 20, 200, 5), x = nroot(-m, 5), e = rt(5, '-' + m);
           return approxPart(e, x, 1, [{ x: nroot(-m, 3), code: 'wrong-index', hint: idxHint(3, 5, true) }, { x: -m / 5, code: 'divided-index', hint: 'Taking a root isn’t dividing by the index. Use ' + XKEY + '.' }],
             'The index is odd, so the root is negative: ' + t(e + '=' + dots(x) + '\\approx ' + x.toFixed(1)) + '.', ['Enter ' + t('5') + ', then ' + XKEY + ', then ' + t('(-)' + m) + '.', 'An odd root of a negative number is negative.'], 'nearest tenth ' + e);
         } },
-        { id: '5b', level: 'PRG', make: function (r) {
+        { id: '5b', level: 'EMG', make: function (r) {
           var k = r.int(2, 6), m = nonPerfect(r, 100, 900, 4), x = -k * nroot(m, 4), e = '-' + k + rt(4, m);
           return approxPart(e, x, 1, [{ x: -k * Math.sqrt(m), code: 'wrong-index', hint: idxHint(2, 4, true) }, { x: -nroot(k * m, 4), code: 'coef-inside', hint: 'The ' + t(-k) + ' multiplies the root — it doesn’t go under the radical.' }, { x: -nroot(m, 4), code: 'no-coef', hint: 'Don’t forget to multiply by ' + t(-k) + '.' }],
             t(rt(4, m) + '=' + dots(nroot(m, 4))) + ', so ' + t(e + '=-' + k + '\\times ' + dots(nroot(m, 4)) + '=' + dots(x) + '\\approx ' + x.toFixed(1)) + '.', ['Find ' + t(rt(4, m)) + ' first, then multiply by ' + t(-k) + '.'], 'nearest tenth ' + e);
         } },
-        { id: '5c', level: 'PRG', make: function (r) {
+        { id: '5c', level: 'EMG', make: function (r) {
           var c = r.pick([[2, 3], [3, 4], [3, 2], [4, 5], [5, 3]]), m = nonPerfect(r, 20, 200, 3), k = c[0] / c[1], x = k * nroot(-m, 3), e = rTex(c) + rt(3, '-' + m);
           return approxPart(e, x, 1, [{ x: nroot(-k * m, 3), code: 'coef-inside', hint: 'The coefficient multiplies the root — it doesn’t go under the radical.' }, { x: nroot(-m, 3), code: 'no-coef', hint: 'Don’t forget to multiply by ' + t(rTex(c)) + '.' }, { x: nroot(-m, 3) / k, code: 'flip', hint: 'Multiply by ' + t(rTex(c)) + ' — don’t divide by it.' }],
             t(rt(3, '-' + m) + '=' + dots(nroot(-m, 3))) + ', so ' + t(e + '=' + rTex(c) + '\\times(' + dots(nroot(-m, 3)) + ')=' + dots(x) + '\\approx ' + x.toFixed(1)) + '.' + (Math.abs(K.roundTo(x, 1) - Math.round(x)) < 1e-9 ? ' (Keep the zero: the nearest tenth is ' + t(x.toFixed(1)) + '.)' : ''),
@@ -392,10 +392,10 @@
         } }] },
       { num: '6', section: 'Part B — Radical Vocabulary', stem: 'Identify the index and the radicand.', parts: [
         { id: '6a', level: 'LIM', make: function (r) { var n = r.pick([3, 5, 7, 9]), m = nonPerfect(r, 10, 99, n); return vocabPart(n, m, 1); } },
-        { id: '6b', level: 'BEG', make: function (r) { var n = r.pick([4, 6, 8]), m = r.pick([16, 25, 36, 49, 81, 100].filter(function (v) { return !isPerfect(v, n); })); return vocabPart(n, m, 1); } },
-        { id: '6c', level: 'EMG', make: function (r) { return vocabPart(2, nonPerfect(r, 11, 47, 2), r.int(2, 9)); } }] },
+        { id: '6b', level: 'LIM', make: function (r) { var n = r.pick([4, 6, 8]), m = r.pick([16, 25, 36, 49, 81, 100].filter(function (v) { return !isPerfect(v, n); })); return vocabPart(n, m, 1); } },
+        { id: '6c', level: 'BEG', make: function (r) { return vocabPart(2, nonPerfect(r, 11, 47, 2), r.int(2, 9)); } }] },
       { num: '7', stem: 'The meaning of the index.', parts: [
-        { id: '7', level: 'PRG', make: function (r) {
+        { id: '7', level: 'EMG', make: function (r) {
           var n = r.pick([4, 5, 6, 6, 7]), m = nonPerfect(r, 20, 99, n), e = rt(n, m), dv = Math.round(m / n * 100) / 100;
           return mcPart(r, 'Which statement explains the meaning of the index ' + t(n) + ' in the radical ' + t(e) + '?', [
             { html: t(e) + ' must be used as a <b>factor</b> ' + n + ' times to give ' + t(m) + ': ' + t('\\left(' + e + '\\right)^{' + n + '}=' + m) + '.', right: true },
@@ -405,42 +405,42 @@
             'The index ' + t(n) + ' tells us that ' + t(e) + ' is used as a factor ' + n + ' times to produce ' + t(m) + ': ' + t('\\left(' + e + '\\right)^{' + n + '}=' + m) + '.', ['Think of ' + t('\\sqrt[3]{8}=2') + ': ' + t('2\\times 2\\times 2=8') + '. What does the 3 count?'], 'meaning of index ' + n);
         } }] },
       { num: '8', section: 'Part C — Products and Quotients of Radicals', stem: 'Determine whether each statement is true or false.', parts: [
-        { id: '8a', level: 'EMG', make: function (r) {
+        { id: '8a', level: 'BEG', make: function (r) {
           var ab = r.pick([[7, 8], [3, 5], [6, 7], [2, 11], [5, 6], [3, 10], [7, 5]]), p = ab[0] * ab[1];
           return tf(r, t('\\sqrt{' + p + '}=\\sqrt{' + ab[0] + '}\\sqrt{' + ab[1] + '}'), true, 'The product rule: ' + t('\\sqrt{a}\\times\\sqrt{b}=\\sqrt{ab}') + '. What is ' + t(ab[0] + '\\times ' + ab[1]) + '?',
             t('\\sqrt{' + ab[0] + '}\\sqrt{' + ab[1] + '}=\\sqrt{' + ab[0] + '\\times ' + ab[1] + '}=\\sqrt{' + p + '}') + '. <b>True.</b>', ['Use ' + t('\\sqrt{a}\\times\\sqrt{b}=\\sqrt{ab}') + '.'], '√' + p + ' = √' + ab[0] + '√' + ab[1]);
         } },
-        { id: '8b', level: 'EMG', make: function (r) {
+        { id: '8b', level: 'BEG', make: function (r) {
           var a = r.int(3, 10), b = r.int(2, a - 1), A = a * a, B = b * b, d = A - B;
           return tf(r, t('\\sqrt{' + A + '-' + B + '}=\\sqrt{' + A + '}-\\sqrt{' + B + '}'), false, 'Test it: ' + t('\\sqrt{' + A + '-' + B + '}=\\sqrt{' + d + '}' + (isPerfect(d, 2) ? '=' + Math.sqrt(d) : '\\approx ' + Math.sqrt(d).toFixed(2))) + ', but ' + t('\\sqrt{' + A + '}-\\sqrt{' + B + '}=' + a + '-' + b + '=' + (a - b)) + '.',
             t('\\sqrt{' + A + '-' + B + '}=\\sqrt{' + d + '}' + (isPerfect(d, 2) ? '=' + Math.sqrt(d) : '\\approx ' + Math.sqrt(d).toFixed(2))) + ', but ' + t(a + '-' + b + '=' + (a - b)) + '. A root of a difference is <b>not</b> the difference of the roots. <b>False.</b>', ['Work out each side separately.'], '√(' + A + '−' + B + ') = √' + A + '−√' + B);
         } },
-        { id: '8c', level: 'EMG', make: function (r) {
+        { id: '8c', level: 'BEG', make: function (r) {
           var k = r.int(2, 7), b = r.pick([5, 6, 10, 11, 13, 15].filter(function (x) { return x !== k; })), a = k * b;
           return tf(r, t('\\sqrt{' + k + '}=\\dfrac{\\sqrt{' + a + '}}{\\sqrt{' + b + '}}'), true, 'The quotient rule: ' + t('\\dfrac{\\sqrt{a}}{\\sqrt{b}}=\\sqrt{\\dfrac{a}{b}}') + '. What is ' + t(a + '\\div ' + b) + '?',
             t('\\dfrac{\\sqrt{' + a + '}}{\\sqrt{' + b + '}}=\\sqrt{\\dfrac{' + a + '}{' + b + '}}=\\sqrt{' + k + '}') + '. <b>True.</b>', ['Use ' + t('\\dfrac{\\sqrt{a}}{\\sqrt{b}}=\\sqrt{\\dfrac{a}{b}}') + '.'], '√' + k + ' = √' + a + '/√' + b);
         } },
-        { id: '8d', level: 'PRG', make: function (r) {
+        { id: '8d', level: 'BEG', make: function (r) {
           var bc = r.pick([[9, 4], [4, 9], [16, 4], [9, 16], [25, 4], [4, 25], [16, 9]]), b = bc[0], c = bc[1], a = b * c;
           return tf(r, t('\\dfrac{\\sqrt{' + a + '}}{\\sqrt{' + b + '}}=\\sqrt{' + b + '}'), false, 'Divide the radicands: ' + t('\\dfrac{\\sqrt{' + a + '}}{\\sqrt{' + b + '}}=\\sqrt{\\dfrac{' + a + '}{' + b + '}}') + '. Is that ' + t('\\sqrt{' + b + '}') + '?',
             t('\\dfrac{\\sqrt{' + a + '}}{\\sqrt{' + b + '}}=\\sqrt{\\dfrac{' + a + '}{' + b + '}}=\\sqrt{' + c + '}=' + Math.sqrt(c)) + ', not ' + t('\\sqrt{' + b + '}=' + Math.sqrt(b)) + '. <b>False.</b>', ['Use the quotient rule, or evaluate both sides: both radicands are perfect squares.'], '√' + a + '/√' + b + ' = √' + b);
         } },
-        { id: '8e', level: 'PRG', make: function (r) {
+        { id: '8e', level: 'EMG', make: function (r) {
           var a = r.pick([2, 3, 5, 6, 7, 10]);
           return tf(r, t('\\sqrt{' + a + '}+\\sqrt{' + a + '}=\\sqrt{' + (2 * a) + '}'), false, 'Test with decimals: ' + t('\\sqrt{' + a + '}+\\sqrt{' + a + '}\\approx ' + (2 * Math.sqrt(a)).toFixed(2)) + ', but ' + t('\\sqrt{' + 2 * a + '}\\approx ' + Math.sqrt(2 * a).toFixed(2)) + '. The rules work for × and ÷, not for +.',
             t('\\sqrt{' + a + '}+\\sqrt{' + a + '}=2\\sqrt{' + a + '}\\approx ' + (2 * Math.sqrt(a)).toFixed(2)) + ', but ' + t('\\sqrt{' + 2 * a + '}\\approx ' + Math.sqrt(2 * a).toFixed(2)) + '. A sum of roots is not the root of the sum. <b>False.</b>', ['Use a calculator to compare both sides.'], '√' + a + '+√' + a + ' = √' + 2 * a);
         } },
-        { id: '8f', level: 'EMG', make: function (r) {
+        { id: '8f', level: 'BEG', make: function (r) {
           var a = r.pick([2, 3, 5, 6, 7, 10, 11]);
           return tf(r, t('\\sqrt{' + a + '}\\times\\sqrt{' + a + '}=\\sqrt{' + (a * a) + '}'), true, 'The product rule: ' + t('\\sqrt{' + a + '}\\times\\sqrt{' + a + '}=\\sqrt{' + a + '\\times ' + a + '}') + '.',
             t('\\sqrt{' + a + '}\\times\\sqrt{' + a + '}=\\sqrt{' + a + '\\times ' + a + '}=\\sqrt{' + a * a + '}') + ' (which is ' + t(a) + '). <b>True.</b>', ['Use ' + t('\\sqrt{a}\\times\\sqrt{b}=\\sqrt{ab}') + '.'], '√' + a + '×√' + a + ' = √' + a * a);
         } },
-        { id: '8g', level: 'PRG', make: function (r) {
+        { id: '8g', level: 'BEG', make: function (r) {
           var k = r.pick([2, 3, 4, 5]), j = r.pick([9, 4, 16, 5, 6, 7].filter(function (x) { return x !== k; })), m = k * j;
           return tf(r, t('\\sqrt{\\dfrac{1}{' + k + '}\\times ' + m + '}=\\sqrt{' + j + '}'), true, 'Work out the radicand first: ' + t('\\dfrac{1}{' + k + '}\\times ' + m) + ' is just ' + t(m + '\\div ' + k) + '.',
             t('\\dfrac{1}{' + k + '}\\times ' + m + '=' + j) + ', so both sides are ' + t('\\sqrt{' + j + '}') + '. <b>True.</b>', ['Simplify what is under the radical first.'], '√(1/' + k + '×' + m + ') = √' + j);
         } },
-        { id: '8h', level: 'ADV', make: function (r) {
+        { id: '8h', level: 'EMG', make: function (r) {
           var k = r.pick([2, 3, 4]), j = r.pick([9, 4, 16, 5, 6, 7].filter(function (x) { return x !== k; })), m = k * j, q = nrm(m, k * k);
           return tf(r, t('\\dfrac{1}{' + k + '}\\sqrt{' + m + '}=\\sqrt{' + j + '}'), false, 'Here the ' + t('\\dfrac{1}{' + k + '}') + ' is <b>outside</b> the radical. Compare with decimals: ' + t('\\dfrac{1}{' + k + '}\\sqrt{' + m + '}\\approx ' + (Math.sqrt(m) / k).toFixed(2)) + ' and ' + t('\\sqrt{' + j + '}\\approx ' + Math.sqrt(j).toFixed(2)) + '.',
             'The ' + t('\\dfrac{1}{' + k + '}') + ' is outside the radical. To move it inside it must be squared: ' + t('\\dfrac{1}{' + k + '}\\sqrt{' + m + '}=\\sqrt{\\dfrac{' + m + '}{' + k * k + '}}=\\sqrt{' + rTex(q) + '}\\approx ' + (Math.sqrt(m) / k).toFixed(2)) + ', but ' + t('\\sqrt{' + j + '}\\approx ' + Math.sqrt(j).toFixed(2)) + '. <b>False.</b>',
@@ -451,9 +451,9 @@
         { id: '9b', level: 'BEG', make: function (r) { var c = r.pick([2, 3, 5]), j = r.pick([3, 5, 7].filter(function (x) { return x !== c; })); return prodPart(c * j, c); } },
         { id: '9c', level: 'BEG', make: function (r) { var s = r.pick([4, 9, 16, 25]), p = r.pick([2, 3, 5, 7, 11, 13]); return prodPart(s, p); } },
         { id: '9d', level: 'BEG', make: function (r) { var a = r.pick([8, 12, 18, 20, 24, 27]), b = r.pick([4, 9].filter(function (x) { return !isPerfect(a * x, 2); })); return prodPart(a, b); } },
-        { id: '9e', level: 'EMG', make: function (r) { var b = r.pick([2, 3, 5, 6, 7]), s = r.int(2, 4); return quotPart(b * s * s, b); } },
-        { id: '9f', level: 'EMG', make: function (r) { var p = r.pick([3, 5, 6, 7, 10, 11]); return quotPart(p * p, p); } },
-        { id: '9g', level: 'PRG', make: function (r) {
+        { id: '9e', level: 'BEG', make: function (r) { var b = r.pick([2, 3, 5, 6, 7]), s = r.int(2, 4); return quotPart(b * s * s, b); } },
+        { id: '9f', level: 'BEG', make: function (r) { var p = r.pick([3, 5, 6, 7, 10, 11]); return quotPart(p * p, p); } },
+        { id: '9g', level: 'EMG', make: function (r) {
           var c, a, b, m;
           for (var i = 0; i < 200; i++) { c = r.pick([2, 3, 5]); b = c * r.pick([2, 3, 5, 7]); a = r.pick([6, 7, 10, 11, 13, 14, 15].filter(function (x) { return x % c; })); m = a * b / c; if (!isPerfect(m, 2) && m <= 200 && b !== c) break; }
           var e = '\\dfrac{\\sqrt{' + a + '}\\sqrt{' + b + '}}{\\sqrt{' + c + '}}';
@@ -463,7 +463,7 @@
             return null;
           }, t(e + '=\\sqrt{\\dfrac{' + a + '\\times ' + b + '}{' + c + '}}=\\sqrt{\\dfrac{' + a * b + '}{' + c + '}}=\\sqrt{' + m + '}') + '.', ['Multiply the radicands on top, then divide by the radicand on the bottom — all under one radical.'], 'single radical √' + a + '√' + b + '/√' + c, ['\\sqrt{' + a * b + '}', '\\sqrt{' + a * b * c + '}']);
         } },
-        { id: '9h', level: 'ADV', make: function (r) {
+        { id: '9h', level: 'EMG', make: function (r) {
           var qq = r.pick([[2, 4], [2, 3], [3, 2], [3, 3], [5, 2], [2, 5], [6, 2], [7, 2]]), k = qq[0], q = qq[1], p = q * k, P2 = p * p, Q2 = q * q;
           var e = '\\dfrac{\\sqrt{\\sqrt{' + P2 + '}}}{\\sqrt{\\sqrt{' + Q2 + '}}}';
           return singlePart(e, k, function (M, v) {
@@ -474,12 +474,12 @@
           ['Work from the inside out: evaluate the inner square roots first.', 'Then use ' + t('\\dfrac{\\sqrt{a}}{\\sqrt{b}}=\\sqrt{\\dfrac{a}{b}}') + '.'], 'single radical nested ' + P2 + '/' + Q2, [String(k), '\\sqrt{' + k * k + '}']);
         } }] },
       { num: '10', stem: 'Express as a product of two radicals.', parts: [
-        { id: '10a', level: 'EMG', make: function (r) { var pq = r.pick([[7, 11], [3, 13], [7, 13], [5, 13], [3, 23], [7, 17]]); return twoPart(pq[0] * pq[1], pq[0], pq[1]); } },
-        { id: '10b', level: 'EMG', make: function (r) { var pq = r.pick([[3, 17], [3, 19], [5, 11], [3, 29], [5, 17], [2, 23]]); return twoPart(pq[0] * pq[1], pq[0], pq[1]); } },
+        { id: '10a', level: 'BEG', make: function (r) { var pq = r.pick([[7, 11], [3, 13], [7, 13], [5, 13], [3, 23], [7, 17]]); return twoPart(pq[0] * pq[1], pq[0], pq[1]); } },
+        { id: '10b', level: 'BEG', make: function (r) { var pq = r.pick([[3, 17], [3, 19], [5, 11], [3, 29], [5, 17], [2, 23]]); return twoPart(pq[0] * pq[1], pq[0], pq[1]); } },
         { id: '10c', level: 'EMG', make: function (r) { var pq = r.pick([[5, 19], [7, 19], [5, 23], [11, 13], [3, 31], [2, 37]]); return twoPart(pq[0] * pq[1], pq[0], pq[1]); } },
-        { id: '10d', level: 'PRG', make: function (r) { var p = r.pick([11, 13, 7, 17, 19]); return twoPart(p * p, p, p); } }] },
+        { id: '10d', level: 'EMG', make: function (r) { var p = r.pick([11, 13, 7, 17, 19]); return twoPart(p * p, p, p); } }] },
       { num: '11', section: 'Part D — Multiple Choice and Numerical Response', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: '11', level: 'ADV', make: function (r) {
+        { id: '11', level: 'PRG', make: function (r) {
           var c = r.int(2, 5), d = r.int(2, 5), e = r.int(4, 9), f = r.int(2, 4), c3 = c * c * c, d4 = ipow(d, 4), e3 = e * e * e, f4 = ipow(f, 4);
           var iT = r.chance(0.35), ivT = r.chance(0.35);
           var st = [
@@ -492,7 +492,7 @@
           return statementsMC(r, 'Consider the following statements.', st, [['II', 'III'], ['I', 'II', 'III'], ['I', 'II', 'III', 'IV']], 'some other combination of I, II, III and IV', 'which root statements are true');
         } }] },
       { num: '12', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: '12', level: 'PRG', make: function (r) {
+        { id: '12', level: 'LIM', make: function (r) {
           var m = nonPerfect(r, 11, 47, 2);
           return mcPart(r, 'In the radical ' + t('\\sqrt{' + m + '}') + ',', [
             { html: 'the index is ' + t('2') + ' and the radicand is ' + t('\\sqrt{' + m + '}'), why: 'The radicand is the number <b>under</b> the radical sign, not the whole radical.' },
@@ -502,7 +502,7 @@
             'No index is written, so by convention the index is ' + t('2') + '. The radicand is the number under the radical sign, ' + t(m) + '.', ['Which number is under the radical sign? What index does a plain ' + t('\\sqrt{\\ }') + ' have?'], 'index/radicand of √' + m);
         } }] },
       { num: '13', stem: '<i>(Numerical Response)</i>', parts: [
-        { id: '13', level: 'ADV', make: function (r) {
+        { id: '13', level: 'EMG', make: function (r) {
           var fr = r.pick([[5, 6], [2, 3], [3, 4], [4, 5], [7, 8], [3, 5], [5, 7]]), c = r.pick([2, 3, 3, 4]), idx = r.pick([[5, 4], [5, 4], [3, 4], [5, 6]]), f = fr[0] / fr[1];
           var A = nroot(-f, idx[0]), B = nroot(f, idx[1]), x = A + c * B;
           var e = rt(idx[0], '-\\dfrac{' + fr[0] + '}{' + fr[1] + '}') + '+' + c + rt(idx[1], '\\dfrac{' + fr[0] + '}{' + fr[1] + '}');
@@ -519,36 +519,36 @@
     ],
     extra: [
       { num: '1', section: 'Extra practice A — Exact values without a calculator', stem: 'Evaluate exactly. Take the root of the numerator and the root of the denominator separately; leave each answer as a fraction in lowest terms.', parts: [
-        { id: 'e1a', level: 'EMG', make: function (r) { var ab = r.pick([[3, 4], [2, 5], [1, 4], [4, 5], [2, 3], [5, 6]]); return rootTyped({ n: 3, num: ipow(ab[0], 3), den: ipow(ab[1], 3), fraction: true }); } },
+        { id: 'e1a', level: 'BEG', make: function (r) { var ab = r.pick([[3, 4], [2, 5], [1, 4], [4, 5], [2, 3], [5, 6]]); return rootTyped({ n: 3, num: ipow(ab[0], 3), den: ipow(ab[1], 3), fraction: true }); } },
         { id: 'e1b', level: 'EMG', make: function (r) { var ab = r.pick([[2, 3], [3, 5], [1, 3], [2, 5], [3, 4], [4, 5]]); return rootTyped({ n: 4, num: ipow(ab[0], 4), den: ipow(ab[1], 4), fraction: true }); } },
-        { id: 'e1c', level: 'PRG', make: function (r) { var ab = r.pick([[2, 3], [1, 2], [1, 3], [3, 2], [3, 4]]); return rootTyped({ n: 5, num: -ipow(ab[0], 5), den: ipow(ab[1], 5), fraction: true }); } },
-        { id: 'e1d', level: 'EMG', make: function (r) { var ab = r.pick([[5, 2], [4, 3], [7, 2], [5, 3], [6, 5]]); return rootTyped({ n: 3, num: ipow(ab[0], 3), den: ipow(ab[1], 3), fraction: true }); } }] },
+        { id: 'e1c', level: 'EMG', make: function (r) { var ab = r.pick([[2, 3], [1, 2], [1, 3], [3, 2], [3, 4]]); return rootTyped({ n: 5, num: -ipow(ab[0], 5), den: ipow(ab[1], 5), fraction: true }); } },
+        { id: 'e1d', level: 'BEG', make: function (r) { var ab = r.pick([[5, 2], [4, 3], [7, 2], [5, 3], [6, 5]]); return rootTyped({ n: 3, num: ipow(ab[0], 3), den: ipow(ab[1], 3), fraction: true }); } }] },
       { num: '2', stem: 'Evaluate exactly. Rewrite each decimal as a fraction over a power of ten first — the number of decimal places in the answer is the number of places in the radicand divided by the index.', parts: [
-        { id: 'e2a', level: 'PRG', make: function (r) { return decimalRoot(4, r.pick([1, 2, 3]), 1); } },
-        { id: 'e2b', level: 'PRG', make: function (r) { return decimalRoot(3, r.pick([2, 3, 4, 5]), 1); } },
-        { id: 'e2c', level: 'PRG', make: function (r) { return decimalRoot(2, r.pick([3, 4, 6, 7, 8, 9]), 2); } },
-        { id: 'e2d', level: 'PRG', make: function (r) { return decimalRoot(3, -r.pick([2, 3, 4, 5, 6, 7, 8, 9]), 1); } }] },
+        { id: 'e2a', level: 'EMG', make: function (r) { return decimalRoot(4, r.pick([1, 2, 3]), 1); } },
+        { id: 'e2b', level: 'EMG', make: function (r) { return decimalRoot(3, r.pick([2, 3, 4, 5]), 1); } },
+        { id: 'e2c', level: 'EMG', make: function (r) { return decimalRoot(2, r.pick([3, 4, 6, 7, 8, 9]), 2); } },
+        { id: 'e2d', level: 'EMG', make: function (r) { return decimalRoot(3, -r.pick([2, 3, 4, 5, 6, 7, 8, 9]), 1); } }] },
       { num: '3', stem: 'Evaluate exactly. A coefficient in front of the radical multiplies the root <i>after</i> the root has been taken.', parts: [
         { id: 'e3a', level: 'EMG', make: function (r) { return rootTyped({ n: 6, num: ipow(r.pick([2, 3]), 6) }); } },
-        { id: 'e3b', level: 'PRG', make: function (r) { var s = r.pick([2, 3, 4]), k = r.pick([2, 3]); return rootTyped({ n: 5, num: -ipow(s, 5), k: -k }); } },
-        { id: 'e3c', level: 'PRG', make: function (r) { var n = r.pick([6, 7, 8]), k = r.pick([2, 2, 4]); return rootTyped({ n: n, num: ipow(2, n), k: [1, k], fraction: true }); } },
+        { id: 'e3b', level: 'EMG', make: function (r) { var s = r.pick([2, 3, 4]), k = r.pick([2, 3]); return rootTyped({ n: 5, num: -ipow(s, 5), k: -k }); } },
+        { id: 'e3c', level: 'EMG', make: function (r) { var n = r.pick([6, 7, 8]), k = r.pick([2, 2, 4]); return rootTyped({ n: n, num: ipow(2, n), k: [1, k], fraction: true }); } },
         { id: 'e3d', level: 'EMG', make: function (r) { var c = r.pick([[6, 2], [6, 3], [5, 2], [5, 3]]); return rootTyped({ n: c[0], num: 1, den: ipow(c[1], c[0]), fraction: true }); } }] },
       { num: '4', stem: 'Evaluate exactly. The radicand is already written as a power — work out the power <i>first</i>, then take the root.', parts: [
-        { id: 'e4a', level: 'PRG', make: function (r) { return powRoot(2, r.int(2, 12), false); } },
-        { id: 'e4b', level: 'PRG', make: function (r) { return powRoot(3, r.int(2, 9), false); } },
-        { id: 'e4c', level: 'PRG', make: function (r) { return powRoot(4, r.int(2, 5), false); } },
-        { id: 'e4d', level: 'ADV', make: function (r) { return powRoot(2, r.int(2, 12), true); } }] },
+        { id: 'e4a', level: 'EMG', make: function (r) { return powRoot(2, r.int(2, 12), false); } },
+        { id: 'e4b', level: 'EMG', make: function (r) { return powRoot(3, r.int(2, 9), false); } },
+        { id: 'e4c', level: 'EMG', make: function (r) { return powRoot(4, r.int(2, 5), false); } },
+        { id: 'e4d', level: 'PRG', make: function (r) { return powRoot(2, r.int(2, 12), true); } }] },
       { num: '5', section: 'Extra practice B — Possible or not possible', stem: 'Give the exact value, or choose <b>not possible</b> if the radical is not a real number. Remember: if the index is even, the radicand must be non-negative.', parts: [
-        { id: 'e5a', level: 'EMG', make: function (r) { var c = r.pick([[4, 2], [4, 3], [6, 2]]); return rootMC(r, { n: c[0], num: -ipow(c[1], c[0]) }); } },
-        { id: 'e5b', level: 'EMG', outcome: 'AN1', make: function (r) { var s = r.int(4, 9); return rootMC(r, { n: 3, num: -s * s * s }); } },
-        { id: 'e5c', level: 'EMG', make: function (r) { var c = r.pick([[6, 2], [6, 3], [4, 4], [8, 2]]); return rootMC(r, { n: c[0], num: -ipow(c[1], c[0]) }); } },
-        { id: 'e5d', level: 'EMG', make: function (r) { var c = r.pick([[5, 3], [5, 2], [5, 4], [7, 2]]); return rootMC(r, { n: c[0], num: -ipow(c[1], c[0]) }); } },
-        { id: 'e5e', level: 'BEG', outcome: 'AN1', make: function (r) { var s = r.int(4, 12); return rootMC(r, { n: 2, num: s * s, neg: true }); } },
-        { id: 'e5f', level: 'EMG', make: function (r) { var s = r.int(4, 12); return rootMC(r, { n: 2, num: -s * s }); } },
-        { id: 'e5g', level: 'EMG', make: function (r) { var c = r.pick([[8, 2], [6, 2], [10, 2], [6, 3], [4, 4]]); return rootMC(r, { n: c[0], num: ipow(c[1], c[0]) }); } },
-        { id: 'e5h', level: 'PRG', make: function (r) { var b = r.pick([10, 10, 4, 5, 6]); return rootMC(r, { n: 3, num: -1, den: b * b * b, order: ['sign', 'np', 'flip'] }); } }] },
+        { id: 'e5a', level: 'BEG', make: function (r) { var c = r.pick([[4, 2], [4, 3], [6, 2]]); return rootMC(r, { n: c[0], num: -ipow(c[1], c[0]) }); } },
+        { id: 'e5b', level: 'BEG', outcome: 'AN1', make: function (r) { var s = r.int(4, 9); return rootMC(r, { n: 3, num: -s * s * s }); } },
+        { id: 'e5c', level: 'BEG', make: function (r) { var c = r.pick([[6, 2], [6, 3], [4, 4], [8, 2]]); return rootMC(r, { n: c[0], num: -ipow(c[1], c[0]) }); } },
+        { id: 'e5d', level: 'BEG', make: function (r) { var c = r.pick([[5, 3], [5, 2], [5, 4], [7, 2]]); return rootMC(r, { n: c[0], num: -ipow(c[1], c[0]) }); } },
+        { id: 'e5e', level: 'LIM', outcome: 'AN1', make: function (r) { var s = r.int(4, 12); return rootMC(r, { n: 2, num: s * s, neg: true }); } },
+        { id: 'e5f', level: 'BEG', make: function (r) { var s = r.int(4, 12); return rootMC(r, { n: 2, num: -s * s }); } },
+        { id: 'e5g', level: 'BEG', make: function (r) { var c = r.pick([[8, 2], [6, 2], [10, 2], [6, 3], [4, 4]]); return rootMC(r, { n: c[0], num: ipow(c[1], c[0]) }); } },
+        { id: 'e5h', level: 'BEG', make: function (r) { var b = r.pick([10, 10, 4, 5, 6]); return rootMC(r, { n: 3, num: -1, den: b * b * b, order: ['sign', 'np', 'flip'] }); } }] },
       { num: '6', stem: 'Each pair looks almost the same, but the minus sign has moved. Evaluate both expressions, then decide whether they are equal.', parts: [
-        { id: 'e6a', level: 'PRG', make: function (r) {
+        { id: 'e6a', level: 'EMG', make: function (r) {
           var c = r.pick([[4, 3], [4, 2], [4, 5], [6, 2]]), n = c[0], s = c[1], M = ipow(s, n), A = '-' + rt(n, M), B = rt(n, '-' + M);
           return pairMC(r, A, B, [
             { html: t(A + '=-' + s) + '; ' + t(B) + ' is not possible. <b>Not equal.</b>', right: true },
@@ -557,7 +557,7 @@
             { html: t(A + '=' + s) + '; ' + t(B + '=-' + s) + '. <b>Not equal.</b>', why: 'The minus sign in ' + t(A) + ' makes that value negative.' }],
             t(rt(n, M) + '=' + s) + ', so ' + t(A + '=-' + s) + '. In ' + t(B) + ' the index is even and the radicand is negative, so it is <b>not possible</b>. <b>Not equal:</b> outside the radical the minus sign negates a root that exists; inside, it makes an even-index radicand negative.', 'pair ' + A + ' vs ' + B);
         } },
-        { id: 'e6b', level: 'ADV', make: function (r) {
+        { id: 'e6b', level: 'PRG', make: function (r) {
           var s = r.int(2, 9), A = '\\sqrt{(-' + s + ')^{2}}', B = '\\left(\\sqrt{-' + s + '}\\right)^{2}';
           return pairMC(r, A, B, [
             { html: t(A + '=' + s) + '; ' + t(B) + ' is not possible. <b>Not equal.</b>', right: true },
@@ -566,7 +566,7 @@
             { html: t(A + '=-' + s) + '; ' + t(B + '=' + s) + '. <b>Not equal.</b>', why: 'Work inside out. ' + t('(-' + s + ')^{2}=' + s * s) + ' — what is its principal square root? And can you take ' + t('\\sqrt{-' + s + '}') + '?' }],
             t(A + '=\\sqrt{' + s * s + '}=' + s) + '. In ' + t(B) + ', ' + t('\\sqrt{-' + s + '}') + ' is <b>not possible</b> (even index, negative radicand), so there is nothing to square. <b>Not equal:</b> squaring first removes the negative; taking the root first never gets started.', 'pair ' + A + ' vs ' + B);
         } },
-        { id: 'e6c', level: 'PRG', make: function (r) {
+        { id: 'e6c', level: 'EMG', make: function (r) {
           var c = r.pick([[3, 3], [3, 2], [3, 4], [5, 2], [3, 5]]), n = c[0], s = c[1], M = ipow(s, n), A = '-' + rt(n, M), B = rt(n, '-' + M);
           return pairMC(r, A, B, [
             { html: 'Both equal ' + t(-s) + '. <b>Equal.</b>', right: true },
@@ -578,7 +578,7 @@
       { num: '7', stem: function (sh) { return 'Consider the radical ' + t('\\sqrt[n]{-' + sh.M + '}') + ', where ' + t('n\\in N') + '.'; },
         shared: function (r) { var b = r.chance(0.7) ? 2 : 3; return { b: b, M: ipow(b, 6) }; },
         parts: [
-          { id: 'e7a', level: 'PRG', make: function (r, sh) {
+          { id: 'e7a', level: 'EMG', make: function (r, sh) {
             var b = sh.b, M = sh.M, rows = [2, 3, 4, 5, 6, 7].map(function (n) { return { id: 'n' + n, html: t('n=' + n) }; });
             var cols = [{ id: 'c3', html: t(-b * b * b) }, { id: 'c2', html: t(-b * b) }, { id: 'c1', html: t(-b) }, { id: 'irr', html: 'irrational' }, { id: 'np', html: 'not possible' }];
             var want = { n2: 'np', n3: 'c2', n4: 'np', n5: 'irr', n6: 'np', n7: 'irr' }, colTex = { c3: -b * b * b, c2: -b * b, c1: -b };
@@ -596,7 +596,7 @@
             ['Even index and negative radicand: not possible.', 'Odd index: the root exists. Is it an exact integer?'], 'table ⁿ√-' + M);
             return p;
           } },
-          { id: 'e7b', level: 'PRG', make: function (r, sh) {
+          { id: 'e7b', level: 'EMG', make: function (r, sh) {
             return mcPart(r, 'Which statement explains the pattern in the table, using only the index?', [
               { html: 'Even index: not possible, because an even power of any real number is never negative. Odd index: a real negative root, because an odd power of a negative number is negative.', right: true },
               { html: 'The root exists only when ' + t(sh.M) + ' is a perfect power of the index.', why: 'For ' + t('n=5') + ' and ' + t('n=7') + ' the root exists even though it isn’t an integer. And for ' + t('n=6') + ', ' + t(sh.M) + ' <i>is</i> a perfect sixth power, yet the root is not possible.' },
@@ -604,7 +604,7 @@
               { html: 'Even index: the root is positive. Odd index: the root is negative.', why: 'With a negative radicand an even index gives no real root at all — not a positive one.' }],
               'Only the parity of the index matters. An even power of a real number is never negative, so an even root of a negative number is not real. An odd power keeps the sign, so an odd root of a negative number is a real negative number.', ['Look down the table: which rows are “not possible”? What do their indices have in common?'], 'pattern even/odd index');
           } },
-          { id: 'e7c', level: 'PRG', make: function (r, sh) {
+          { id: 'e7c', level: 'EMG', make: function (r, sh) {
             var M = sh.M, b = sh.b;
             return mcPart(r, 'A classmate says “' + t(-M) + ' has no roots at all.” Which is the best correction?', [
               { html: t(-M) + ' has one real root for every <b>odd</b> index, e.g. ' + t('\\sqrt[3]{-' + M + '}=' + (-b * b)) + '; it has no roots of <b>even</b> index.', right: true },
@@ -622,19 +622,19 @@
             }, 'Only ' + t('n=3') + ' gives an integer, ' + t(-sh.b * sh.b) + '. The roots for ' + t('n=5, 7') + ' are irrational and the even ones are not possible. Answer: ' + t('1') + '.', ['Use your table from part (a).'], 'how many integer roots');
           } }] },
       { num: '8', section: 'Extra practice C — Estimating irrational roots', stem: 'Each root is irrational. <b>Without a calculator</b>, state the two consecutive integers it lies between.', parts: [
-        { id: 'e8a', level: 'EMG', make: function (r) { return bracketPart(2, nonPerfect(r, 20, 99, 2)); } },
-        { id: 'e8b', level: 'PRG', make: function (r) { return bracketPart(3, nonPerfect(r, 30, 200, 3)); } },
-        { id: 'e8c', level: 'PRG', make: function (r) { return bracketPart(4, nonPerfect(r, 20, 600, 4, function (v) { return v < 17; })); } },
-        { id: 'e8d', level: 'ADV', make: function (r) { return bracketPart(3, -nonPerfect(r, 10, 120, 3, function (v) { return v < 9; })); } }] },
+        { id: 'e8a', level: 'BEG', make: function (r) { return bracketPart(2, nonPerfect(r, 20, 99, 2)); } },
+        { id: 'e8b', level: 'EMG', make: function (r) { return bracketPart(3, nonPerfect(r, 30, 200, 3)); } },
+        { id: 'e8c', level: 'EMG', make: function (r) { return bracketPart(4, nonPerfect(r, 20, 600, 4, function (v) { return v < 17; })); } },
+        { id: 'e8d', level: 'EMG', make: function (r) { return bracketPart(3, -nonPerfect(r, 10, 120, 3, function (v) { return v < 9; })); } }] },
       { num: '9', stem: 'Refine each estimate to <b>one decimal place</b>, still without a calculator. Test the halfway value first: raise it to the power of the index and compare with the radicand.', parts: [
-        { id: 'e9a', level: 'ADV', make: function (r) { return refinePart(2, nonPerfect(r, 20, 99, 2)); } },
-        { id: 'e9b', level: 'ADV', make: function (r) { return refinePart(3, nonPerfect(r, 30, 150, 3)); } },
-        { id: 'e9c', level: 'ADV', make: function (r) { return refinePart(2, nonPerfect(r, 30, 60, 2)); } },
-        { id: 'e9d', level: 'MAS', make: function (r) { return refinePart(3, -nonPerfect(r, 10, 100, 3, function (v) { return v < 9; })); } }] },
+        { id: 'e9a', level: 'EMG', make: function (r) { return refinePart(2, nonPerfect(r, 20, 99, 2)); } },
+        { id: 'e9b', level: 'PRG', make: function (r) { return refinePart(3, nonPerfect(r, 30, 150, 3)); } },
+        { id: 'e9c', level: 'EMG', make: function (r) { return refinePart(2, nonPerfect(r, 30, 60, 2)); } },
+        { id: 'e9d', level: 'PRG', make: function (r) { return refinePart(3, -nonPerfect(r, 10, 100, 3, function (v) { return v < 9; })); } }] },
       { num: '10', stem: function (sh) { return 'Ivy claims that ' + t('\\sqrt[3]{' + sh.A + '}>\\sqrt{' + sh.B + '}') + ' “because ' + t(sh.A) + ' is bigger than ' + t(sh.B) + '.”'; },
         shared: function (r) { var k = r.pick([3, 4, 4]); return { k: k, A: nonPerfect(r, k * k * k + 1, ipow(k + 1, 3) - 1, 3), B: nonPerfect(r, (k - 1) * (k - 1) + 1, k * k - 1, 2) }; },
         parts: [
-          { id: 'e10a', level: 'PRG', make: function (r, sh) {
+          { id: 'e10a', level: 'EMG', make: function (r, sh) {
             var k = sh.k, A = sh.A, B = sh.B;
             return mcPart(r, 'Bracket each root between consecutive integers. Is her <b>conclusion</b> correct?', [
               { html: 'Yes: ' + t(k + '<\\sqrt[3]{' + A + '}<' + (k + 1)) + ' and ' + t((k - 1) + '<\\sqrt{' + B + '}<' + k) + ', so ' + t('\\sqrt[3]{' + A + '}>\\sqrt{' + B + '}') + '.', right: true },
@@ -644,7 +644,7 @@
               t(k + '^{3}=' + k * k * k + '<' + A + '<' + ipow(k + 1, 3) + '=' + (k + 1) + '^{3}') + ', so ' + t(k + '<\\sqrt[3]{' + A + '}<' + (k + 1)) + '. ' + t((k - 1) + '^{2}=' + (k - 1) * (k - 1) + '<' + B + '<' + k * k + '=' + k + '^{2}') + ', so ' + t((k - 1) + '<\\sqrt{' + B + '}<' + k) + '. So her conclusion is correct — but not for her reason.',
               ['Use perfect cubes for the cube root and perfect squares for the square root.'], 'Ivy bracket ∛' + A + ' vs √' + B);
           } },
-          { id: 'e10b', level: 'ADV', make: function (r) {
+          { id: 'e10b', level: 'PRG', make: function (r) {
             var c = r.pick([[3, 4], [3, 5], [4, 5], [4, 6], [4, 7], [5, 6], [5, 9]]), a = c[0], b = c[1], A = a * a * a, B = b * b;
             return mcPart(r, 'Her <b>reasoning</b> is wrong. Which pair is a counterexample: different indices, where the larger radicand gives the smaller value?', [
               { html: t('\\sqrt[3]{' + A + '}') + ' and ' + t('\\sqrt{' + B + '}'), right: true },
@@ -653,7 +653,7 @@
               { html: t('\\sqrt[3]{8}') + ' and ' + t('\\sqrt{' + B + '}'), why: t('8<' + B) + ' and ' + t('2<' + b) + ': the smaller radicand gives the smaller value, so it agrees with Ivy.' }],
               t('\\sqrt[3]{' + A + '}=' + a) + ' and ' + t('\\sqrt{' + B + '}=' + b) + '. The radicand ' + t(A) + ' is larger than ' + t(B) + ', yet ' + t(a + '<' + b) + '. So a larger radicand does not guarantee a larger value.', ['Evaluate each radical in the pair. Which radicand is larger? Which value is larger?'], 'counterexample ∛' + A + ', √' + B);
           } },
-          { id: 'e10c', level: 'MAS', make: function (r) {
+          { id: 'e10c', level: 'EMG', make: function (r) {
             return mcPart(r, 'Why may radicands only be compared directly when the two indices match?', [
               { html: 'The index says how many equal factors the radicand is split into. Different indices undo different powers, so a bigger radicand can still give a smaller root. With the same index, the larger radicand always gives the larger root.', right: true },
               { html: 'Because cube roots are always smaller than square roots.', why: 'Not always: ' + t('\\sqrt[3]{1000}=10') + ' is bigger than ' + t('\\sqrt{4}=2') + '.' },
@@ -662,7 +662,7 @@
               'For radicands greater than 1, a larger index pulls the value down more (' + t('\\sqrt{64}=8') + ', ' + t('\\sqrt[3]{64}=4') + ', ' + t('\\sqrt[6]{64}=2') + '). When the indices match, the same “undoing” happens to both, and then the larger radicand gives the larger root.', ['Compare ' + t('\\sqrt{64}') + ' and ' + t('\\sqrt[3]{64}') + '.'], 'why indices must match');
           } }] },
       { num: '11', section: 'Extra practice D — Ordering roots', stem: 'Arrange from <b>least to greatest</b> without a calculator.', parts: [
-        { id: 'e11', level: 'PRG', make: function (r) {
+        { id: 'e11', level: 'EMG', make: function (r) {
           var k = r.pick([3, 3, 4, 5]), m = r.int(2, k - 1), c = r.int(1, 3), pq = r.sample(range(k * k + 1, (k + 1) * (k + 1) - 1), 2).sort(function (x, y) { return x - y; });
           for (var g = 0; g < 50 && pq[1] - pq[0] < 3; g++) pq = r.sample(range(k * k + 1, (k + 1) * (k + 1) - 1), 2).sort(function (x, y) { return x - y; });
           var items = [
@@ -675,7 +675,7 @@
             t(rt(3, -c * c * c) + '=' + (-c)) + ', ' + t(rt(4, ipow(m, 4)) + '=' + m) + ', ' + t(rt(3, k * k * k) + '=' + k) + '. ' + t(k * k + '<' + pq[0] + '<' + pq[1] + '<' + (k + 1) * (k + 1)) + ', so ' + t('\\sqrt{' + pq[0] + '}') + ' and ' + t('\\sqrt{' + pq[1] + '}') + ' are both between ' + t(k) + ' and ' + t(k + 1) + ' (same index, so the smaller radicand is smaller).<br>' + t(items.map(function (x) { return x.tex; }).join('<')), 'order 5 roots');
         } }] },
       { num: '12', stem: 'Arrange from <b>least to greatest</b> without a calculator. Simplify every radical first, and be careful with the negatives.', parts: [
-        { id: 'e12', level: 'ADV', make: function (r) {
+        { id: 'e12', level: 'PRG', make: function (r) {
           var a = r.pick([3, 4, 5]), b = r.pick([2, 3, 4].filter(function (x) { return x !== a; })), de = r.sample([2, 3, 4, 5, 6, 7, 8, 9], 2), d = de[0], e = de[1], g = r.pick([2, 2, 3]);
           var rr = nonPerfect(r, g * g + 1, (g + 1) * (g + 1) - 1, 2);
           var items = [
@@ -691,13 +691,13 @@
       { num: '13', section: 'Extra practice E — Error analysis', stem: function (sh) { return 'A student writes: “' + t('\\sqrt{-' + sh.c * sh.c + '}=-' + sh.c) + ', because ' + t('(-' + sh.c + ')\\times(-' + sh.c + ')') + ' has a negative in it, so it must give ' + t(-sh.c * sh.c) + '.”'; },
         shared: function (r) { return { c: r.int(3, 9) }; },
         parts: [
-          { id: 'e13a', level: 'BEG', make: function (r, sh) {
+          { id: 'e13a', level: 'LIM', make: function (r, sh) {
             var c = sh.c;
             return P.number('Evaluate ' + t('(-' + c + ')^{2}') + '.', c * c, function (v) { if (v === -c * c) return { code: 'sign', hint: 'A negative times a negative is <b>positive</b>.' }; if (v === -2 * c || v === 2 * c) return { code: 'diag', hint: 'Squaring means multiplying by itself: ' + t('(-' + c + ')\\times(-' + c + ')') + '.' }; return null; },
               t('(-' + c + ')^{2}=(-' + c + ')\\times(-' + c + ')=' + c * c) + ', not ' + t(-c * c) + '. A negative times a negative is positive, so <b>no</b> real number squares to a negative number — that is the student’s mistake.', ['Multiply ' + t('(-' + c + ')\\times(-' + c + ')') + '.'], '(-' + c + ')²');
           } },
-          { id: 'e13b', level: 'EMG', make: function (r, sh) { var p = rootMC(r, { n: 2, num: -sh.c * sh.c }); p.prompt = 'What is the correct answer for ' + t('\\sqrt{-' + sh.c * sh.c + '}') + '?'; return p; } },
-          { id: 'e13c', level: 'PRG', make: function (r, sh) {
+          { id: 'e13b', level: 'BEG', make: function (r, sh) { var p = rootMC(r, { n: 2, num: -sh.c * sh.c }); p.prompt = 'What is the correct answer for ' + t('\\sqrt{-' + sh.c * sh.c + '}') + '?'; return p; } },
+          { id: 'e13c', level: 'EMG', make: function (r, sh) {
             var c = sh.c, C = c * c;
             var chk = function (resp) {
               var a = K.read(resp); if (a.res) return a.res;
@@ -720,8 +720,8 @@
       { num: '14', stem: function (sh) { return 'A second student writes: “' + t('\\sqrt[3]{-' + sh.s * sh.s * sh.s + '}') + ' is not possible, because you can never take the root of a negative number.”'; },
         shared: function (r) { return { s: r.int(2, 6) }; },
         parts: [
-          { id: 'e14a', level: 'EMG', outcome: 'AN1', make: function (r, sh) { var s = sh.s, p = rootMC(r, { n: 3, num: -s * s * s, order: ['np', 'sign', 'pm'] }); p.prompt = 'Evaluate ' + t('\\sqrt[3]{-' + s * s * s + '}') + '.'; p.solution += ' Check: ' + t('(-' + s + ')^{3}=(-' + s + ')(-' + s + ')(-' + s + ')=' + s * s + '\\times(-' + s + ')=-' + s * s * s) + ' ✓'; return p; } },
-          { id: 'e14b', level: 'PRG', make: function (r, sh) {
+          { id: 'e14a', level: 'BEG', outcome: 'AN1', make: function (r, sh) { var s = sh.s, p = rootMC(r, { n: 3, num: -s * s * s, order: ['np', 'sign', 'pm'] }); p.prompt = 'Evaluate ' + t('\\sqrt[3]{-' + s * s * s + '}') + '.'; p.solution += ' Check: ' + t('(-' + s + ')^{3}=(-' + s + ')(-' + s + ')(-' + s + ')=' + s * s + '\\times(-' + s + ')=-' + s * s * s) + ' ✓'; return p; } },
+          { id: 'e14b', level: 'EMG', make: function (r, sh) {
             var s = sh.s;
             return mcPart(r, 'Which rule should the student have used?', [
               { html: 'Only an <b>even</b> index needs a non-negative radicand. The index here is ' + t('3') + ' (odd), so the root of a negative number is real.', right: true },
@@ -730,7 +730,7 @@
               { html: 'Every index allows a negative radicand.', why: 'Not an even index: ' + t('(-2)^{4}=+16') + ', so no real number has a fourth power of ' + t('-16') + '.' }],
               'The restriction applies only when the index is <b>even</b>. With an odd index, any real radicand is allowed, because an odd power of a negative number is negative.', ['What is special about odd powers of negative numbers?'], 'rule: even index only');
           } },
-          { id: 'e14c', level: 'PRG', make: function (r, sh) {
+          { id: 'e14c', level: 'EMG', make: function (r, sh) {
             var s = sh.s, key = '\\sqrt[4]{-' + ipow(s, 3) + '}';
             var chk = function (resp) {
               var a = K.read(resp); if (a.res) return a.res;
@@ -750,7 +750,7 @@
             return p;
           } }] },
       { num: '15', section: 'Extra practice F — Reasoning', stem: 'Counting roots.', parts: [
-        { id: 'e15a', level: 'PRG', make: function (r) {
+        { id: 'e15a', level: 'EMG', make: function (r) {
           var s = r.int(2, 6);
           return mcPart(r, 'Why does a positive number have <b>two</b> square roots but only <b>one</b> cube root?', [
             { html: 'Squaring makes every number positive: ' + t(s + '^{2}=(-' + s + ')^{2}=' + s * s) + '. Cubing keeps the sign: ' + t(s + '^{3}=' + s * s * s) + ' but ' + t('(-' + s + ')^{3}=-' + s * s * s) + '.', right: true },
@@ -759,7 +759,7 @@
             { html: 'Because 3 is bigger than 2.', why: 'Compare fourth roots: ' + t('4>2') + ', yet ' + t(ipow(s, 4)) + ' has two real fourth roots. What matters is whether the index is even or odd.' }],
             'Multiplying a number by itself twice always gives a positive result, so two different numbers (' + t(s) + ' and ' + t(-s) + ') share the same square ' + t(s * s) + '. Multiplying three times keeps the sign, so only ' + t(s) + ' cubes to ' + t(s * s * s) + '.', ['Square and cube both ' + t(s) + ' and ' + t(-s) + '.'], 'two square roots, one cube root');
         } },
-        { id: 'e15b', level: 'PRG', make: function (r) {
+        { id: 'e15b', level: 'EMG', make: function (r) {
           var s = r.int(5, 12), n = s * s;
           return mcPart(r, t(n) + ' has two square roots, yet ' + t('\\sqrt{' + n + '}=' + s) + ' only. Why?', [
             { html: t('\\sqrt{\\ }') + ' is defined to mean the <b>principal</b> (positive) square root, because a symbol must name exactly one value. The other root is written ' + t('-\\sqrt{' + n + '}') + '.', right: true },
@@ -778,7 +778,7 @@
           return P.number('How many real <b>fifth</b> roots does ' + t(E) + ' have?', 1, function (v) { if (v === 2) return { code: 'count', hint: 'Check ' + t('(-' + e + ')^{5}') + ': an odd power keeps the negative sign.' }; return null; },
             t(e + '^{5}=' + E) + ' but ' + t('(-' + e + ')^{5}=-' + E) + ', so ' + t(E) + ' has just <b>one</b> real fifth root, ' + t(e) + '.', ['Test ' + t(e) + ' and ' + t(-e) + '.'], 'number of 5th roots of ' + E);
         } },
-        { id: 'e15e', level: 'ADV', make: function (r) {
+        { id: 'e15e', level: 'PRG', make: function (r) {
           return mcPart(r, 'Which general rule is correct for a <b>positive</b> number?', [
             { html: 'It has <b>two</b> real roots of any even index and <b>one</b> real root of any odd index.', right: true },
             { html: 'It has two real roots of every index.', why: 'Try an odd index: ' + t('2^{5}=32') + ' but ' + t('(-2)^{5}=-32') + ', so ' + t('32') + ' has only one real fifth root.' },
@@ -787,10 +787,10 @@
             'Even index: the even power hides the sign, so ' + t('\\pm') + ' both work — two real roots. Odd index: the sign survives, so only the positive number works — one real root. (A negative number has no real roots of even index and one of odd index.)', ['Use your answers to the last two parts.'], 'rule for number of roots');
         } }] },
       { num: '16', stem: 'The identity ' + t('\\sqrt{x^{2}}=|x|') + '.', parts: [
-        { id: 'e16a', level: 'PRG', make: function (r) {
+        { id: 'e16a', level: 'EMG', make: function (r) {
           var a = r.int(3, 9), fr = r.pick([[3, 4], [2, 3], [5, 6], [2, 5], [4, 7]]);
           var xs = [[a, 1], [0, 1], [-a, 1], [-fr[0], fr[1]]];
-          var fields = xs.map(function (x) { var xt = rTex(x); return { name: t('x=' + xt), label: t('x=' + xt), before: t('\\sqrt{(' + xt + ')^{2}}='), mode: x[1] > 1 ? 'text' : undefined }; });
+          var fields = xs.map(function (x) { var xt = rTex(x); return { name: t('x=' + xt), label: t('x=' + xt), before: t('\\sqrt{(' + xt + ')^{2}}='), mode: x[1] > 1 ? 'math' : undefined, keys: 'fraction' }; });
           var checkers = xs.map(function (x) {
             var X = x[0] / x[1];
             return K.value(Math.abs(X), { only: 'fraction', diag: function (v) {
@@ -806,7 +806,7 @@
           p.bad = [keys.slice(0, 2).concat(['-' + a, keys[3]])];
           return p;
         } },
-        { id: 'e16b', level: 'ADV', make: function (r) {
+        { id: 'e16b', level: 'PRG', make: function (r) {
           return mcPart(r, 'Why is ' + t('\\sqrt{x^{2}}=|x|') + ' rather than ' + t('\\sqrt{x^{2}}=x') + '?', [
             { html: 'Squaring destroys the sign (' + t('(-5)^{2}=5^{2}=25') + '), and the principal square root always gives back the non-negative number. So the result is the size of ' + t('x') + ': ' + t('|x|') + '.', right: true },
             { html: 'Because ' + t('x') + ' is always positive.', why: t('x') + ' can be any real number, e.g. ' + t('x=-5') + '. Try it in ' + t('\\sqrt{x^{2}}') + '.' },
@@ -822,17 +822,17 @@
             { html: t('x\\le 0'), why: 'Check ' + t('x=-5') + ': ' + t('\\sqrt{(-5)^{2}}=5') + ', not ' + t('-5') + '.' }],
             t('\\sqrt{x^{2}}=|x|') + ', and ' + t('|x|=x') + ' exactly when ' + t('x\\ge 0') + '.', ['When does ' + t('|x|=x') + '?'], 'when √(x²)=x');
         } },
-        { id: 'e16d', level: 'ADV', make: function (r) {
+        { id: 'e16d', level: 'EMG', make: function (r) {
           var s = r.int(2, 6);
           return tf(r, t('\\sqrt[3]{x^{3}}=x') + ' for <b>every</b> real number ' + t('x') + '.', true, 'Test ' + t('x=-' + s) + ': ' + t('(-' + s + ')^{3}=-' + s * s * s) + ' and ' + t('\\sqrt[3]{-' + s * s * s + '}=-' + s) + '. An odd power keeps the sign, so nothing is lost.',
             'True. With ' + t('x=-' + s) + ': ' + t('x^{3}=-' + s * s * s) + ' and ' + t('\\sqrt[3]{-' + s * s * s + '}=-' + s + '=x') + '. An odd power keeps the sign and the odd root restores the original number exactly — unlike squaring, which throws the sign away.', ['Test a negative value of ' + t('x') + '.'], '∛(x³)=x always');
         } }] },
       { num: '17', stem: '<b>Stretch.</b> Solve each equation over the real numbers.', parts: [
-        { id: 'e17a', level: 'PRG', make: function (r) { return eqMC(r, 3, -1, r.int(2, 6)); } },
-        { id: 'e17b', level: 'PRG', make: function (r) { return eqMC(r, 4, 1, r.int(2, 5)); } },
-        { id: 'e17c', level: 'PRG', make: function (r) { return eqMC(r, 4, -1, r.int(2, 5)); } },
-        { id: 'e17d', level: 'PRG', make: function (r) { return eqMC(r, 5, 1, r.int(2, 3)); } },
-        { id: 'e17e', level: 'MAS', make: function (r) {
+        { id: 'e17a', level: 'BEG', make: function (r) { return eqMC(r, 3, -1, r.int(2, 6)); } },
+        { id: 'e17b', level: 'EMG', make: function (r) { return eqMC(r, 4, 1, r.int(2, 5)); } },
+        { id: 'e17c', level: 'BEG', make: function (r) { return eqMC(r, 4, -1, r.int(2, 5)); } },
+        { id: 'e17d', level: 'BEG', make: function (r) { return eqMC(r, 5, 1, r.int(2, 3)); } },
+        { id: 'e17e', level: 'PRG', make: function (r) {
           return mcPart(r, 'How many real solutions does ' + t('x^{n}=k') + ' have?', [
             { html: 'Even ' + t('n') + ': two if ' + t('k>0') + ', one if ' + t('k=0') + ', none if ' + t('k<0') + '. Odd ' + t('n') + ': exactly one for every real ' + t('k') + '.', right: true },
             { html: 'Always two, ' + t('x=\\pm\\sqrt[n]{k}') + '.', why: 'Check ' + t('x^{3}=-125') + ': only ' + t('-5') + ' works, and ' + t('x^{4}=-81') + ' has no solution.' },
@@ -841,10 +841,10 @@
             'Even powers erase the sign, so two bases land on each positive value and none on a negative value. Odd powers keep the sign, so exactly one base gives each real value.', ['Look back at the four equations you just solved.'], 'number of solutions of xⁿ=k');
         } }] },
       { num: '18', stem: '<b>Stretch — nested radicals.</b> Work from the inside out.', parts: [
-        { id: 'e18a', level: 'PRG', make: function (r) { var s = r.int(2, 5); return nestPart(2, 2, ipow(s, 4), s); } },
-        { id: 'e18b', level: 'PRG', make: function (r) { var s = r.pick([2, 3]); return nestPart(3, 2, ipow(s, 6), s); } },
-        { id: 'e18c', level: 'PRG', make: function (r) { var s = r.pick([2, 3]); return nestPart(2, 3, ipow(s, 6), s); } },
-        { id: 'e18d', level: 'MAS', make: function (r) {
+        { id: 'e18a', level: 'EMG', make: function (r) { var s = r.int(2, 5); return nestPart(2, 2, ipow(s, 4), s); } },
+        { id: 'e18b', level: 'EMG', make: function (r) { var s = r.pick([2, 3]); return nestPart(3, 2, ipow(s, 6), s); } },
+        { id: 'e18c', level: 'EMG', make: function (r) { var s = r.pick([2, 3]); return nestPart(2, 3, ipow(s, 6), s); } },
+        { id: 'e18d', level: 'ADV', make: function (r) {
           var mn = r.pick([[2, 3], [2, 3], [3, 2], [2, 2], [3, 3], [2, 4]]), outer = mn[0], inner = mn[1], N = outer * inner, e = rt(outer, rt(inner, 'x'));
           var p = P.math('Rewrite ' + t(e) + ' as a <b>single</b> radical (assume ' + t('x\\ge 0') + ').', K.varRadical(rt(N, 'x'), 'entire', { diag: function (rr) {
             if (rr && rr.n === outer + inner && rr.rad.vars.x === 1 && !Object.keys(rr.vars).length) return { code: 'added-index', hint: 'Multiply the indices, don’t add them: the number is used as a factor ' + outer + ' times to make ' + t(rt(inner, 'x')) + ', and that ' + inner + ' times to make ' + t('x') + '.' };
@@ -855,7 +855,7 @@
           return p;
         } }] },
       { num: '19', section: 'Extra practice G — Multiple choice and numerical response', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: 'e19', level: 'PRG', make: function (r) {
+        { id: 'e19', level: 'EMG', make: function (r) {
           var f1 = r.pick([[2, 3], [1, 2], [3, 4], [2, 5]]), f2 = r.pick([[2, 3], [1, 2], [1, 3], [3, 5]]), e = r.pick([2, 3]);
           var A = rt(3, '-\\dfrac{' + ipow(f1[0], 3) + '}{' + ipow(f1[1], 3) + '}'), B = rt(4, '-\\dfrac{' + ipow(f2[0], 4) + '}{' + ipow(f2[1], 4) + '}'), C = '-' + rt(4, '\\dfrac{' + ipow(f2[0], 4) + '}{' + ipow(f2[1], 4) + '}'), D = rt(5, '-\\dfrac{1}{' + ipow(e, 5) + '}');
           return mcPart(r, 'Which of the following is <b>not possible</b> in the real number system?', [
@@ -866,7 +866,7 @@
             t(A + '=-' + rTex(f1)) + ' (odd index). ' + t(B) + ': even index, negative radicand — <b>not possible</b>. ' + t(C + '=-' + rTex(f2)) + ' (minus sign outside). ' + t(D + '=-\\frac{1}{' + e + '}') + ' (odd index).', ['Look for an even index with a negative radicand.'], 'which is not possible');
         } }] },
       { num: '20', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: 'e20', level: 'ADV', make: function (r) {
+        { id: 'e20', level: 'PRG', make: function (r) {
           var s = r.int(3, 9), u = r.pick([2, 3]), w = r.pick([1, 1, 2]), iT = r.chance(0.3), iiiT = r.chance(0.3), U = ipow(u, 6), W5 = ipow(w, 5);
           var st = [
             iT ? { label: 'i)', html: t('\\sqrt{(-' + s + ')^{2}}=' + s), truth: true, reason: t('\\sqrt{(-' + s + ')^{2}}=\\sqrt{' + s * s + '}=' + s) + '.' }
@@ -879,7 +879,7 @@
           return p;
         } }] },
       { num: '21', stem: '<i>(Numerical Response)</i>', parts: [
-        { id: 'e21', level: 'ADV', make: function (r) {
+        { id: 'e21', level: 'EMG', make: function (r) {
           var a, b, c, ans;
           for (var i = 0; i < 200; i++) { a = r.int(11, 16); b = r.int(8, 13); c = r.int(5, 12); ans = a - b + c; if (ans >= 1 && ans <= 99) break; }
           var A = ipow(a, 4), B = b * b * b, e = rt(4, F(A)) + '+' + rt(3, '-' + F(B)) + '+\\sqrt{(-' + c + ')^{2}}';

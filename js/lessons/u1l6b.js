@@ -211,31 +211,31 @@
     blurb: 'The Lesson 6A idea for cube roots and beyond: pull out the largest perfect cube (or 4th or 5th power), push a coefficient back inside, watch the sign — and, as an extension, radicals with variables.',
     questions: [
       { num: '1', section: 'Part A — Radicals With Index 3 and Higher', stem: 'Convert the following radicals to mixed radicals in simplest form.', parts: [
-        { id: '1a', level: 'BEG', make: function (r) { return mixPart(1, 3, pickR(r, 3, [2, 3], [2, 3, 4, 5, 6, 7, 9, 10], 135)); } },
-        { id: '1b', level: 'BEG', make: function (r) { return mixPart(1, 3, pickR(r, 3, [4, 5], [2, 3, 5, 6, 7], 375)); } },
+        { id: '1a', level: 'EMG', make: function (r) { return mixPart(1, 3, pickR(r, 3, [2, 3], [2, 3, 4, 5, 6, 7, 9, 10], 135)); } },
+        { id: '1b', level: 'EMG', make: function (r) { return mixPart(1, 3, pickR(r, 3, [4, 5], [2, 3, 5, 6, 7], 375)); } },
         { id: '1c', level: 'EMG', make: function (r) { return mixPart(1, 3, pickR(r, 3, [6, 7, 9, 10], [2, 3, 4, 5], 4000)); } },
         { id: '1d', level: 'PRG', make: function (r) { return mixPart(r.pick([2, 3, 4, 5]), 3, -pickR(r, 3, [2, 3, 4, 5], [2, 3, 5, 6], 192)); } },
         { id: '1e', level: 'PRG', make: function (r) {
           for (var i = 0; i < 100; i++) { var c = r.pick([[4, 9], [2, 9], [5, 9], [2, 7], [3, 7], [4, 7], [5, 7], [2, 3]]), f = r.pick([2, 3, 4, 5]), k = ex.norm(c[0] * f, c[1]); if (k[1] > 1) return mixPart(c, 3, pickR(r, 3, [f], [2, 3, 4], 250)); }
           return mixPart([4, 9], 3, 250);
         } },
-        { id: '1f', level: 'EMG', make: function (r) { return mixPart(r.pick([2, 3, 4, 5]), 4, pickR(r, 4, [2, 3, 4], [2, 3, 5], 512)); } },
+        { id: '1f', level: 'PRG', make: function (r) { return mixPart(r.pick([2, 3, 4, 5]), 4, pickR(r, 4, [2, 3, 4], [2, 3, 5], 512)); } },
         { id: '1g', level: 'PRG', make: function (r) { return mixPart(1, 5, -pickR(r, 5, [2, 3], [3, 5, 6, 7, 10], 320)); } },
         { id: '1h', level: 'PRG', make: function (r) { return mixPart(-r.pick([2, 3, 4]), 3, pickR(r, 3, [5, 6, 7], [2, 3, 4, 5], 1029)); } }] },
       { num: '2', stem: 'Convert the following mixed radicals to entire radicals.', parts: [
-        { id: '2a', level: 'BEG', make: function (r) { return entirePart(r.pick([2, 3]), 4, r.pick([2, 3, 5, 6, 7])); } },
-        { id: '2b', level: 'BEG', make: function (r) { return entirePart(r.pick([2, 3, 4, 5]), 3, r.pick([2, 3, 4, 5, 6, 7])); } },
-        { id: '2c', level: 'EMG', make: function (r) { return entirePart(-r.pick([2, 3]), 4, r.pick([2, 3, 5, 6, 7])); } },
+        { id: '2a', level: 'EMG', make: function (r) { return entirePart(r.pick([2, 3]), 4, r.pick([2, 3, 5, 6, 7])); } },
+        { id: '2b', level: 'EMG', make: function (r) { return entirePart(r.pick([2, 3, 4, 5]), 3, r.pick([2, 3, 4, 5, 6, 7])); } },
+        { id: '2c', level: 'PRG', make: function (r) { return entirePart(-r.pick([2, 3]), 4, r.pick([2, 3, 5, 6, 7])); } },
         { id: '2d', level: 'EMG', make: function (r) { return entirePart(-r.pick([3, 4, 5, 6]), 3, r.pick([2, 3, 5, 7])); } },
         { id: '2e', level: 'EMG', make: function (r) { return entirePart(r.pick([2, 3]), 5, r.pick([2, 3, 4, 5])); } },
         { id: '2f', level: 'PRG', make: function (r) { var q = r.pick([2, 3]), p = r.pick(q === 2 ? [1, 3, 5] : [1, 2, 4]); return entirePart([p, q], 3, pw(q, 3) * r.pick([2, 3, 4, 5])); } },
-        { id: '2g', level: 'ADV', make: function (r) {
+        { id: '2g', level: 'PRG', make: function (r) {
           for (var i = 0; i < 100; i++) { var q = r.pick([2, 3, 5]), p = r.pick([1, 2, 3].filter(function (x) { return ex.gcd(x, q) === 1; })), m = q * r.pick([q, 1]) * r.pick([2, 3]), A = ex.norm(pw(p, 4) * m, pw(q, 4)); if (A[1] > 1 && !(p === 1 && m < 6)) return entirePart([p, q], 4, m); }
           return entirePart([2, 5], 4, 50);
         } },
         { id: '2h', level: 'EMG', make: function (r) { return entirePart(-r.pick([2, 3, 4, 5]), 3, r.pick([6, 7, 10, 11, 13])); } }] },
       { num: '3', stem: '<b>(No calculator.)</b>', parts: [
-        { id: '3', level: 'PRG', make: function (r) {
+        { id: '3', level: 'EMG', make: function (r) {
           var A, B, C, D;
           for (var i = 0; i < 200; i++) {
             A = { k: r.int(2, 7) }; A.v = A.k; B = { k: r.pick([2, 3, 4]), r: r.pick([2, 3, 4]) }; B.v = B.k * B.r;
@@ -266,7 +266,7 @@
           return { items: best.map(function (x, j) { return { id: 'r' + j, tex: x.a + '\\sqrt[3]{' + x.b + '}', a: x.a, b: x.b, N: x.N }; }) };
         },
         parts: [
-          { id: '4a', level: 'PRG', make: function (r) {
+          { id: '4a', level: 'EMG', make: function (r) {
             return P.mc(r, 'Which method arranges radicals like these in order without a calculator?', [
               { html: 'Write each one as an entire cube root (cube the coefficient and multiply). With the same index, the larger radicand is the larger number.', right: true },
               { html: 'Compare the coefficients: the larger the number in front, the larger the radical.', why: 'The radicand matters too. For example ' + t('2\\sqrt[3]{9}=\\sqrt[3]{72}') + ' is larger than ' + t('3\\sqrt[3]{2}=\\sqrt[3]{54}') + '.' },
@@ -283,7 +283,7 @@
               ['Convert each to an entire cube root: cube the coefficient, then multiply by the radicand.'], 'order cube-root radicals');
           } }] },
       { num: '5', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: '5', level: 'PRG', make: function (r) {
+        { id: '5', level: 'EMG', make: function (r) {
           var R = pickR(r, 3, [2, 3, 4, 5, 6], [2, 3, 5, 6, 7], 648, 60, 1500), f = ex.nthFactor(R, 3), m = R / pw(f, 3), V = f * Math.cbrt(m);
           var cands = [{ k: pw(f, 3), m: m, why: t(F(pw(f, 3))) + ' comes out of the cube root as ' + t(rt(3, F(pw(f, 3))) + '=' + f) + '.' }];
           var g = ex.nthFactor(R, 2); if (g > 1 && g !== f) cands.push({ k: g, m: R / (g * g), why: t(F(g * g) + '=' + g + '^{2}') + ' is a perfect <b>square</b>, but this is a cube root: ' + t(rt(3, F(g * g)) + '\\neq ' + g) + '.' });
@@ -297,7 +297,7 @@
             ['Find the largest perfect cube that divides ' + t(F(R)) + '.', 'Check an option: cube the coefficient and multiply by the radicand. Do you get ' + t(F(R)) + '?'], 'cube root MC ' + R);
         } }] },
       { num: '6', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: '6', level: 'ADV', make: function (r) {
+        { id: '6', level: 'EMG', make: function (r) {
           var pat = r.pick([['e', 'o'], ['e', 'o'], ['o', 'e'], ['o', 'e'], ['o', 'o'], ['e', 'e']]);
           var st = pat.map(function (p) { var n = p === 'e' ? r.pick([4, 6]) : r.pick([3, 5]), a = r.int(2, 6), b = r.pick([2, 3, 5, 6, 7, 10]); return { n: n, even: p === 'e', tex: '-' + a + '\\sqrt[' + n + ']{' + b + '}=' + a + '\\sqrt[' + n + ']{-' + b + '}', b: b }; });
           var t1 = !st[0].even, t2 = !st[1].even;
@@ -310,7 +310,7 @@
             ['A negative sign can move in or out of a root only when the index is <b>odd</b>.'], 'sign in/out of odd/even roots', true);
         } }] },
       { num: '7', stem: '<i>(Numerical Response)</i>', parts: [
-        { id: '7', level: 'ADV', make: function (r) {
+        { id: '7', level: 'PRG', make: function (r) {
           var cq = r.pick([[3, 9], [2, 6], [2, 9], [4, 6], [4, 9], [5, 9], [5, 6], [2, 3], [3, 7], [2, 7], [4, 7]]), c = cq[0], q = cq[1], b = r.pick([2, 3, 5, 6, 7, 9, 10, 11]);
           if (c === 3 && q === 9 && r.chance(0.3)) b = 7;
           var R = pw(c, 3) * b, a = ex.norm(c, q), x = a[0] / a[1] + b;
@@ -324,8 +324,8 @@
           ['Simplify ' + t('\\sqrt[3]{' + R + '}') + ' first, then multiply by ' + t('\\frac{1}{' + q + '}') + '.', t('a') + ' is a fraction. Change it to a decimal before adding.'], 'a+b for (1/' + q + ')cbrt(' + R + ')');
         } }] },
       { num: '8', section: 'Part B — Extension: Radicals With Variables', stem: 'Assume every variable represents a non-negative number. Express each as an <b>entire radical</b>.', parts: [
-        { id: '8a', level: 'BEG', make: function (r) { var L = letters(r, 1); return varEntire(r.int(2, 9), {}, 2, 1, obj(L, [1])); } },
-        { id: '8b', level: 'BEG', make: function (r) { var L = letters(r, 1); return varEntire(r.int(2, 9), {}, 2, 1, obj(L, [2])); } },
+        { id: '8a', level: 'EMG', make: function (r) { var L = letters(r, 1); return varEntire(r.int(2, 9), {}, 2, 1, obj(L, [1])); } },
+        { id: '8b', level: 'EMG', make: function (r) { var L = letters(r, 1); return varEntire(r.int(2, 9), {}, 2, 1, obj(L, [2])); } },
         { id: '8c', level: 'EMG', make: function (r) { var L = letters(r, 2); return varEntire(r.int(2, 7), {}, 2, r.pick([2, 3, 5, 6, 7]), obj(L, [1, r.pick([3, 5])])); } },
         { id: '8d', level: 'EMG', make: function (r) { var L = letters(r, 1); return varEntire(-r.int(2, 5), {}, 3, 1, obj(L, [r.pick([1, 2])])); } },
         { id: '8e', level: 'EMG', make: function (r) { var L = letters(r, 1); return varEntire(1, obj(L, [r.pick([1, 2])]), 2, 1, obj(L, [1])); } },
@@ -334,12 +334,12 @@
         { id: '8h', level: 'PRG', make: function (r) { var L = letters(r, 2); return varEntire(r.int(2, 7), obj(L, [r.int(1, 3), 1]), 2, r.pick([2, 3, 5]), obj(L, [r.pick([1, 3]), 1])); } },
         { id: '8i', level: 'PRG', make: function (r) { var L = letters(r, 2); return varEntire(r.int(2, 5), obj(L, [r.int(1, 3), 1]), 2, r.pick([2, 3, 5, 6, 7]), {}); } },
         { id: '8j', level: 'ADV', make: function (r) { var L = letters(r, 2); return varEntire(r.pick([2, 3]), obj(L, [1, 2]), 3, r.pick([2, 3, 4, 5]), obj(L, [1, 1])); } },
-        { id: '8k', level: 'ADV', make: function (r) { var L = letters(r, 3); return varEntire(r.int(2, 5), obj(L, [r.int(4, 6), r.int(5, 7)]), 2, 1, obj([L[0], L[2]], [3, 1])); } },
+        { id: '8k', level: 'PRG', make: function (r) { var L = letters(r, 3); return varEntire(r.int(2, 5), obj(L, [r.int(4, 6), r.int(5, 7)]), 2, 1, obj([L[0], L[2]], [3, 1])); } },
         { id: '8l', level: 'ADV', make: function (r) { var L = letters(r, 2); return varEntire(r.pick([2, 3]), obj(L, [1, 2]), 4, r.pick([2, 3, 4, 5]), obj([L[0]], [3])); } }] },
       { num: '9', stem: 'Express each as a mixed radical in simplest form.', parts: [
-        { id: '9a', level: 'BEG', make: function (r) { return varMixed(1, {}, 2, 1, obj(letters(r, 1), [r.pick([5, 7, 9])])); } },
-        { id: '9b', level: 'BEG', make: function (r) { return varMixed(1, {}, 2, 1, obj(letters(r, 1), [r.pick([3, 5, 7])])); } },
-        { id: '9c', level: 'BEG', make: function (r) { return varMixed(1, {}, 2, 1, obj(letters(r, 1), [r.pick([11, 13, 15, 17])])); } },
+        { id: '9a', level: 'EMG', make: function (r) { return varMixed(1, {}, 2, 1, obj(letters(r, 1), [r.pick([5, 7, 9])])); } },
+        { id: '9b', level: 'EMG', make: function (r) { return varMixed(1, {}, 2, 1, obj(letters(r, 1), [r.pick([3, 5, 7])])); } },
+        { id: '9c', level: 'EMG', make: function (r) { return varMixed(1, {}, 2, 1, obj(letters(r, 1), [r.pick([11, 13, 15, 17])])); } },
         { id: '9d', level: 'EMG', make: function (r) { return varMixed(1, {}, 3, 1, obj(letters(r, 1), [r.pick([4, 7, 10])])); } },
         { id: '9e', level: 'EMG', make: function (r) { return varMixed(1, {}, 3, 1, obj(letters(r, 1), [r.pick([5, 8, 11, 14])])); } },
         { id: '9f', level: 'PRG', make: function (r) { var p = varMixed(1, {}, 4, 1, obj(letters(r, 1), [r.pick([6, 9, 10, 11, 13, 14])])); p.hints.push('Index ' + t('4') + ': divide each exponent by ' + t('4') + '.'); return p; } }] },
@@ -349,9 +349,9 @@
         { id: '10c', level: 'PRG', make: function (r) { var L = letters(r, 2); return varMixed(1, {}, 2, pickR(r, 2, [2, 3], [2, 3, 5, 7], 45), obj(L, [r.pick([3, 5]), r.pick([2, 4, 6])])); } },
         { id: '10d', level: 'PRG', make: function (r) { var L = letters(r, 2); return varMixed(1, {}, 2, pickR(r, 2, [6, 10, 12], [2, 3], 432), obj(L, [r.pick([5, 7]), r.pick([7, 9])])); } },
         { id: '10e', level: 'PRG', make: function (r) { var L = letters(r, 2); return varMixed(r.pick([2, 3, 4]), {}, 2, pickR(r, 2, [2, 3], [2, 3, 5], 45), obj(L, [r.pick([4, 6]), r.pick([3, 5])])); } },
-        { id: '10f', level: 'PRG', make: function (r) { var L = letters(r, 2); return varMixed(-r.int(2, 5), {}, 2, r.pick([13, 17, 19, 23, 29, 31]), obj(L, [r.pick([4, 6, 8]), r.pick([6, 8, 10])])); } },
+        { id: '10f', level: 'EMG', make: function (r) { var L = letters(r, 2); return varMixed(-r.int(2, 5), {}, 2, r.pick([13, 17, 19, 23, 29, 31]), obj(L, [r.pick([4, 6, 8]), r.pick([6, 8, 10])])); } },
         { id: '10g', level: 'ADV', make: function (r) { var L = letters(r, 2); return varMixed(r.int(2, 5), obj(L, [r.int(1, 3), r.int(1, 3)]), 2, pickR(r, 2, [2, 3], [2, 3, 5], 20), obj(L, [r.pick([5, 7]), r.pick([2, 4])])); } },
-        { id: '10h', level: 'ADV', make: function (r) {
+        { id: '10h', level: 'PRG', make: function (r) {
           var L = letters(r, 2), sq = r.pick([[8, 3, 4], [8, 1, 4], [6, 2, 3], [6, 1, 2], [10, 2, 5], [10, 3, 5], [4, 3, 2], [9, 2, 3]]);
           return varMixed([sq[1], sq[2]], obj([L[0]], [1]), 2, sq[0] * sq[0], obj(L, [r.pick([3, 5]), r.pick([6, 8])]));
         } },
@@ -360,7 +360,7 @@
         { id: '10k', level: 'ADV', make: function (r) { var L = letters(r, 1); return varMixed(r.pick([2, 3, 4]), {}, 3, pickR(r, 3, [4, 5, 6], [2, 3], 432), obj(L, [r.pick([13, 14, 16, 17])])); } },
         { id: '10l', level: 'ADV', make: function (r) { var L = letters(r, 1); return varMixed(1, {}, 4, pickR(r, 4, [2, 3], [2, 3, 5], 162), obj(L, [r.pick([9, 11, 13, 14])])); } }] },
       { num: '11', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: '11', level: 'PRG', make: function (r) {
+        { id: '11', level: 'EMG', make: function (r) {
           var ab = r.sample([2, 3, 5, 7, 11], 2), a = ab[0], b = ab[1], z = r.pick(['z', 'x', 'y']), p = a * b;
           return P.mc(r, t('\\sqrt{' + a + z + '}\\cdot\\sqrt{' + b + z + '}') + ' is equivalent to', [
             { html: t(z + '\\sqrt{' + p + '}'), right: true },
@@ -385,19 +385,19 @@
         } }] },
       { num: '6', section: 'Extra practice B — Index 3 and higher', stem: 'For a cube root you need the largest perfect <b>cube</b> factor, not the largest perfect square. Convert each to a mixed radical in simplest form.', parts: [
         { id: 'e6a', level: 'EMG', make: function (r) { return mixPart(1, 3, pickR(r, 3, [2, 3], [2, 3, 4, 5, 6, 7], 54, 16, 200)); } },
-        { id: 'e6b', level: 'PRG', make: function (r) { return mixPart(1, 3, pickR(r, 3, [4, 5, 6, 7], [2, 3, 5, 6, 7], 1512, 300, 2500)); } },
+        { id: 'e6b', level: 'EMG', make: function (r) { return mixPart(1, 3, pickR(r, 3, [4, 5, 6, 7], [2, 3, 5, 6, 7], 1512, 300, 2500)); } },
         { id: 'e6c', level: 'EMG', make: function (r) { return mixPart(1, 3, -pickR(r, 3, [2, 3, 4], [2, 3, 5], 128)); } },
         { id: 'e6d', level: 'PRG', make: function (r) { return mixPart(1, 3, -pickR(r, 3, [8, 9, 10, 12], [2, 3, 4], 3456)); } }] },
       { num: '7', stem: 'Same idea at index ' + t('4') + ' and index ' + t('5') + ': group the prime factors into fours or fives.', parts: [
         { id: 'e7a', level: 'PRG', make: function (r) { return mixPart(1, 4, pickR(r, 4, [3, 4, 5, 6], [2, 3, 5], 2592, 0, 4000)); } },
-        { id: 'e7b', level: 'ADV', make: function (r) { return mixPart(1, 4, pickR(r, 4, [2, 3, 4, 5], [8, 27], 6912, 0, 20000)); } },
-        { id: 'e7c', level: 'ADV', make: function (r) { return mixPart(1, 5, pickR(r, 5, [2, 3], [4, 8, 9, 16, 27], 3888)); } },
+        { id: 'e7b', level: 'PRG', make: function (r) { return mixPart(1, 4, pickR(r, 4, [2, 3, 4, 5], [8, 27], 6912, 0, 20000)); } },
+        { id: 'e7c', level: 'PRG', make: function (r) { return mixPart(1, 5, pickR(r, 5, [2, 3], [4, 8, 9, 16, 27], 3888)); } },
         { id: 'e7d', level: 'PRG', make: function (r) { return mixPart(1, 5, -pickR(r, 5, [2, 3, 4], [2, 3], 2048)); } }] },
       { num: '8', stem: 'Convert to a mixed radical in simplest form. Watch the sign travelling out of an odd root.', parts: [
         { id: 'e8a', level: 'PRG', make: function (r) { return mixPart(-r.pick([2, 3, 4, 5]), 3, pickR(r, 3, [6, 8, 10, 12], [2, 3], 5184)); } },
-        { id: 'e8b', level: 'ADV', make: function (r) { var s = r.pick([2, 3, 5]), p = r.pick([2, 3, 4].filter(function (x) { return ex.gcd(x, s) === 1; })); if (s === 5 && r.chance(0.4)) p = 3; return mixPart([p, s], 4, pickR(r, 4, [s], [2, 3], 1250)); } },
+        { id: 'e8b', level: 'PRG', make: function (r) { var s = r.pick([2, 3, 5]), p = r.pick([2, 3, 4].filter(function (x) { return ex.gcd(x, s) === 1; })); if (s === 5 && r.chance(0.4)) p = 3; return mixPart([p, s], 4, pickR(r, 4, [s], [2, 3], 1250)); } },
         { id: 'e8c', level: 'PRG', make: function (r) { return mixPart(r.pick([2, 3]), 5, -pickR(r, 5, [2, 4], [2, 3], 2048)); } },
-        { id: 'e8d', level: 'ADV', make: function (r) { var s = r.pick([5, 7]), p = r.pick([2, 3, 4, 5, 6].filter(function (x) { return x !== s; })); return mixPart([p, s], 3, pickR(r, 3, [s], [2, 3, 6, 9, 12, 18], 6174)); } }] },
+        { id: 'e8d', level: 'PRG', make: function (r) { var s = r.pick([5, 7]), p = r.pick([2, 3, 4, 5, 6].filter(function (x) { return x !== s; })); return mixPart([p, s], 3, pickR(r, 3, [s], [2, 3, 6, 9, 12, 18], 6174)); } }] },
       { num: '9', stem: 'Convert each mixed radical to an entire radical. The coefficient is raised to the power of the <b>index</b> — and with an even index a negative coefficient has to stay outside.', parts: [
         { id: 'e9a', level: 'EMG', make: function (r) { return entirePart(r.int(2, 5), 3, r.pick([2, 3])); } },
         { id: 'e9b', level: 'EMG', make: function (r) { return entirePart(-r.int(3, 6), 3, r.pick([2, 3, 4])); } },
@@ -406,12 +406,12 @@
         { id: 'e9e', level: 'PRG', make: function (r) { return entirePart(-r.pick([3, 4, 5]), 4, r.pick([2, 3])); } },
         { id: 'e9f', level: 'PRG', make: function (r) { return entirePart([1, 2], 5, 32 * r.pick([3, 5, 7])); } }] },
       { num: '10', stem: 'Evaluate each exactly, or decide that it is <b>not possible</b> in the real number system.', parts: [
-        { id: 'e10a', level: 'BEG', outcome: 'AN1', make: function (r) { return evalPart(r, 3, -1, r.pick([2, 3, 4, 5, 6, 10])); } },
-        { id: 'e10b', level: 'EMG', outcome: 'AN1', make: function (r) { return evalPart(r, 4, -1, r.pick([2, 3]), true); } },
-        { id: 'e10c', level: 'EMG', outcome: 'AN1', make: function (r) { return evalPart(r, 4, 1, r.pick([2, 3]), false, true); } },
-        { id: 'e10d', level: 'BEG', outcome: 'AN1', make: function (r) { return evalPart(r, 5, -1, r.pick([2, 3])); } }] },
+        { id: 'e10a', level: 'LIM', outcome: 'AN1', make: function (r) { return evalPart(r, 3, -1, r.pick([2, 3, 4, 5, 6, 10])); } },
+        { id: 'e10b', level: 'BEG', outcome: 'AN1', make: function (r) { return evalPart(r, 4, -1, r.pick([2, 3]), true); } },
+        { id: 'e10c', level: 'BEG', outcome: 'AN1', make: function (r) { return evalPart(r, 4, 1, r.pick([2, 3]), false, true); } },
+        { id: 'e10d', level: 'LIM', outcome: 'AN1', make: function (r) { return evalPart(r, 5, -1, r.pick([2, 3])); } }] },
       { num: '12', section: 'Extra practice C — Comparing radicals', stem: '<b>(No calculator.)</b> Every radical here has index ' + t('3') + ', so convert each to an entire cube root — the coefficient is now <b>cubed</b>, not squared — and compare the radicands.', parts: [
-        { id: 'e12', level: 'ADV', make: function (r) {
+        { id: 'e12', level: 'PRG', make: function (r) {
           var N, it;
           for (var i = 0; i < 500; i++) {
             var b1 = r.pick([4, 5, 6, 7, 9, 10]), b3 = r.pick([2, 3]), n2 = r.int(30, 90), n4 = r.int(30, 90), n5 = r.int(30, 90);
@@ -434,7 +434,7 @@
       { num: '13', section: 'Extra practice D — Error analysis', stem: function (sh) { return 'Each student made exactly one mistake.<br>(a) <b>Nadia</b> simplifies a cube root: ' + t('\\sqrt[3]{' + sh.R + '}=\\sqrt[3]{' + sh.s * sh.s + '\\times ' + sh.u + '}=' + sh.s + '\\sqrt[3]{' + sh.u + '}') + '<br>(c) <b>Priya</b> converts to an entire radical: ' + t('-' + sh.c + '\\sqrt[4]{' + sh.m + '}=\\sqrt[4]{-' + F(pw(sh.c, 4) * sh.m) + '}'); },
         shared: function (r) { var R = r.pick([72, 108, 48, 162, 200, 80, 96, 500]), s = ex.nthFactor(R, 2); return { R: R, s: s, u: R / (s * s), c: r.pick([2, 3, 4]), m: r.pick([2, 3, 5, 6, 7]) }; },
         parts: [
-          { id: 'e13a1', sub: 'a(i)', level: 'PRG', make: function (r, sh) {
+          { id: 'e13a1', sub: 'a(i)', level: 'EMG', make: function (r, sh) {
             return P.mc(r, 'What is Nadia’s error?', [
               { html: t(sh.s * sh.s) + ' is a perfect <b>square</b>, not a perfect cube, so ' + t('\\sqrt[3]{' + sh.s * sh.s + '}') + ' is not ' + t(sh.s) + '.', right: true },
               { html: 'There is no error.', why: 'Check by cubing: ' + t(sh.s + '^{3}\\times ' + sh.u + '=' + F(pw(sh.s, 3) * sh.u)) + ', not ' + t(sh.R) + '.' },
@@ -442,8 +442,8 @@
               { html: 'She didn’t use the <b>largest</b> perfect square.', why: t(sh.s * sh.s) + ' is the largest perfect square factor — but for a cube root you need a perfect <b>cube</b>.' }],
               'For a cube root you need a perfect <b>cube</b> factor. ' + t(sh.s * sh.s + '=' + sh.s + '^{2}') + ' is a perfect square, and ' + t('\\sqrt[3]{' + sh.s * sh.s + '}\\neq ' + sh.s) + ' because ' + t(sh.s + '^{3}=' + F(pw(sh.s, 3))) + '.', ['Check her answer: cube the coefficient and multiply by the radicand.'], 'Nadia error ' + sh.R);
           } },
-          { id: 'e13a2', sub: 'a(ii)', level: 'PRG', make: function (r, sh) { var p = mixPart(1, 3, sh.R); p.prompt = 'Give the correct simplest form of ' + t('\\sqrt[3]{' + sh.R + '}') + '.'; return p; } },
-          { id: 'e13c1', sub: 'c(i)', level: 'PRG', make: function (r, sh) {
+          { id: 'e13a2', sub: 'a(ii)', level: 'EMG', make: function (r, sh) { var p = mixPart(1, 3, sh.R); p.prompt = 'Give the correct simplest form of ' + t('\\sqrt[3]{' + sh.R + '}') + '.'; return p; } },
+          { id: 'e13c1', sub: 'c(i)', level: 'EMG', make: function (r, sh) {
             var M = pw(sh.c, 4) * sh.m;
             return P.mc(r, 'What is Priya’s error?', [
               { html: 'The index is even, so the negative can’t go under the root: ' + t('\\sqrt[4]{-' + F(M) + '}') + ' isn’t a real number. The ' + t('-') + ' must stay outside.', right: true },
@@ -454,7 +454,7 @@
           } },
           { id: 'e13c2', sub: 'c(ii)', level: 'PRG', make: function (r, sh) { var p = entirePart(-sh.c, 4, sh.m); p.prompt = 'Give the correct entire radical for ' + t('-' + sh.c + '\\sqrt[4]{' + sh.m + '}') + '.'; return p; } }] },
       { num: '14', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: 'e14', level: 'ADV', make: function (r) {
+        { id: 'e14', level: 'EMG', make: function (r) {
           var f = r.pick([6, 6, 10, 12, 8]), m = r.pick([2, 3, 5].filter(function (x) { return f !== 10 || x !== 5; })), R = pw(f, 3) * m;
           var divs = [2, 3, 4, 5, 6].filter(function (a) { return a < f && f % a === 0; }), two = r.sample(divs, 2);
           var near = null;
@@ -468,15 +468,15 @@
       { num: '15', section: 'Extra practice E — Radicals with variables', stem: 'Assume every variable represents a non-negative number. Express each as a mixed radical in simplest form. Divide each exponent by the index: the quotient comes out, the remainder stays under.', parts: [
         { id: 'e15a', level: 'PRG', make: function (r) { var L = letters(r, 2); return varMixed(1, {}, 2, pickR(r, 2, [6, 10, 12], [2, 3], 288), obj(L, [r.pick([7, 9, 11]), r.pick([4, 6, 8])])); } },
         { id: 'e15b', level: 'ADV', make: function (r) { var L = letters(r, 2); return varMixed(1, {}, 3, pickR(r, 3, [3, 4, 6], [2, 3], 432), obj(L, [r.pick([8, 11]), r.pick([4, 7])])); } },
-        { id: 'e15c', level: 'ADV', make: function (r) { var L = letters(r, 2); return varMixed(-r.pick([2, 3]), {}, 2, pickR(r, 2, [5, 10], [3, 6, 7], 700), obj(L, [r.pick([3, 5]), r.pick([7, 9])])); } },
+        { id: 'e15c', level: 'PRG', make: function (r) { var L = letters(r, 2); return varMixed(-r.pick([2, 3]), {}, 2, pickR(r, 2, [5, 10], [3, 6, 7], 700), obj(L, [r.pick([3, 5]), r.pick([7, 9])])); } },
         { id: 'e15d', level: 'ADV', make: function (r) { var L = letters(r, 2); return varMixed(1, {}, 4, pickR(r, 4, [2, 3, 5], [2, 3], 1250), obj(L, [r.pick([9, 13]), 4])); } }] },
       { num: '16', stem: 'Assume every variable represents a non-negative number. Express each as an entire radical.', parts: [
         { id: 'e16a', level: 'PRG', make: function (r) { var L = letters(r, 1); return varEntire(r.int(2, 5), obj(L, [r.int(1, 3)]), 2, r.pick([2, 3, 5]), obj(L, [r.pick([1, 3])])); } },
         { id: 'e16b', level: 'PRG', make: function (r) { var L = letters(r, 2); return varEntire(r.int(2, 5), obj(L, [1, r.pick([2, 3])]), 2, r.pick([2, 3, 5, 7]), obj(L, [2, 1])); } },
         { id: 'e16c', level: 'ADV', make: function (r) { var L = letters(r, 3); return varEntire(r.pick([2, 3]), obj(L, [1, 2]), 3, r.pick([2, 3, 5]), obj([L[0], L[2]], [1, r.pick([2, 4])])); } },
-        { id: 'e16d', level: 'ADV', make: function (r) { var L = letters(r, 2), q = r.pick([2, 3]), p = q === 2 ? r.pick([1, 3]) : r.pick([1, 2]); return varEntire([p, q], obj([L[0]], [r.pick([2, 3])]), 2, q * q * r.pick([2, 3, 5]), obj(L, [1, 2])); } }] },
+        { id: 'e16d', level: 'PRG', make: function (r) { var L = letters(r, 2), q = r.pick([2, 3]), p = q === 2 ? r.pick([1, 3]) : r.pick([1, 2]); return varEntire([p, q], obj([L[0]], [r.pick([2, 3])]), 2, q * q * r.pick([2, 3, 5]), obj(L, [1, 2])); } }] },
       { num: '17', section: 'Extra practice F — Combining and stretching', stem: '<b>Like radicals</b> have the same index and the same radicand, and only then can their coefficients be added: ' + t('3\\sqrt[3]{2}+4\\sqrt[3]{2}=7\\sqrt[3]{2}') + ', just like ' + t('3x+4x=7x') + '. Simplify each term to a mixed radical first, then combine.', parts: [
-        { id: 'e17', sub: 'd', level: 'ADV', make: function (r) {
+        { id: 'e17', sub: 'd', level: 'PRG', make: function (r) {
           var m, s1, s2, a, b, R1, R2;
           for (var i = 0; i < 100; i++) { m = r.pick([2, 3, 4, 5]); var ss = r.sample([2, 3, 4], 2); s1 = ss[0]; s2 = ss[1]; a = r.pick([1, 2, 3]); b = r.pick([1, 2]); R1 = pw(s1, 3) * m; R2 = pw(s2, 3) * m; if (R1 <= 320 && R2 <= 320 && a * s1 + b * s2 > 1) break; }
           if (r.chance(0.25)) { m = 2; s1 = 3; s2 = 2; a = 2; b = 1; R1 = 54; R2 = 16; }
@@ -496,7 +496,7 @@
           return p;
         } }] },
       { num: '20', stem: '<b>Stretch.</b> Run the process backwards.', parts: [
-        { id: 'e20', sub: 'c', level: 'MAS', make: function (r) {
+        { id: 'e20', sub: 'c', level: 'ADV', make: function (r) {
           var c = r.pick([2, 3, 4, 5, 6, 7]), ans = 2 * pw(c, 3);
           return P.nr('The smallest whole number ' + t('n') + ' for which ' + t('\\sqrt[3]{n}') + ', in simplest form, is a mixed radical with coefficient exactly ' + t(c) + ' is ________.', ans, function (v) {
             if (v === pw(c, 3)) return { code: 'whole-number', hint: t('\\sqrt[3]{' + pw(c, 3) + '}=' + c) + ' is a whole number — nothing is left under the root, so it isn’t a mixed radical.' };

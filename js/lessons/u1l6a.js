@@ -269,15 +269,15 @@
       { num: '1', section: 'Part A — Entire and Mixed Radicals (Square Roots)', stem: 'State whether each radical is written as a mixed radical or an entire radical.', parts: [
         { id: '1a', level: 'LIM', make: function (r) { var n = pickWhere(r, function () { return r.int(20, 99); }, function (v) { return !isSq(v); }); return kindPart(r, sq(n), false, 'Nothing multiplies the root here.'); } },
         { id: '1b', level: 'LIM', make: function (r) { return kindPart(r, r.int(2, 9) + sq(r.pick([2, 3, 5, 6, 7, 10, 11])), true, 'There is a number <b>in front of</b> the root.'); } },
-        { id: '1c', level: 'BEG', make: function (r) { var n = r.pick([4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144]); return kindPart(r, sq(n), false, 'Nothing multiplies the root. (It happens to equal ' + t(Math.sqrt(n)) + ', but as written it is an entire radical.)'); } },
-        { id: '1d', level: 'BEG', make: function (r) { return kindPart(r, '0.' + r.int(2, 9) + sq(r.pick([2, 3, 5, 6, 7, 10, 11, 13])), true, 'A decimal coefficient is still a coefficient: something sits in front of the root.'); } }] },
+        { id: '1c', level: 'LIM', make: function (r) { var n = r.pick([4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144]); return kindPart(r, sq(n), false, 'Nothing multiplies the root. (It happens to equal ' + t(Math.sqrt(n)) + ', but as written it is an entire radical.)'); } },
+        { id: '1d', level: 'LIM', make: function (r) { return kindPart(r, '0.' + r.int(2, 9) + sq(r.pick([2, 3, 5, 6, 7, 10, 11, 13])), true, 'A decimal coefficient is still a coefficient: something sits in front of the root.'); } }] },
       { num: '2', stem: 'Convert the following radicals to mixed radicals in simplest form.', parts: [
         { id: '2a', level: 'BEG', make: function (r) { return toMixed(1, 4 * r.pick([3, 5, 6, 7])); } },
         { id: '2b', level: 'BEG', make: function (r) { return toMixed(1, r.pick([28, 44, 52, 45, 63, 50, 75])); } },
         { id: '2c', level: 'EMG', make: function (r) { return toMixed(1, 16 * r.pick([3, 5, 6, 7])); } },
         { id: '2d', level: 'EMG', make: function (r) { return toMixed(1, 9 * r.pick([11, 13, 17, 19, 23])); } },
         { id: '2e', level: 'EMG', make: function (r) { return toMixed(r.int(2, 5), 9 * r.pick([2, 3, 5, 7])); } },
-        { id: '2f', level: 'PRG', make: function (r) { return toMixed(-r.int(2, 7), 16 * r.pick([2, 3, 5, 7])); } },
+        { id: '2f', level: 'EMG', make: function (r) { return toMixed(-r.int(2, 7), 16 * r.pick([2, 3, 5, 7])); } },
         { id: '2g', level: 'EMG', make: function (r) { return toMixed(r.int(2, 4), 25 * r.pick([2, 3, 5, 6, 7])); } },
         { id: '2h', level: 'PRG', make: function (r) { return toMixed(-r.int(2, 6), 36 * r.pick([2, 3, 5, 7])); } }] },
       { num: '3', stem: 'Convert the following radicals to mixed radicals in simplest form. <b>Some of them cannot be converted</b> — if a radical is already in simplest form, type it unchanged.',
@@ -289,17 +289,17 @@
           { id: '3d', level: 'PRG', make: function (r) { var s = r.int(6, 9); return toMixed([1, s], s * s * r.pick([2, 3, 5, 6, 7])); } },
           { id: '3e', level: 'EMG', make: function (r) { return toMixed(1, Math.pow(r.int(11, 13), 2) * r.pick([2, 3, 5, 6, 7])); } },
           { id: '3f', level: 'PRG', make: function (r) { return toMixed(r.int(2, 6), Math.pow(r.int(11, 13), 2) * r.pick([2, 3])); } },
-          { id: '3g', level: 'PRG', make: function (r) { return toMixed(1, Math.pow(r.pick([20, 25, 30]), 2) * r.pick([2, 3, 5])); } },
-          { id: '3h', level: 'PRG', make: function (r, sh) { return toMixed(1, sh.sf); } },
-          { id: '3i', level: 'ADV', make: function (r) { var s = r.pick([8, 9, 10, 12]), p = r.pick([5, 7, 11].filter(function (x) { return x < s && gcd(x, s) === 1; })); return toMixed([-p, s], s * s * r.pick([2, 3, 5])); } },
+          { id: '3g', level: 'EMG', make: function (r) { return toMixed(1, Math.pow(r.pick([20, 25, 30]), 2) * r.pick([2, 3, 5])); } },
+          { id: '3h', level: 'EMG', make: function (r, sh) { return toMixed(1, sh.sf); } },
+          { id: '3i', level: 'PRG', make: function (r) { var s = r.pick([8, 9, 10, 12]), p = r.pick([5, 7, 11].filter(function (x) { return x < s && gcd(x, s) === 1; })); return toMixed([-p, s], s * s * r.pick([2, 3, 5])); } },
           { id: '3j', level: 'EMG', make: function (r) { return toMixed(1, Math.pow(r.int(13, 17), 2) * r.pick([2, 3, 5])); } },
           { id: '3k', level: 'PRG', make: function (r) { return toMixed(r.int(2, 4), Math.pow(r.int(15, 18), 2) * r.pick([2, 3])); } },
           { id: '3l', level: 'PRG', make: function (r) { return toMixed(-r.int(2, 4), Math.pow(r.int(11, 13), 2) * r.pick([6, 7])); } },
           { id: '3m', level: 'PRG', make: function (r) { return toMixed(r.int(3, 6), Math.pow(r.pick([11, 13]), 2) * r.pick([2, 3, 5])); } },
-          { id: '3n', level: 'ADV', make: function (r) { var s = r.pick([2, 3]), m = pickWhere(r, function () { return r.int(100, 250); }, function (v) { return sqFree(v) && nt.factor(v).some(function (pe) { return pe[0] > 20; }); }); return toMixed(1, s * s * m); } },
-          { id: '3o', level: 'ADV', make: function (r) { var f = fracCoef(r, [10, 12, 14, 15]); return toMixed([f.p, f.q], f.s * f.s * r.pick([2, 3, 5, 7])); } },
-          { id: '3p', level: 'ADV', make: function (r) { var ab = r.sample([5, 7, 11, 13, 17], 2); return toMixed([ab[0], ab[1]], ab[0] * ab[1]); } },
-          { id: '3q', level: 'PRG', make: function (r, sh) {
+          { id: '3n', level: 'PRG', make: function (r) { var s = r.pick([2, 3]), m = pickWhere(r, function () { return r.int(100, 250); }, function (v) { return sqFree(v) && nt.factor(v).some(function (pe) { return pe[0] > 20; }); }); return toMixed(1, s * s * m); } },
+          { id: '3o', level: 'PRG', make: function (r) { var f = fracCoef(r, [10, 12, 14, 15]); return toMixed([f.p, f.q], f.s * f.s * r.pick([2, 3, 5, 7])); } },
+          { id: '3p', level: 'PRG', make: function (r) { var ab = r.sample([5, 7, 11, 13, 17], 2); return toMixed([ab[0], ab[1]], ab[0] * ab[1]); } },
+          { id: '3q', level: 'EMG', make: function (r, sh) {
             var n = sh.sf;
             return P.mc(r, 'Which statement explains why ' + t(sq(n)) + ' cannot be written as a mixed radical?', [
               { html: t(F(n) + '=' + K.fac(n)) + ' has no perfect-square factor other than ' + t('1') + ': no prime appears twice.', right: true },
@@ -313,37 +313,37 @@
         { id: '4a', level: 'EMG', make: function (r) { var d = pickWhere(r, function () { return [r.pick([2, 3, 5, 6, 7, 10, 11]), r.pick([4, 9, 16, 25, 36, 49, 64, 81])]; }, function (v) { return gcd(v[0], v[1]) === 1; }); return fracRootPart(1, d[0], d[1]); } },
         { id: '4b', level: 'EMG', make: function (r) { var d = pickWhere(r, function () { var den = r.pick([4, 9, 16]); return [r.int(den + 1, 2 * den + 4), den]; }, function (v) { return sqFree(v[0]) && gcd(v[0], v[1]) === 1; }); return fracRootPart(1, d[0], d[1]); } },
         { id: '4c', level: 'PRG', make: function (r) { var d = pickWhere(r, function () { return [r.int(2, 5), r.pick([3, 5, 7, 9]), r.pick([2, 3, 5])]; }, function (v) { return gcd(v[0] * v[0] * v[2], v[1]) === 1; }); return fracRootPart(1, d[0] * d[0] * d[2], d[1] * d[1]); } },
-        { id: '4d', level: 'ADV', make: function (r) { var d = pickWhere(r, function () { return [r.pick([2, 3]), r.pick([2, 3, 5]), r.pick([2, 3, 5, 6, 7]), r.int(2, 3)]; }, function (v) { return v[0] !== v[1] && gcd(v[0] * v[0] * v[2], v[1]) === 1 && v[1] * v[3] * v[0] / v[1] !== 1; }); return fracRootPart(d[1] * d[3], d[0] * d[0] * d[2], d[1] * d[1]); } }] },
+        { id: '4d', level: 'PRG', make: function (r) { var d = pickWhere(r, function () { return [r.pick([2, 3]), r.pick([2, 3, 5]), r.pick([2, 3, 5, 6, 7]), r.int(2, 3)]; }, function (v) { return v[0] !== v[1] && gcd(v[0] * v[0] * v[2], v[1]) === 1 && v[1] * v[3] * v[0] / v[1] !== 1; }); return fracRootPart(d[1] * d[3], d[0] * d[0] * d[2], d[1] * d[1]); } }] },
       { num: '5', stem: 'Convert the following to entire radical form.', parts: [
         { id: '5a', level: 'BEG', make: function (r) { return toEntire(r.int(2, 5), r.pick([2, 3, 5, 6, 7])); } },
         { id: '5b', level: 'BEG', make: function (r) { return toEntire(r.int(3, 5), r.pick([5, 6, 7, 10])); } },
         { id: '5c', level: 'EMG', make: function (r) { return toEntire(r.int(5, 7), r.pick([7, 10, 11, 13])); } },
-        { id: '5d', level: 'EMG', make: function (r) { return toEntire(r.int(10, 12), r.pick([2, 3, 5])); } },
+        { id: '5d', level: 'BEG', make: function (r) { return toEntire(r.int(10, 12), r.pick([2, 3, 5])); } },
         { id: '5e', level: 'EMG', make: function (r) { return toEntire(r.int(2, 3), r.pick([16, 25, 36, 49])); } },
-        { id: '5f', level: 'PRG', make: function (r) { return toEntire(-r.int(5, 8), r.pick([3, 5, 6, 7])); } },
+        { id: '5f', level: 'EMG', make: function (r) { return toEntire(-r.int(5, 8), r.pick([3, 5, 6, 7])); } },
         { id: '5g', level: 'EMG', make: function (r) { return toEntire(r.int(7, 9), r.pick([7, 10, 11])); } },
-        { id: '5h', level: 'PRG', make: function (r) { return toEntire(-r.pick([8, 9, 11, 12]), r.pick([2, 3])); } }] },
+        { id: '5h', level: 'EMG', make: function (r) { return toEntire(-r.pick([8, 9, 11, 12]), r.pick([2, 3])); } }] },
       { num: '6', stem: 'Convert the following to entire radical form.', parts: [
         { id: '6a', level: 'PRG', make: function (r) { var s = r.int(3, 6), m = r.pick([2, 3, 5, 6, 7]); var p = toEntire([1, s], s * s * m); p.solution = 'Simplify first: ' + t(sq(s * s * m) + '=' + s + sq(m)) + ', so ' + t('\\tfrac{1}{' + s + '}\\times ' + s + sq(m) + '=' + sq(m)) + '.<br>(Or square the coefficient: ' + t('\\tfrac{1}{' + s * s + '}\\times ' + F(s * s * m) + '=' + m) + '.)'; return p; } },
-        { id: '6b', level: 'PRG', make: function (r) {
+        { id: '6b', level: 'EMG', make: function (r) {
           var n = r.int(12, 25);
           return toEntire(n, 1, { prompt: t(n), notEntire: form('not-entire', 'Right value, but write it as a square root: which number has a square root of ' + t(n) + '?'),
             more: function (val, rr) { if (rr && rr.n === 2 && rr.m === 2 * n) return { code: 'doubled', hint: t('\\sqrt{' + 2 * n + '}') + ' isn’t ' + t(n) + '. A whole number ' + t('n=\\sqrt{n^{2}}') + ': square it, don’t double it.' }; return null; },
             sol: 'Any whole number ' + t('n=\\sqrt{n^{2}}') + ': ' + t(n + '=\\sqrt{' + n + '^{2}}=' + sq(n * n)) + '.' });
         } },
-        { id: '6c', level: 'ADV', make: function (r) { var q = r.pick([2, 3]), p = r.pick([3, 5, 7].filter(function (x) { return gcd(x, q) === 1; })), m = r.pick([2, 3, 5]); var pp = toEntire([p, q], q * q * m); pp.solution = 'Simplify first: ' + t(sq(q * q * m) + '=' + q + sq(m)) + ', so ' + t('\\tfrac{' + p + '}{' + q + '}\\times ' + q + sq(m) + '=' + p + sq(m)) + '.<br>Then ' + t(p + sq(m) + '=\\sqrt{' + p * p + '\\times ' + m + '}=' + sq(p * p * m)) + '.'; return pp; } },
-        { id: '6d', level: 'PRG', make: function (r) { var ae = r.pick([[2, 2], [3, 2], [2, 3]]), c = Math.pow(ae[0], ae[1]), m = r.pick([5, 7, 11, 13]); var p = toEntire(c, m, { disp: ae[0] + '^{' + ae[1] + '}' }); p.solution = t(ae[0] + '^{' + ae[1] + '}=' + c) + ', so the radical is ' + t(c + sq(m)) + '.<br>' + t(c + sq(m) + '=\\sqrt{' + c * c + '\\times ' + m + '}=' + sq(c * c * m)) + '.'; return p; } }] },
+        { id: '6c', level: 'PRG', make: function (r) { var q = r.pick([2, 3]), p = r.pick([3, 5, 7].filter(function (x) { return gcd(x, q) === 1; })), m = r.pick([2, 3, 5]); var pp = toEntire([p, q], q * q * m); pp.solution = 'Simplify first: ' + t(sq(q * q * m) + '=' + q + sq(m)) + ', so ' + t('\\tfrac{' + p + '}{' + q + '}\\times ' + q + sq(m) + '=' + p + sq(m)) + '.<br>Then ' + t(p + sq(m) + '=\\sqrt{' + p * p + '\\times ' + m + '}=' + sq(p * p * m)) + '.'; return pp; } },
+        { id: '6d', level: 'EMG', make: function (r) { var ae = r.pick([[2, 2], [3, 2], [2, 3]]), c = Math.pow(ae[0], ae[1]), m = r.pick([5, 7, 11, 13]); var p = toEntire(c, m, { disp: ae[0] + '^{' + ae[1] + '}' }); p.solution = t(ae[0] + '^{' + ae[1] + '}=' + c) + ', so the radical is ' + t(c + sq(m)) + '.<br>' + t(c + sq(m) + '=\\sqrt{' + c * c + '\\times ' + m + '}=' + sq(c * c * m)) + '.'; return p; } }] },
       { num: '7', stem: function (sh) { return '<b>Do not use a calculator.</b> Given that ' + t('\\sqrt{' + sh.b + '}\\approx ' + gTex(sh.g[0])) + ' and ' + t('\\sqrt{' + 10 * sh.b + '}\\approx ' + gTex(sh.g[1])) + ', find the approximate value of each radical.'; },
         shared: function (r) { return r.pick(GIVEN); },
         parts: [
           { id: '7a', level: 'EMG', make: function (r, sh) { return approxPart(sh, 10, 1, 0); } },
-          { id: '7b', level: 'PRG', make: function (r, sh) { return approxPart(sh, 10, 1, 1); } },
-          { id: '7c', level: 'PRG', make: function (r, sh) { return r.chance(0.6) ? approxPart(sh, 100, 1, 1) : approxPart(sh, 100, 1, 0); } },
+          { id: '7b', level: 'EMG', make: function (r, sh) { return approxPart(sh, 10, 1, 1); } },
+          { id: '7c', level: 'EMG', make: function (r, sh) { return r.chance(0.6) ? approxPart(sh, 100, 1, 1) : approxPart(sh, 100, 1, 0); } },
           { id: '7d', level: 'PRG', make: function (r, sh) { return approxPart(sh, 1, r.pick([10, 100]), 0); } },
-          { id: '7e', level: 'ADV', make: function (r, sh) { return approxPart(sh, 1, r.pick([10, 100]), 1); } },
+          { id: '7e', level: 'PRG', make: function (r, sh) { return approxPart(sh, 1, r.pick([10, 100]), 1); } },
           { id: '7f', level: 'EMG', make: function (r, sh) { return approxPart(sh, r.int(2, 5), 1, 0); } },
           { id: '7g', level: 'PRG', make: function (r, sh) { return approxPart(sh, r.int(2, 4), 1, 1); } },
-          { id: '7h', level: 'ADV', make: function (r, sh) { return approxPart(sh, 1, r.pick([2, 4, 5]), 0); } }] },
+          { id: '7h', level: 'EMG', make: function (r, sh) { return approxPart(sh, 1, r.pick([2, 4, 5]), 0); } }] },
       { num: '8', stem: '<b>Do not use a calculator.</b>', parts: [
         { id: '8', level: 'PRG', make: function (r) { return orderPart(r, orderItems(r, 40, 110), true); } }] },
       { num: '9', section: 'Part B — Radicals and the Pythagorean Theorem',
@@ -361,7 +361,7 @@
           return { a: a, b: b, S: S, la: la, lb: lb, Ls: Ls, L: K.roundTo(Math.sqrt(Ls), 2), A: K.roundTo(Math.sqrt(S), 2), s: big(S), m: S / (big(S) * big(S)) };
         },
         parts: [
-          { id: '9a', level: 'PRG', make: function (r, sh) {
+          { id: '9a', level: 'EMG', make: function (r, sh) {
             var L = sh.L.toFixed(2), A = sh.A.toFixed(2);
             return P.fields('Complete both students’ work.', [{ name: 'Louis', label: 'Louis: ' + t('PQ\\approx') }, { name: 'Asia ' + t('PQ^{2}'), label: 'Asia: ' + t('PQ^{2}=') }, { name: 'Asia', label: 'Asia: ' + t('PQ\\approx') }],
               [K.approx(sh.L, 2, { diag: function (v) { return Math.abs(v - sh.A) < 1e-9 ? { code: 'louis', hint: 'That’s the answer from the exact values. Louis starts from ' + t('\\sqrt{' + sh.a + '}\\approx ' + sh.la.toFixed(2)) + ' and ' + t('\\sqrt{' + sh.b + '}\\approx ' + sh.lb.toFixed(2)) + ' and squares those.' } : null; } }),
@@ -371,7 +371,7 @@
               '<b>Louis:</b> ' + t('PQ^{2}\\approx ' + sh.la.toFixed(2) + '^{2}+' + sh.lb.toFixed(2) + '^{2}\\approx ' + sh.Ls.toFixed(4)) + ', so ' + t('PQ\\approx ' + L) + '.<br><b>Asia:</b> ' + t('PQ^{2}=\\left(\\sqrt{' + sh.a + '}\\right)^{2}+\\left(\\sqrt{' + sh.b + '}\\right)^{2}=' + sh.a + '+' + sh.b + '=' + sh.S) + ', so ' + t('PQ=\\sqrt{' + sh.S + '}\\approx ' + A) + '.',
               ['Louis: square the rounded sides and add, then take the square root.', 'Asia: ' + t('\\left(\\sqrt{a}\\right)^{2}=a') + ', so ' + t('PQ^{2}') + ' is a whole number.'], 'Louis vs Asia PQ, legs √' + sh.a + ', √' + sh.b);
           } },
-          { id: '9b', level: 'PRG', make: function (r, sh) {
+          { id: '9b', level: 'EMG', make: function (r, sh) {
             return P.mc(r, 'Which student’s answer is more accurate?', [
               { html: 'Asia’s: she worked with exact values and rounded only once, at the end.', right: true },
               { html: 'Louis’s: he showed more decimal work, so his answer is more precise.', why: 'More steps with rounded numbers add error, not accuracy. The exact value is ' + t('\\sqrt{' + sh.S + '}=' + Math.sqrt(sh.S).toFixed(4) + '\\ldots') + ' — whose answer matches it?' },
@@ -391,7 +391,7 @@
           return { h: v[0], l: v[1], N: N, s: big(N), m: N / (big(N) * big(N)) };
         },
         parts: [
-          { id: '10a', sub: 'i', level: 'PRG', make: function (r, sh) {
+          { id: '10a', sub: 'i', level: 'EMG', make: function (r, sh) {
             var p = toEntire(sh.s, sh.m, { prompt: 'Give ' + t('XY') + ' (in cm) as an <b>entire radical</b>.', more: hypDiag(sh), sol: hypSol(sh) });
             p.text = 'XY entire, hyp ' + sh.h + ' leg ' + sh.l; p.bad = [sq(sh.h * sh.h + sh.l * sh.l)];
             p.hints = [t('XZ') + ' is opposite the right angle at ' + t('Y') + ', so it is the hypotenuse: ' + t('XY^{2}=XZ^{2}-YZ^{2}') + '.', 'Then ' + t('XY=\\sqrt{XY^{2}}') + ' — that square root is the entire radical.']; return p;
@@ -400,7 +400,7 @@
             var p = toMixed(1, sh.N, { prompt: 'Give ' + t('XY') + ' (in cm) as a <b>mixed radical</b> in simplest form.', more: hypDiag(sh) });
             p.solution = hypSol(sh) + '<br>' + mixedSol([1, 1], sh.N, ''); p.text = 'XY mixed, hyp ' + sh.h + ' leg ' + sh.l; return p;
           } },
-          { id: '10c', sub: 'iii', level: 'EMG', make: function (r, sh) {
+          { id: '10c', sub: 'iii', level: 'BEG', make: function (r, sh) {
             return P.approx('Give ' + t('XY') + ' as a decimal, to the nearest hundredth of a centimetre.', Math.sqrt(sh.N), 2, { after: 'cm', diag: function (v) { return Math.abs(v - K.roundTo(Math.sqrt(sh.h * sh.h + sh.l * sh.l), 2)) < 1e-9 ? { code: 'hyp-added', hint: t('XZ') + ' is the hypotenuse (it is opposite the right angle at ' + t('Y') + '), so subtract: ' + t('XY^{2}=XZ^{2}-YZ^{2}') + '.' } : null; } },
               hypSol(sh) + '<br>' + t('XY=' + ansTex(sh.s, sh.m) + '=' + Math.sqrt(sh.N).toFixed(5) + '\\ldots\\approx ' + K.roundTo(Math.sqrt(sh.N), 2).toFixed(2)) + ' cm.', ['Find the exact value first, then use your calculator.'], 'XY decimal, hyp ' + sh.h + ' leg ' + sh.l);
           } }] },
@@ -432,7 +432,7 @@
           p.hints = ['The vertical line is a leg of <b>both</b> right triangles. Find its length from the left triangle first.', 'Then use it with the hypotenuse ' + t(H) + ' to find ' + t('x') + '.']; p.text = 'two triangles: ' + b + ',' + c + ' then hyp ' + H; return p;
         } }] },
       { num: '12', stem: '<i>(Multiple Choice)</i>', parts: [
-        { id: '12', level: 'PRG', make: function (r) {
+        { id: '12', level: 'EMG', make: function (r) {
           var v = pickWhere(r, function () { return [r.int(5, 30), r.int(30, 99)]; }, function (x) { var D = x[1] - x[0], s = big(D), m = D / (s * s); return !isSq(x[0]) && !isSq(x[1]) && !isSq(x[0] + x[1]) && s >= 2 && m > 1 && m !== s && D >= 18; }) || [11, 56];
           var a = v[0], c = v[1], D = c - a, s = big(D), m = D / (s * s);
           var cands = [{ html: t(sq(a + c)), v: Math.sqrt(a + c), why: t('JL') + ' is the hypotenuse (opposite the right angle at ' + t('K') + '), so subtract: ' + t('KL^{2}=JL^{2}-JK^{2}') + '.' },
@@ -445,7 +445,7 @@
           return P.mc(r, pr, opts, t('JL') + ' is the hypotenuse, so ' + t('KL^{2}=JL^{2}-JK^{2}=' + c + '-' + a + '=' + D) + '.<br>' + t('KL=' + sq(D) + '=\\sqrt{' + s * s + '\\times ' + m + '}=' + s + sq(m)) + '.', ['Which side is the hypotenuse? It is opposite the right angle.', t('\\left(\\sqrt{a}\\right)^{2}=a') + ', so the squares are easy.'], 'KL with JK=√' + a + ', JL=√' + c);
         } }] },
       { num: '13', stem: '<i>(Multiple Choice)</i> Without using a calculator, determine which of the following radicals is <b>not</b> equal to the others.', parts: [
-        { id: '13', level: 'ADV', make: function (r) {
+        { id: '13', level: 'PRG', make: function (r) {
           var c = r.pick([6, 8, 10, 12]), m = r.pick([2, 3, 5]), divs = nt.divisors(c).filter(function (d) { return d > 1 && d < c; }), a = r.pick(divs);
           var odd = pickWhere(r, function () { return [r.int(2, 6), r.int(2, 5)]; }, function (x) { var p = x[0] * x[1]; return p !== c && Math.abs(p - c) <= 2 && x[1] !== a; }) || [3, 4];
           var oddV = odd[0] * odd[1];
@@ -461,7 +461,7 @@
         stem: function (sh) { return '<i>Use the following information.</i> A physics textbook gives the distance, ' + t('d') + ' kilometres, that a person can see to the horizon on a clear day as ' + t('d=\\sqrt{13h}') + ', where ' + t('h') + ' is the person’s eye-level height above the ground, in metres. Standing on the ground, Maya’s eye-level height is ' + t(sh.e) + ' m.'; },
         shared: function (r) { var o = r.pick([[10, 2], [10, 3], [10, 5], [10, 6], [10, 7], [10, 10], [10, 11], [5, 7], [5, 10], [5, 11]]), e = r.pick(['1.4', '1.5', '1.6', '1.7']); var h = o[0] * o[0] * o[1], H10 = h * 10 - Math.round(Number(e) * 10); return { s: o[0], j: o[1], h: h, e: e, H: F(Math.floor(H10 / 10)) + '.' + (H10 % 10) }; },
         parts: [
-          { id: '14', level: 'ADV', make: function (r, sh) {
+          { id: '14', level: 'PRG', make: function (r, sh) {
             var s = sh.s, b = 13 * sh.j, ans = s + b;
             return P.nr('The distance Maya can see to the horizon while standing on the roof of a building ' + t(sh.H) + ' m high can be written in simplest form as ' + t('a\\sqrt{b}') + '. The value of ' + t('a+b') + ' is ________.', ans, function (v) {
               if (v === s * b) return { code: 'product', hint: 'The question asks for ' + t('a+b') + ', not ' + t('ab') + '.' };
@@ -473,7 +473,7 @@
             ['Her eye-level height on the roof is the building’s height <b>plus</b> ' + t(sh.e) + ' m.', 'Simplify ' + t('\\sqrt{13h}') + ': look for the largest perfect-square factor.'], 'horizon a+b, h=' + sh.h);
           } }] },
       { num: '15', stem: '<i>Use the following information.</i> Heron’s Formula gives the area of a triangle as ' + t('A=\\sqrt{s(s-a)(s-b)(s-c)}') + ', where ' + t('s=\\dfrac{a+b+c}{2}') + ' and ' + t('a, b, c') + ' are the lengths of the three sides.', parts: [
-        { id: '15', level: 'ADV', make: function (r) {
+        { id: '15', level: 'PRG', make: function (r) {
           var T = r.chance(0.2) ? HERON.filter(function (x) { return x.a === 10 && x.b === 13 && x.c === 15; })[0] : r.pick(HERON), p = T.p, q = T.q;
           return P.nr('The area of a triangle whose sides measure ' + t(T.a) + ', ' + t(T.b) + ' and ' + t(T.c) + ' can be written in simplest form as ' + t('p\\sqrt{' + q + '}') + ', where ' + t('p\\in N') + '. The value of ' + t('p') + ' is ________.', p, function (v) {
             if (v === p * p) return { code: 'coef-power', hint: t(p * p) + ' comes out of the root as ' + t(p) + '.' };
@@ -498,27 +498,27 @@
     extra: [
       { num: '1', section: 'Extra practice A — Large radicands and both directions', stem: 'Convert each to a mixed radical in simplest form. These radicands are large, so write the prime factorization first, then pair the primes off.', parts: [
         { id: 'e1a', level: 'PRG', make: function (r) { return factorMixed(Math.pow(r.pick([12, 14, 18]), 2) * r.pick([3, 5, 7])); } },
-        { id: 'e1b', level: 'PRG', make: function (r) { return factorMixed(Math.pow(r.pick([12, 15, 16]), 2) * r.pick([5, 6, 7])); } },
-        { id: 'e1c', level: 'ADV', make: function (r) { return factorMixed(Math.pow(r.pick([20, 21, 30]), 2) * r.pick([2, 3, 5])); } },
-        { id: 'e1d', level: 'ADV', make: function (r) { return factorMixed(Math.pow(r.pick([22, 26, 28, 34]), 2) * r.pick([3, 5, 6])); } }] },
+        { id: 'e1b', level: 'EMG', make: function (r) { return factorMixed(Math.pow(r.pick([12, 15, 16]), 2) * r.pick([5, 6, 7])); } },
+        { id: 'e1c', level: 'PRG', make: function (r) { return factorMixed(Math.pow(r.pick([20, 21, 30]), 2) * r.pick([2, 3, 5])); } },
+        { id: 'e1d', level: 'PRG', make: function (r) { return factorMixed(Math.pow(r.pick([22, 26, 28, 34]), 2) * r.pick([3, 5, 6])); } }] },
       { num: '2', stem: 'Convert each to a mixed radical in simplest form. Simplify the radical first, then deal with the coefficient. One of these may turn out not to be a mixed radical at all.', parts: [
-        { id: 'e2a', level: 'PRG', make: function (r) { return toMixed(-r.int(2, 5), Math.pow(r.int(3, 6), 2) * r.pick([2, 3, 5])); } },
-        { id: 'e2b', level: 'ADV', make: function (r) { var f = fracCoef(r, [16, 18, 20, 24]); return toMixed([f.p, f.q], f.s * f.s * r.pick([2, 3])); } },
-        { id: 'e2c', level: 'ADV', make: function (r) {
+        { id: 'e2a', level: 'EMG', make: function (r) { return toMixed(-r.int(2, 5), Math.pow(r.int(3, 6), 2) * r.pick([2, 3, 5])); } },
+        { id: 'e2b', level: 'PRG', make: function (r) { var f = fracCoef(r, [16, 18, 20, 24]); return toMixed([f.p, f.q], f.s * f.s * r.pick([2, 3])); } },
+        { id: 'e2c', level: 'PRG', make: function (r) {
           var N = r.pick([36, 48, 54, 66, 72, 78, 84]), q = r.pick(nt.divisors(N).filter(function (d) { return d >= 3 && d <= 12; })), p = r.pick([1, 5, 7, 11].filter(function (x) { return x < q && gcd(x, q) === 1; }));
           var pp = toMixed([-p, q], N * N); pp.solution += '<br>The result is a whole number, <b>not</b> a mixed radical: ' + t(F(N * N)) + ' is a perfect square, so nothing is left under the root.'; return pp;
         } },
-        { id: 'e2d', level: 'ADV', make: function (r) { var f = fracCoef(r, [36, 40, 48, 60], 6); return toMixed([f.p, f.q], f.s * f.s * r.pick([2, 3])); } }] },
+        { id: 'e2d', level: 'PRG', make: function (r) { var f = fracCoef(r, [36, 40, 48, 60], 6); return toMixed([f.p, f.q], f.s * f.s * r.pick([2, 3])); } }] },
       { num: '3', stem: 'Here the radicand is already prime-factored: an even exponent comes straight out (halved), and an odd exponent leaves one factor behind. Write each as a mixed radical in simplest form.', parts: [
-        { id: 'e3a', level: 'PRG', make: function (r) { return primePowPart(r, false); } },
-        { id: 'e3b', level: 'ADV', make: function (r) { return primePowPart(r, true); } }] },
+        { id: 'e3a', level: 'EMG', make: function (r) { return primePowPart(r, false); } },
+        { id: 'e3b', level: 'PRG', make: function (r) { return primePowPart(r, true); } }] },
       { num: '4', stem: 'Convert each mixed radical to an entire radical.', parts: [
         { id: 'e4a', level: 'EMG', make: function (r) { return toEntire(r.int(5, 9), r.pick([6, 10, 11])); } },
-        { id: 'e4b', level: 'PRG', make: function (r) { return toEntire(-r.int(6, 9), r.pick([2, 3, 5])); } },
-        { id: 'e4c', level: 'ADV', make: function (r) { var q = r.pick([3, 4]), p = r.pick([1, 2, 3].filter(function (x) { return gcd(x, q) === 1 && x < q; })); return fracEntire([p, q], q * q * r.pick([2, 3, 5, 6, 7])); } },
-        { id: 'e4d', level: 'ADV', make: function (r) { var q = r.pick([5, 6]), p = r.pick([1, 2, 3, 4].filter(function (x) { return gcd(x, q) === 1 && x < q; })); return fracEntire([p, q], q * q * r.pick([2, 3, 6, 7])); } },
-        { id: 'e4e', level: 'ADV', make: function (r) { var q = r.pick([2, 3]), p = r.pick([5, 7]); return fracEntire([p, q], q * q * r.pick([2, 3, 5])); } },
-        { id: 'e4f', level: 'ADV', make: function (r) { var d = r.pick([['0.4', [2, 5]], ['0.6', [3, 5]], ['0.2', [1, 5]], ['0.5', [1, 2]], ['1.5', [3, 2]], ['0.8', [4, 5]]]); return fracEntire(d[1], d[1][1] * d[1][1] * r.pick([2, 3, 5, 6]), d[0]); } }] },
+        { id: 'e4b', level: 'EMG', make: function (r) { return toEntire(-r.int(6, 9), r.pick([2, 3, 5])); } },
+        { id: 'e4c', level: 'PRG', make: function (r) { var q = r.pick([3, 4]), p = r.pick([1, 2, 3].filter(function (x) { return gcd(x, q) === 1 && x < q; })); return fracEntire([p, q], q * q * r.pick([2, 3, 5, 6, 7])); } },
+        { id: 'e4d', level: 'PRG', make: function (r) { var q = r.pick([5, 6]), p = r.pick([1, 2, 3, 4].filter(function (x) { return gcd(x, q) === 1 && x < q; })); return fracEntire([p, q], q * q * r.pick([2, 3, 6, 7])); } },
+        { id: 'e4e', level: 'PRG', make: function (r) { var q = r.pick([2, 3]), p = r.pick([5, 7]); return fracEntire([p, q], q * q * r.pick([2, 3, 5])); } },
+        { id: 'e4f', level: 'PRG', make: function (r) { var d = r.pick([['0.4', [2, 5]], ['0.6', [3, 5]], ['0.2', [1, 5]], ['0.5', [1, 2]], ['1.5', [3, 2]], ['0.8', [4, 5]]]); return fracEntire(d[1], d[1][1] * d[1][1] * r.pick([2, 3, 5, 6]), d[0]); } }] },
       { num: '5', stem: function (sh) { return 'Three of these four radicals can be written as mixed radicals; one cannot. Simplify each one — if it cannot be simplified, type it unchanged.'; },
         shared: function (r) {
           var nums = [];
@@ -532,7 +532,7 @@
           { id: 'e5b', level: 'PRG', make: function (r, sh) { return factorMixed(sh.nums[1]); } },
           { id: 'e5c', level: 'PRG', make: function (r, sh) { return factorMixed(sh.nums[2]); } },
           { id: 'e5d', level: 'PRG', make: function (r, sh) { return factorMixed(sh.nums[3]); } },
-          { id: 'e5e', level: 'ADV', make: function (r, sh) {
+          { id: 'e5e', level: 'EMG', make: function (r, sh) {
             var n = sh.sf;
             return P.mc(r, t(sq(n)) + ' cannot be simplified. Which statement about the prime factorization of ' + t(F(n)) + ' <b>explains why</b>?', [
               { html: 'Every prime appears only once, so there is no pair of equal primes (no perfect square) to take out.', right: true },
@@ -542,9 +542,9 @@
               t(F(n) + '=' + K.fac(n)) + '. Every prime appears exactly once, so no perfect square (other than 1) divides it: ' + t(sq(n)) + ' is already in simplest form.', ['Write the prime factorization of ' + t(F(n)) + '.'], 'square-free ' + n);
           } }] },
       { num: '6', section: 'Extra practice B — Comparing radicals', stem: '<b>No calculator.</b> Convert every radical to entire form first, then compare the radicands.', parts: [
-        { id: 'e6', level: 'ADV', make: function (r) { return orderPart(r, orderItems(r, 40, 99), false); } }] },
+        { id: 'e6', level: 'PRG', make: function (r) { return orderPart(r, orderItems(r, 40, 99), false); } }] },
       { num: '7', section: 'Extra practice C — Error analysis', stem: 'Each student made exactly one mistake.', parts: [
-        { id: 'e7', level: 'PRG', make: function (r) {
+        { id: 'e7', level: 'EMG', make: function (r) {
           var s = r.int(3, 7), m = r.pick([2, 3, 5]), N = s * s * m;
           return P.mc(r, '<b>Owen</b> writes ' + t(sq(N) + '=\\sqrt{' + s * s + '\\times ' + m + '}=' + s + sq(m)) + ', then says “and ' + t(s + sq(m)) + ' simplifies further to ' + t(sq(s * m)) + '.” What is his error?', [
             { html: 'Moving ' + t(s) + ' under the root means <b>squaring</b> it: ' + t(s + sq(m) + '=' + sq(N)) + ', not ' + t(sq(s * m)) + '. And ' + t(s + sq(m)) + ' is already in simplest form.', right: true },
@@ -557,7 +557,7 @@
       { num: '8', stem: function (sh) { return '<b>Quinn</b> writes ' + t(sq(sh.n) + '=\\sqrt{' + sh.t * sh.t + '\\times ' + F(sh.n / (sh.t * sh.t)) + '}=' + sh.t + sq(sh.n / (sh.t * sh.t))) + ' and stops there.'; },
         shared: function (r) { var o = r.pick([[6, 2], [6, 3], [10, 2], [10, 5], [12, 2], [12, 3], [12, 4], [12, 6], [15, 3], [15, 5], [20, 2], [20, 4]]), m = r.pick([2, 3, 5, 7]); return { s: o[0], t: o[1], m: m, n: o[0] * o[0] * m }; },
         parts: [
-          { id: 'e8a', level: 'PRG', make: function (r, sh) {
+          { id: 'e8a', level: 'EMG', make: function (r, sh) {
             var rest = sh.n / (sh.t * sh.t), u = sh.s / sh.t;
             return P.mc(r, 'What is Quinn’s mistake?', [
               { html: 'He didn’t finish: ' + t(F(rest)) + ' still contains the perfect square ' + t(u * u) + ', so it must come out too.', right: true },
@@ -567,26 +567,26 @@
               t(F(rest) + '=' + u * u + '\\times ' + sh.m) + ' still holds a perfect square, so ' + t(sh.t + sq(rest)) + ' is not in simplest form: ' + t(sh.t + sq(rest) + '=' + sh.t + '\\times ' + u + sq(sh.m) + '=' + sh.s + sq(sh.m)) + '. (Taking the largest perfect square first: ' + t(sq(sh.n) + '=\\sqrt{' + sh.s * sh.s + '\\times ' + sh.m + '}=' + sh.s + sq(sh.m)) + '.)',
               ['Is there a perfect square hiding in ' + t(F(rest)) + '?'], 'Quinn error √' + sh.n);
           } },
-          { id: 'e8b', level: 'PRG', make: function (r, sh) { var p = toMixed(1, sh.n); p.prompt = 'Give the correct simplest form of ' + t(sq(sh.n)) + '.'; return p; } }] },
+          { id: 'e8b', level: 'EMG', make: function (r, sh) { var p = toMixed(1, sh.n); p.prompt = 'Give the correct simplest form of ' + t(sq(sh.n)) + '.'; return p; } }] },
       { num: '9', section: 'Extra practice D — Combining, applying, stretching',
         stem: '<b>Beyond the booklet: like radicals.</b> Two radicals are <b>like radicals</b> when they have the same index and the same radicand, and only then can their coefficients be added or subtracted: ' + t('3\\sqrt{5}+4\\sqrt{5}=7\\sqrt{5}') + ', exactly as ' + t('3x+4x=7x') + '. The radicals below look unlike, so simplify each term to a mixed radical first, then combine.', parts: [
-          { id: 'e9a', level: 'ADV', make: function (r) { var m = r.pick([2, 3, 5, 6, 7]), ab = r.sample([2, 3, 4, 5], 2); return likePart([[1, ab[0]], [1, ab[1]]], m); } },
-          { id: 'e9b', level: 'ADV', make: function (r) { var v = pickWhere(r, function () { return [r.int(2, 4), r.int(2, 3), r.int(2, 6)]; }, function (x) { var d = x[0] * x[1] - x[2]; return d >= 1 && d <= 4 && x[1] !== x[2]; }) || [3, 2, 5]; return likePart([[v[0], v[1]], [-1, v[2]]], r.pick([2, 3, 5])); } },
-          { id: 'e9c', level: 'ADV', make: function (r) { var v = pickWhere(r, function () { return r.sample([2, 3, 4, 5], 3); }, function (x) { return x[0] + x[1] - x[2] >= 2; }) || [3, 4, 2]; return likePart([[1, v[0]], [1, v[1]], [-1, v[2]]], r.pick([2, 3, 5])); } }] },
+          { id: 'e9a', level: 'PRG', make: function (r) { var m = r.pick([2, 3, 5, 6, 7]), ab = r.sample([2, 3, 4, 5], 2); return likePart([[1, ab[0]], [1, ab[1]]], m); } },
+          { id: 'e9b', level: 'PRG', make: function (r) { var v = pickWhere(r, function () { return [r.int(2, 4), r.int(2, 3), r.int(2, 6)]; }, function (x) { var d = x[0] * x[1] - x[2]; return d >= 1 && d <= 4 && x[1] !== x[2]; }) || [3, 2, 5]; return likePart([[v[0], v[1]], [-1, v[2]]], r.pick([2, 3, 5])); } },
+          { id: 'e9c', level: 'PRG', make: function (r) { var v = pickWhere(r, function () { return r.sample([2, 3, 4, 5], 3); }, function (x) { return x[0] + x[1] - x[2] >= 2; }) || [3, 4, 2]; return likePart([[1, v[0]], [1, v[1]], [-1, v[2]]], r.pick([2, 3, 5])); } }] },
       { num: '10', stem: function (sh) { return 'A rectangular box measures ' + t(sh.d[0] + '\\text{ cm}\\times ' + sh.d[1] + '\\text{ cm}\\times ' + sh.d[2] + '\\text{ cm}') + '. The longest straight rod that fits inside runs corner to corner, and its length ' + t('d') + ' satisfies ' + t('d^{2}=' + sh.d[0] + '^{2}+' + sh.d[1] + '^{2}+' + sh.d[2] + '^{2}') + '.'; },
         shared: function (r) { return boxDims(r); },
         parts: [
-          { id: 'e10a', sub: 'i', level: 'PRG', make: function (r, sh) { var p = toEntire(sh.s, sh.m, { prompt: 'Give ' + t('d') + ' (in cm) as an <b>entire radical</b>.', more: boxDiag(sh), sol: boxSol(sh) }); p.text = 'box diagonal entire ' + sh.d.join('x');
+          { id: 'e10a', sub: 'i', level: 'EMG', make: function (r, sh) { var p = toEntire(sh.s, sh.m, { prompt: 'Give ' + t('d') + ' (in cm) as an <b>entire radical</b>.', more: boxDiag(sh), sol: boxSol(sh) }); p.text = 'box diagonal entire ' + sh.d.join('x');
             p.hints = ['Square all three dimensions and add them to get ' + t('d^{2}') + '.', 'Then ' + t('d=\\sqrt{d^{2}}') + ' — that square root is the entire radical.']; return p; } },
-          { id: 'e10b', sub: 'ii', level: 'PRG', make: function (r, sh) { var p = toMixed(1, sh.S, { prompt: 'Give ' + t('d') + ' (in cm) as a <b>mixed radical</b> in simplest form.', more: boxDiag(sh) }); p.solution = boxSol(sh) + '<br>' + mixedSol([1, 1], sh.S, ''); p.text = 'box diagonal mixed ' + sh.d.join('x'); return p; } },
-          { id: 'e10c', sub: 'iii', level: 'EMG', make: function (r, sh) { return P.approx('Give ' + t('d') + ' to the nearest hundredth of a centimetre.', Math.sqrt(sh.S), 2, { after: 'cm' }, boxSol(sh) + '<br>' + t('d=' + sq(sh.S) + '=' + Math.sqrt(sh.S).toFixed(5) + '\\ldots\\approx ' + K.roundTo(Math.sqrt(sh.S), 2).toFixed(2)) + ' cm.', ['Add the three squares, then take the square root on your calculator.'], 'box diagonal decimal ' + sh.d.join('x')); } }] },
+          { id: 'e10b', sub: 'ii', level: 'EMG', make: function (r, sh) { var p = toMixed(1, sh.S, { prompt: 'Give ' + t('d') + ' (in cm) as a <b>mixed radical</b> in simplest form.', more: boxDiag(sh) }); p.solution = boxSol(sh) + '<br>' + mixedSol([1, 1], sh.S, ''); p.text = 'box diagonal mixed ' + sh.d.join('x'); return p; } },
+          { id: 'e10c', sub: 'iii', level: 'BEG', make: function (r, sh) { return P.approx('Give ' + t('d') + ' to the nearest hundredth of a centimetre.', Math.sqrt(sh.S), 2, { after: 'cm' }, boxSol(sh) + '<br>' + t('d=' + sq(sh.S) + '=' + Math.sqrt(sh.S).toFixed(5) + '\\ldots\\approx ' + K.roundTo(Math.sqrt(sh.S), 2).toFixed(2)) + ' cm.', ['Add the three squares, then take the square root on your calculator.'], 'box diagonal decimal ' + sh.d.join('x')); } }] },
       { num: '11', stem: function (sh) {
           var a = sh.a, H = a * Math.sqrt(3);
           return 'An equilateral triangle has side length ' + t(2 * a) + ' cm. Dropping a perpendicular from one vertex splits it into two right triangles.' + fig({ A: [0, 0], B: [2 * a, 0], C: [a, H], D: [a, 0] }, { edges: [['A', 'B'], ['B', 'C'], ['C', 'A'], ['C', 'D']], right: [['D', 'C', 'B']], labels: [['A', 'C', String(2 * a)], ['B', 'C', String(2 * a)], ['A', 'D', String(a)], ['D', 'B', String(a)]], H: 120 });
         },
         shared: function (r) { return { a: r.int(2, 10) }; },
         parts: [
-          { id: 'e11a', level: 'ADV', make: function (r, sh) {
+          { id: 'e11a', level: 'PRG', make: function (r, sh) {
             var a = sh.a, p = toMixed(1, 3 * a * a, { prompt: 'Find the exact height as a mixed radical (in cm).', more: function (val) { return near(val, a * Math.sqrt(5)) ? { code: 'hyp-added', hint: 'The side ' + t(2 * a) + ' is the hypotenuse of each right triangle, so subtract: ' + t('h^{2}=' + 2 * a + '^{2}-' + a + '^{2}') + '.' } : null; } });
             p.solution = 'The perpendicular bisects the base, so each right triangle has hypotenuse ' + t(2 * a) + ' and base ' + t(a) + '.<br>' + t('h^{2}=' + 2 * a + '^{2}-' + a + '^{2}=' + 4 * a * a + '-' + a * a + '=' + 3 * a * a) + ', so ' + t('h=' + sq(3 * a * a) + '=' + ansTex(a, 3)) + ' cm.'; p.text = 'equilateral height side ' + 2 * a; return p;
           } },
@@ -600,7 +600,7 @@
             p.hints = ['Find the exact height first: the side is the hypotenuse of each right triangle.', 'Then use ' + t('A=\\tfrac{1}{2}bh') + ' with base ' + t(2 * a) + '.']; return p;
           } }] },
       { num: '12', stem: '<i>(Numerical Response)</i>', parts: [
-        { id: 'e12', level: 'ADV', make: function (r) {
+        { id: 'e12', level: 'PRG', make: function (r) {
           var s = 0, m = 0, n = 0;
           for (var i = 0; i < 200; i++) { s = r.int(25, 57); m = r.pick([2, 3]); n = s * s * m; if (n >= 1500 && n <= 9999) break; }
           var ans = s + m;
@@ -612,7 +612,7 @@
           }, t(F(n) + '=' + K.fac(n) + '=' + F(s * s) + '\\times ' + m) + ', and ' + t(F(s * s) + '=' + s + '^{2}') + '.<br>' + t(sq(n) + '=' + s + sq(m)) + ', so ' + t('a=' + s + ',\\ b=' + m) + ' and ' + t('a+b=' + ans) + '.', ['Write the prime factorization and pair off the primes.'], 'a+b for √' + n);
         } }] },
       { num: '13', stem: '<i>(Numerical Response)</i>', parts: [
-        { id: 'e13', level: 'ADV', make: function (r) {
+        { id: 'e13', level: 'PRG', make: function (r) {
           var sh = boxDims(r), ans = sh.s * sh.m;
           return P.nr('A box measures ' + t(sh.d[0] + '\\text{ cm}\\times ' + sh.d[1] + '\\text{ cm}\\times ' + sh.d[2] + '\\text{ cm}') + '. Its corner-to-corner diagonal ' + t('d') + ' (with ' + t('d^{2}=a^{2}+b^{2}+c^{2}') + ') is ' + t('p\\sqrt{q}') + ' in simplest form, where ' + t('p,q\\in N') + '. The value of ' + t('pq') + ' is ________.', ans, function (v) {
             if (v === sh.s + sh.m) return { code: 'sum', hint: 'The question asks for the product ' + t('pq') + ', not the sum.' };
@@ -621,7 +621,7 @@
           }, boxSol(sh) + '<br>' + mixedSol([1, 1], sh.S, '') + '<br>' + t('p=' + sh.s + ',\\ q=' + sh.m) + ', so ' + t('pq=' + ans) + '.', ['Add the three squares, then simplify the square root.'], 'box pq ' + sh.d.join('x'));
         } }] },
       { num: '14', stem: '<b>Stretch.</b> Run the whole process backwards.', parts: [
-        { id: 'e14', level: 'MAS', make: function (r) {
+        { id: 'e14', level: 'ADV', make: function (r) {
           var c = r.pick([5, 6, 7, 8, 9, 10, 12, 15]), ans = 2 * c * c;
           return P.nr('The <b>smallest</b> whole number ' + t('n') + ' for which ' + t('\\sqrt{n}') + ', in simplest form, is a mixed radical with coefficient exactly ' + t(c) + ' is ________.', ans, function (v) {
             if (v === c * c) return { code: 'whole', hint: t('\\sqrt{' + c * c + '}=' + c) + ' is a whole number, not a mixed radical. Something must be left under the root.' };
@@ -633,7 +633,7 @@
           ['A coefficient of ' + t(c) + ' outside the root means ' + t(c * c) + ' inside.', 'What is the smallest number you can leave under the root so that it is still a mixed radical?'], 'smallest n with coefficient ' + c);
         } }] },
       { num: '15', stem: '<b>Stretch.</b> Recall ' + t('n!=n\\times(n-1)\\times\\cdots\\times 2\\times 1') + '.', parts: [
-        { id: 'e15', level: 'MAS', make: function (r) {
+        { id: 'e15', level: 'ADV', make: function (r) {
           var n = r.pick([7, 8, 9, 10]), v = 1; for (var i = 2; i <= n; i++) v *= i;
           var f = nt.factor(v), out = 1, inn = 1; f.forEach(function (pe) { out *= Math.pow(pe[0], Math.floor(pe[1] / 2)); inn *= Math.pow(pe[0], pe[1] % 2); });
           var list = []; for (var j = 2; j <= n; j++) list.push(nt.isPrime(j) ? String(j) : K.fac(j));
