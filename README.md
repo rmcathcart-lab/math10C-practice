@@ -29,7 +29,7 @@ Homework practice for every Math 10C lesson, built from the course booklets. Eve
 | `js/catalog.js` | Units and lessons (a lesson is open once its lesson file exists) |
 | `teacher/` | The teacher dashboard |
 | `backend/Code.gs` | Google Apps Script backend (paste into the Apps Script project) |
-| `tests/` | `node tests/gen_test.js [runs] [lessonId]` (every generator), `node tests/kitx_test.js` (the shared checkers), `node tests/calc_test.js`, `tests/e2e.py` (Playwright, against `backend/mock_server.js`) |
+| `tests/` | `node tests/gen_test.js [runs] [lessonId]` (every generator), `node tests/kitx_test.js` (the shared checkers), `node tests/mathlive_form_test.js` (answer keys typed the way the MathLive keyboard writes them), `node tests/calc_test.js`, `tests/e2e.py` (Playwright, against `backend/mock_server.js`) |
 
 ## Adding a lesson
 

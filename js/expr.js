@@ -41,7 +41,21 @@
         if (name === '{' || name === 'lbrace') { out.push({ t: '(' }); continue; }
         if (name === '}' || name === 'rbrace') { out.push({ t: ')' }); continue; }
         if (name === 'vert' || name === '|' || name === 'lvert' || name === 'rvert') { out.push({ t: 'bar' }); continue; }
-        if (name === 'frac' || name === 'dfrac' || name === 'tfrac' || name === 'cfrac') { out.push({ t: 'frac' }); continue; }
+        if (name === 'frac' || name === 'dfrac' || name === 'tfrac' || name === 'cfrac') {
+          // TeX argument rules: each argument is a {group} or ONE character/command (MathLive writes 5/9 as \frac59)
+          out.push({ t: 'frac' });
+          for (var ai = 0; ai < 2; ai++) {
+            while (/\s/.test(peek())) i++;
+            if (!peek()) break; // missing argument: the parser reports it
+            var arg;
+            if (peek() === '{') { var dep = 0, j2 = i; for (; j2 < s.length; j2++) { if (s[j2] === '{' && s[j2 - 1] !== '\\') dep++; else if (s[j2] === '}' && s[j2 - 1] !== '\\') { dep--; if (!dep) break; } } if (j2 >= s.length) return { err: 'unbalanced' }; arg = s.slice(i + 1, j2); i = j2 + 1; if (!arg.trim()) return { err: 'blank' }; }
+            else if (peek() === '\\') { var cm = /^\\([a-zA-Z]+|.)/.exec(s.slice(i)); arg = cm[0]; i += cm[0].length; }
+            else { arg = peek(); i++; }
+            var sub2 = tokenize(arg); if (sub2.err) return sub2;
+            out.push({ t: '{' }); out = out.concat(sub2.toks); out.push({ t: '}' });
+          }
+          continue;
+        }
         if (name === 'sqrt') {
           if (peek() === '[') { var depth = 0, j = i; for (; j < s.length; j++) { if (s[j] === '[') depth++; else if (s[j] === ']') { depth--; if (!depth) break; } } var idx = s.slice(i + 1, j); i = j + 1; var it = parse(idx); if (!it.ok) return { err: it.code === 'empty' ? 'blank' : it.code }; out.push({ t: 'root', idx: it.ast }); }
           else out.push({ t: 'root', idx: null });

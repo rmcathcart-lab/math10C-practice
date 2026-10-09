@@ -56,4 +56,8 @@ var s2 = K.sci(0.000453, { sig: 2 }); T('sci small sig', s2, '4.5\\times10^{-4}'
 var sx = K.sci(2.4e-16); T('sci tiny ok', sx, '2.4\\times10^{-16}', 'correct'); T('sci tiny off', sx, '2.4\\times10^{-17}', 'wrong'); T('sci e-notation', sx, '2.4e-16', 'form', 'e-notation');
 var ve = K.expo('\\frac{r^{2n}}{s^{6n}}'); T('neg sym exp', ve, 'r^{2n}s^{-6n}', 'form', 'neg-exp'); T('sym ok', ve, '\\frac{r^{2n}}{s^{6n}}', 'correct');
 var vz = K.expo('z^{7}'); T('exp letter cancels', vz, '\\frac{z^{2n+7}}{z^{2n}}', 'form', 'combine');
+// MathLive writes one-digit fractions without braces: \frac59
+T('compact frac', K.fraction([5, 9]), '\\frac59', 'correct'); T('compact neg frac', K.fraction([-2, 3]), '-\\frac23', 'correct'); T('compact mixed', K.fraction([7, 3]), '2\\frac13', 'form', 'mixed-num');
+T('compact frac expo', K.expo('\\frac{3x^{4}}{7}'), '\\frac37x^4', 'correct');
+T('compact frac exponent', K.expo('x^{\\frac{2}{3}}'), 'x^{\\frac23}', 'correct'); T('compact radical frac', K.radical({ k: [1, 2], n: 2, m: 3 }, 'mixed'), '\\frac12\\sqrt3', 'correct');
 console.log(n + ' checks, ' + fails + ' failed'); process.exit(fails ? 1 : 0);
