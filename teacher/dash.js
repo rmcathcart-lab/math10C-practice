@@ -112,8 +112,8 @@
       var ls2 = s.lessons[r.lesson] || (s.lessons[r.lesson] = { done: 0, first: 0, extra: 0, items: {} });
       ls2.items[r.id] = r;
       if (counted) { if (r.extra) ls2.extra++; else { ls2.done++; if (r.credit === 'first') ls2.first++; } }
-      var la = s.levelAcc[r.outcome + '|' + r.level] || (s.levelAcc[r.outcome + '|' + r.level] = { tried: 0, first: 0 });
-      if (r.attempts && (!inOnly || r.correctIn || !r.correctAt)) { la.tried++; if (counted && r.credit === 'first') la.first++; }
+      var la = s.levelAcc[r.outcome + '|' + r.level] || (s.levelAcc[r.outcome + '|' + r.level] = { tried: 0, first: 0, hint: 0, shown: 0, right: 0 });
+      if (r.attempts && (!inOnly || r.correctIn || !r.correctAt)) { la.tried++; if (counted) { la[r.credit]++; if (allow[r.credit]) la.right++; } }
       if (counted && allow[r.credit]) { var cur = s.outcomes[r.outcome]; if (!cur || LV.indexOf(r.level) > LV.indexOf(cur)) s.outcomes[r.outcome] = r.level; }
     });
     D.days.forEach(function (d) { var s = S(d[1]); s.secs += Number(d[3]) || 0; s.secsIn += Number(d[4]) || 0; });
@@ -246,11 +246,12 @@
       sec.appendChild(el('div', 'group small', '<span class="muted">Click a band to list those students (a ready-made reteach group).</span>'));
       // grid: student x level accuracy
       var t = el('table', 'tbl ogrid');
-      var h = '<thead><tr><th>Student</th><th>Level reached</th>'; LV.forEach(function (l) { h += '<th class="c">' + l + '<div class="th-sub">first try</div></th>'; }); t.innerHTML = h + '</tr></thead>';
+      var sub = st.rule === 'first' ? 'right first try' : st.rule === 'any' ? 'right (any way)' : 'right (incl. hints)';
+      var h = '<thead><tr><th>Student</th><th>Level reached</th>'; LV.forEach(function (l) { h += '<th class="c">' + l + '<div class="th-sub">' + sub + '</div></th>'; }); t.innerHTML = h + '</tr></thead>';
       var tb = el('tbody');
       ss.forEach(function (s) {
         var lv = s.outcomes[o], row = '<td><a href="#" class="slink">' + esc(s.name) + '</a></td><td>' + (lv ? '<span class="lvl lvl-' + lv + '">' + LVN[lv] + '</span>' : '<span class="muted">—</span>') + '</td>';
-        LV.forEach(function (l) { var a = s.levelAcc[o + '|' + l]; row += '<td class="c">' + (a && a.tried ? '<span class="acc" style="--a:' + (a.first / a.tried) + '">' + a.first + '/' + a.tried + '</span>' : '<span class="muted">·</span>') + '</td>'; });
+        LV.forEach(function (l) { var a = s.levelAcc[o + '|' + l]; row += '<td class="c">' + (a && a.tried ? '<span class="acc" style="--a:' + (a.right / a.tried) + '" title="' + a.tried + ' tried: ' + a.first + ' first try, ' + a.hint + ' after a hint, ' + a.shown + ' after the answer was shown">' + a.right + '/' + a.tried + '</span>' : '<span class="muted">·</span>') + '</td>'; });
         var tr = el('tr'); tr.innerHTML = row; tr.querySelector('.slink').addEventListener('click', function (e) { e.preventDefault(); openStudent(s.name); }); tb.appendChild(tr);
       });
       t.appendChild(tb); sec.appendChild(wrapTbl(t));

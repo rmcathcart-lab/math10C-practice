@@ -223,8 +223,8 @@
   /* ---------------- the keypad ---------------- */
   // [primary label, 2nd label, primary action, 2nd action, class]
   var KEYS = [
-    [['2nd', '', 'second', null, 'k-2nd'], ['MODE', 'QUIT', 'mode', 'quit', 'k-fn'], ['DEL', 'INS', 'del', 'ins', 'k-fn'], ['◄', '', 'left', null, 'k-arrow'], ['►', '', 'right', null, 'k-arrow']],
-    [['LOG', '10<sup>x</sup>', 'log', 'tenx', 'k-fn'], ['PRB', '', 'prb', null, 'k-fn'], ['DATA', 'STAT', 'data', 'data', 'k-fn'], ['▲', '', 'up', null, 'k-arrow'], ['▼', '', 'down', null, 'k-arrow']],
+    [['2nd', '', 'second', null, 'k-2nd'], ['MODE', 'QUIT', 'mode', 'quit', 'k-fn'], ['DEL', 'INS', 'del', 'ins', 'k-fn']],
+    [['LOG', '10<sup>x</sup>', 'log', 'tenx', 'k-fn'], ['PRB', '', 'prb', null, 'k-fn'], ['DATA', 'STAT', 'data', 'data', 'k-fn']],
     [['LN', 'e<sup>x</sup>', 'ln', 'ex', 'k-fn'], ['a<sup>b</sup>/<sub>c</sub>', 'd/e', 'frac', 'mixed', 'k-fn'], ['F◂▸D', '', 'fd', null, 'k-fn'], ['%', '', 'pct', null, 'k-fn'], ['CLEAR', '', 'clear', null, 'k-clear']],
     [['π', '', 'pi', null, 'k-fn'], ['SIN', 'SIN<sup>-1</sup>', 'sin', 'asin', 'k-fn'], ['COS', 'COS<sup>-1</sup>', 'cos', 'acos', 'k-fn'], ['TAN', 'TAN<sup>-1</sup>', 'tan', 'atan', 'k-fn'], ['^', '<sup>x</sup>√', 'pow', 'root', 'k-op']],
     [['x<sup>-1</sup>', 'x!', 'inv', 'fact', 'k-fn'], ['EE', '', 'ee', null, 'k-fn'], ['(', '', 'lp', null, 'k-fn'], [')', '', 'rp', null, 'k-fn'], ['÷', '', 'div', null, 'k-op']],
@@ -233,6 +233,9 @@
     [['STO▸', 'RCL', 'sto', 'rcl', 'k-fn'], ['1', '', '1', null, 'k-num'], ['2', '', '2', null, 'k-num'], ['3', '', '3', null, 'k-num'], ['+', '', 'add', null, 'k-op']],
     [['ON', 'OFF', 'on', 'off', 'k-on'], ['0', '', '0', null, 'k-num'], ['.', '', '.', null, 'k-num'], ['(−)', 'ANS', 'neg', 'ans', 'k-num'], ['ENTER', '', 'enter', null, 'k-enter']]
   ];
+
+  // The arrow keys sit in a round 4-way pad at the top right, like the real TI-30XIIS (columns 4-5, rows 1-2).
+  var ARROWS = [['▲', 'up', 'ca-up'], ['◄', 'left', 'ca-left'], ['►', 'right', 'ca-right'], ['▼', 'down', 'ca-down']];
 
   Calc.prototype.press = function (act) {
     var c = this;
@@ -318,14 +321,22 @@
     var screen = el('div', 'calc-screen'), ind = el('div', 'calc-ind'), l1 = el('div', 'calc-l1'), l2 = el('div', 'calc-l2');
     screen.appendChild(ind); screen.appendChild(l1); screen.appendChild(l2);
     var pad = el('div', 'calc-pad');
-    KEYS.forEach(function (row) {
+    function wire(b, a1, a2) {
+      b.type = 'button'; b.dataset.a = a1; if (a2) b.dataset.b = a2;
+      b.addEventListener('pointerdown', function (e) { e.preventDefault(); var act = (c.second && a2) ? a2 : a1; c.press(act); render(); b.classList.add('down'); setTimeout(function () { b.classList.remove('down'); }, 90); });
+      b.addEventListener('click', function (e) { e.preventDefault(); });
+      return b;
+    }
+    KEYS.forEach(function (row, ri) {
       row.forEach(function (k) {
-        var b = el('button', 'ck ' + k[4], (k[1] ? '<span class="ck2">' + k[1] + '</span>' : '<span class="ck2">&nbsp;</span>') + '<span class="ck1">' + k[0] + '</span>'); b.type = 'button';
-        b.dataset.a = k[2]; if (k[3]) b.dataset.b = k[3];
-        b.addEventListener('pointerdown', function (e) { e.preventDefault(); var act = (c.second && k[3]) ? k[3] : k[2]; c.press(act); render(); b.classList.add('down'); setTimeout(function () { b.classList.remove('down'); }, 90); });
-        b.addEventListener('click', function (e) { e.preventDefault(); });
-        pad.appendChild(b);
+        pad.appendChild(wire(el('button', 'ck ' + k[4], (k[1] ? '<span class="ck2">' + k[1] + '</span>' : '<span class="ck2">&nbsp;</span>') + '<span class="ck1">' + k[0] + '</span>'), k[2], k[3]));
       });
+      if (ri === 0) {
+        var dpad = el('div', 'calc-dpad'), ring = el('div', 'cd-ring');
+        ARROWS.forEach(function (a) { var b = wire(el('button', 'ca ' + a[2], '<span>' + a[0] + '</span>'), a[1], null); b.setAttribute('aria-label', a[1]); ring.appendChild(b); });
+        ring.appendChild(el('div', 'cd-hub'));
+        dpad.appendChild(ring); pad.appendChild(dpad);
+      }
     });
     box.appendChild(head); box.appendChild(screen); box.appendChild(pad);
     document.body.appendChild(box);
