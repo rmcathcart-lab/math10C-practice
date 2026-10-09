@@ -206,12 +206,12 @@
       case 'div': return value(a.a, env) / value(a.b, env);
       case 'pow': var b = value(a.a, env), e = value(a.b, env); if (b < 0 && e % 1) { var r = ex.rat(a.b); if (r && r[1] % 2) return Math.pow(-Math.pow(-b, 1 / r[1]), r[0]); return NaN; } return Math.pow(b, e);
       case 'abs': return Math.abs(value(a.a, env));
-      case 'root': var n = value(a.n, env), x = value(a.a, env); if (x < 0) return n % 2 === 1 ? -Math.pow(-x, 1 / n) : NaN; var v = Math.pow(x, 1 / n), rv = Math.round(v); return Math.abs(Math.pow(rv, n) - x) < 1e-9 * Math.max(1, x) ? rv : v;
+      case 'root': var n = value(a.n, env), x = value(a.a, env); if (x < 0) return n % 2 === 1 ? -Math.pow(-x, 1 / n) : NaN; var v = Math.pow(x, 1 / n), rv = Math.round(v); return rv >= 1 && Math.abs(Math.pow(rv, n) - x) < 1e-9 * x ? rv : v;
     }
     return NaN;
   }
   ex.value = value;
-  ex.eq = function (x, y, rel) { if (!isFinite(x) || !isFinite(y)) return false; return Math.abs(x - y) <= (rel || 1e-9) * Math.max(1, Math.abs(x), Math.abs(y)); };
+  ex.eq = function (x, y, rel) { if (!isFinite(x) || !isFinite(y)) return false; var d = Math.abs(x - y); return d <= (rel || 1e-9) * Math.max(Math.abs(x), Math.abs(y)) || d < 1e-14; };
 
   /* exact rational, or null if the expression has a root, π or a variable */
   function rat(a) {
@@ -334,6 +334,48 @@
     den.forEach(function (d) { a = { t: 'div', a: a, b: d }; });
     return sign < 0 ? { t: 'neg', a: a } : a;
   }
+  /* How a product/quotient of powers is written (exponent-law answers).
+   * Returns { coef:[p,q]|null, vars:{x:[p,q]} (net exponents), flags:{...}, ok } where flags note things that are
+   * not "simplest form": negExp, zeroExp, repeatVar, nested (power of a bracket/power), numPow (unevaluated number
+   * power), coefSplit (numbers in both numerator and denominator), roots, ratExp (fractional exponents), complex. */
+  ex.analyze = function (a) {
+    var num = [], den = [], sign = flat(a, num, den, 1), coef = [sign, 1], vars = {}, seen = {}, f = { negExp: false, zeroExp: false, repeatVar: false, nested: false, numPow: false, coefSplit: false, roots: 0, ratExp: false, complex: false, numInNum: 0, numInDen: 0, varExpo: false }, pN = [1, 1], pD = [1, 1];
+    function mulC(r, inv) { if (!coef) return; coef = inv ? norm(coef[0] * r[1], coef[1] * r[0]) : norm(coef[0] * r[0], coef[1] * r[1]); if (coef && (!safe(coef[0]) || !safe(coef[1]))) coef = null; }
+    function addV(v, e, inv) { if (seen[v]) f.repeatVar = true; seen[v] = 1; var cur = vars[v] || [0, 1]; var s = inv ? -1 : 1; vars[v] = norm(cur[0] * e[1] + s * e[0] * cur[1], cur[1] * e[1]); }
+    function one(x, inv) {
+      if (x.t === 'paren') x = x.a;
+      if (x.t === 'num') { var rr = rat(x) || [x.v, 1]; mulC(rr, inv); if (inv) { f.numInDen++; pD = norm(pD[0] * rr[0], pD[1] * rr[1]); } else { f.numInNum++; pN = norm(pN[0] * rr[0], pN[1] * rr[1]); } return; }
+      if (x.t === 'var') { addV(x.n, [1, 1], inv); return; }
+      if (x.t === 'pow') {
+        var base = x.a; while (base.t === 'paren') base = base.a;
+        var e = rat(x.b);
+        if (!e) {
+          var ee = x.b; while (ee.t === 'paren') ee = ee.a;
+          var lead = ee; while (lead.t === 'add' || lead.t === 'sub' || lead.t === 'mul') lead = lead.a;
+          if ((ee.t === 'neg' || lead.t === 'neg' || (lead.t === 'num' && lead.v < 0)) && (ee.t !== 'add' && ee.t !== 'sub' || ee.t === 'neg')) f.negExp = true;
+          if (base.t === 'var') { f.varExpo = true; if (seen[base.n]) f.repeatVar = true; seen[base.n] = 1; return; } f.complex = true; return;
+        }
+        if (e[1] !== 1) f.ratExp = true;
+        var en = x.b; while (en.t === 'paren') en = en.a; if (en.t === 'neg') en = en.a;
+        if (en.t === 'num' && en.dec) f.decExp = true;
+        if (en.t === 'div') { var pf = ex.plainFraction(en); if (pf && gcd(pf[0], pf[1]) > 1) f.unreducedExp = true; if (!pf) f.unreducedExp = true; }
+        if (en.t === 'add' || en.t === 'sub' || en.t === 'mul') f.unreducedExp = true;
+        if (e[0] === 0) f.zeroExp = true;
+        if (e[0] < 0) f.negExp = true;
+        if (base.t === 'var') { addV(base.n, e, inv); return; }
+        if (base.t === 'num') { f.numPow = true; var r = rat(x); if (r) mulC(r, inv); else f.complex = true; if (inv) f.numInDen++; else f.numInNum++; return; }
+        f.nested = true; return;
+      }
+      if (x.t === 'root') { f.roots++; return; }
+      if (x.t === 'div' || x.t === 'mul' || x.t === 'neg') { var n2 = [], d2 = [], s2 = flat(x, n2, d2, 1); if (s2 < 0) mulC([-1, 1], false); n2.forEach(function (y) { one(y, inv); }); d2.forEach(function (y) { one(y, !inv); }); return; }
+      f.complex = true;
+    }
+    num.forEach(function (x) { one(x, false); });
+    den.forEach(function (x) { one(x, true); });
+    if (f.numInNum > 1 || f.numInDen > 1 || (f.numInNum && f.numInDen && (pN[1] !== 1 || pD[1] !== 1 || gcd(pN[0], pD[0]) > 1))) f.coefSplit = true;
+    return { coef: coef, vars: vars, flags: f };
+  };
+
   /* numeric equivalence at a few positive sample points (for answers with variables) */
   ex.equiv = function (a, b, vars, n) {
     vars = vars || []; n = n || 5;

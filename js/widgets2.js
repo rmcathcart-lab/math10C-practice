@@ -30,6 +30,13 @@
     var: [[d(7), d(8), d(9), K.sqrt, K.cbrt, K.nrt, K.del], [d(4), d(5), d(6), K.x, K.y, K.pow, K.clear], [d(1), d(2), d(3), K.a, K.b, K.left, K.right], [d(0), K.neg, K.times, K.frac, K.enter]],
     abs: [[d(7), d(8), d(9), K.abs, K.del], [d(4), d(5), d(6), K.neg, K.clear], [d(1), d(2), d(3), K.left, K.right], [d(0), K.dot, K.frac, K.enter]]
   };
+  /* exponent laws: digits, powers, fractions, roots, brackets, and a row with the question's letters (opt.vars) */
+  W.KEYSETS.expo = function (opt) {
+    var vs = (opt && opt.vars && opt.vars.length ? opt.vars : ['x', 'y']).slice(0, 7).map(function (v) { return { label: '<i>' + v + '</i>', tex: v, plain: v }; });
+    var par = { label: '( )', tex: '\\left(#0\\right)', plain: '(', title: 'Brackets' };
+    return [[d(7), d(8), d(9), K.pow, K.frac, K.del], [d(4), d(5), d(6), K.sqrt, K.nrt, K.clear], [d(1), d(2), d(3), K.neg, K.left, K.right], [d(0), K.dot, K.times, par, K.enter], vs.concat(opt && opt.pi ? [K.pi] : [])];
+  };
+  W.KEYSETS.sci = [[d(7), d(8), d(9), { label: '×10<sup>n</sup>', tex: '\\times10^{#?}', plain: ' × 10^', title: 'Times ten to a power' }, K.del], [d(4), d(5), d(6), K.neg, K.clear], [d(1), d(2), d(3), K.left, K.right], [d(0), K.dot, K.enter]];
   W.KEYHELP = {
     radical: ['Use <b>√</b>, <b>∛</b> or <b><sup>n</sup>√</b> for roots. Type the number in front first, e.g. 3 then √ then 5 for ' + HW.k('3\\sqrt{5}') + '. Press <b>▶</b> to step out of the root.',
       'Type roots as <code>3sqrt(5)</code> or <code>2cbrt(4)</code>.'],
@@ -37,7 +44,9 @@
     decimal: ['For a repeating decimal, type the digits that don’t repeat, then press <b><span style="text-decoration:overline">x</span></b> and type the repeating block, e.g. ' + HW.k('0.1\\overline{6}') + '.', 'For a repeating decimal, type <code>0.1\\overline{6}</code>.'],
     expr: ['Use the keypad for roots, fractions, exponents and π. Press <b>▶</b> to step out of a box.', 'Type roots as <code>sqrt(5)</code>, fractions as <code>3/4</code> and powers as <code>2^3</code>.'],
     var: ['Type the number in front, then the variables, then the root, e.g. 3, x, √, 2, x for ' + HW.k('3x\\sqrt{2x}') + '. Use <b>x<sup>n</sup></b> for exponents.', 'Type e.g. <code>3x sqrt(2x)</code> or <code>x^2 cbrt(3y)</code>.'],
-    abs: ['Use <b>|x|</b> for absolute value bars.', 'Type absolute value bars with <code>|</code>.']
+    abs: ['Use <b>|x|</b> for absolute value bars.', 'Type absolute value bars with <code>|</code>.'],
+    expo: ['Use <b>x<sup>n</sup></b> for an exponent (a negative or fraction can go in the exponent box) and <b><sup>a</sup>⁄<sub>b</sub></b> for a fraction. Press <b>▶</b> to step out of a box.', 'Type powers as <code>x^5</code> or <code>x^(2/3)</code> and fractions with <code>/</code>, e.g. <code>3x^4/(2y^2)</code>.'],
+    sci: ['Type the number, then press <b>×10<sup>n</sup></b> and type the exponent, e.g. ' + HW.k('3.2\\times10^{5}') + '.', 'Type e.g. <code>3.2 × 10^5</code>.']
   };
 
   /* ---------- ordering: tap the items in order ---------- */
@@ -117,7 +126,7 @@
       if (f.before) row.appendChild(el('span', 'ans-affix', HW.tex(f.before)));
       var box;
       if (f.mode === 'math') {
-        var m = W.math({ keys: f.keys || 'product', keypad: false, placeholder: f.placeholder });
+        var m = W.math({ keys: f.keys || 'product', vars: f.vars, keypad: false, placeholder: f.placeholder });
         m.node.classList.add('fld-math');
         row.appendChild(m.node);
         box = { kind: 'math', w: m, get: function () { var v = String(m.value() || '').trim(); var tx = /^\\text\{([^}]*)\}$/.exec(v); if (tx) return tx[1].trim(); if (/^\\(mathrm|text)\{none\}|^none$/i.test(v.replace(/\s/g, ''))) return 'none'; return v; },
@@ -139,7 +148,8 @@
       boxes.push(box); wrap.appendChild(row);
     });
     if (mathKeys) {
-      var rows = (W.KEYSETS[mathKeys] || W.KEYSETS.product).map(function (r) { return r.slice(); });
+      var ksx = W.KEYSETS[mathKeys] || W.KEYSETS.product; if (typeof ksx === 'function') ksx = ksx({ vars: opt.fields.reduce(function (acc, f) { return acc.concat(f.vars || []); }, []).filter(function (v, i, arr) { return arr.indexOf(v) === i; }) });
+      var rows = ksx.map(function (r) { return r.slice(); });
       if (wantNone) rows[rows.length - 1].splice(rows[rows.length - 1].length - 1, 0, { label: 'none', tex: '\\text{none}', plain: 'none', title: 'There is no such root' });
       var kp = W.keypad(rows, function (k) { if (k.fn === 'enter') { if (enter) enter(); return; } if (active) active.w.press(k); });
       kp.classList.add('kp-small'); wrap.appendChild(kp);

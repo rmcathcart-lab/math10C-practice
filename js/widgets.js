@@ -152,7 +152,7 @@
       };
       api.kind = 'mathlive';
     } else {
-      var inp = plainInput(opt.placeholder || ({ radical: 'e.g. 3sqrt(5)', fraction: 'e.g. 3/4', decimal: 'e.g. 0.1\\overline{6}', expr: 'Your answer', var: 'e.g. 3x sqrt(2x)', abs: 'Your answer' })[opt.keys] || 'e.g. 2^3 × 3 × 11', 'text'); inp.classList.add('ans-wide');
+      var inp = plainInput(opt.placeholder || ({ radical: 'e.g. 3sqrt(5)', fraction: 'e.g. 3/4', decimal: 'e.g. 0.1\\overline{6}', expr: 'Your answer', var: 'e.g. 3x sqrt(2x)', abs: 'Your answer', expo: 'e.g. 3x^4/(2y^2)', sci: 'e.g. 3.2 × 10^5' })[opt.keys] || 'e.g. 2^3 × 3 × 11', 'text'); inp.classList.add('ans-wide');
       var prev = el('div', 'preview muted', 'Your answer will appear here as math.');
       var row2 = el('div', 'ans-row'); if (opt.before) row2.appendChild(el('span', 'ans-affix', HW.tex(opt.before)));
       row2.appendChild(inp); wrap.appendChild(row2); wrap.appendChild(prev);
@@ -173,7 +173,8 @@
       };
       api.kind = 'text';
     }
-    var keys = (typeof opt.keys === 'string' && opt.keys !== 'product' ? W.KEYSETS[opt.keys] : typeof opt.keys === 'object' ? opt.keys : null) || [
+    var ks = typeof opt.keys === 'string' && opt.keys !== 'product' ? W.KEYSETS[opt.keys] : null; if (typeof ks === 'function') ks = ks(opt);
+    var keys = (ks || (typeof opt.keys === 'object' ? opt.keys : null)) || [
       [{ label: '7', tex: '7', plain: '7' }, { label: '8', tex: '8', plain: '8' }, { label: '9', tex: '9', plain: '9' }, { label: '×', tex: '\\times', plain: ' × ', title: 'Multiply' }, { label: '⌫', fn: 'del' }],
       [{ label: '4', tex: '4', plain: '4' }, { label: '5', tex: '5', plain: '5' }, { label: '6', tex: '6', plain: '6' }, { label: 'x<sup>n</sup>', tex: '#@^{#?}', plain: '^', title: 'Exponent' }, { label: 'clear', fn: 'clear' }],
       [{ label: '1', tex: '1', plain: '1' }, { label: '2', tex: '2', plain: '2' }, { label: '3', tex: '3', plain: '3' }, { label: '◀', fn: 'left', title: 'Move left' }, { label: '▶', fn: 'right', title: 'Move right (out of an exponent)' }],

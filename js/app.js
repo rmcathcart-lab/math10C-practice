@@ -396,7 +396,7 @@
     switch (I.type) {
       case 'number': return W.number({ nr: I.nr, before: I.before, after: I.after });
       case 'list': return W.list({});
-      case 'math': return W.math({ before: I.before, keys: I.keys, placeholder: I.placeholder });
+      case 'math': return W.math({ before: I.before, keys: I.keys, vars: I.vars, pi: I.pi, placeholder: I.placeholder });
       case 'mc': return W.mc({ options: I.options, columns: I.columns });
       case 'select': return W.select({ options: I.options });
       case 'classify': return W.classify({ n: I.n });

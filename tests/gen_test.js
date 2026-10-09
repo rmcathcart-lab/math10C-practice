@@ -8,7 +8,9 @@ ctx.window = ctx; ctx.globalThis = ctx;
 vm.createContext(ctx);
 var only = process.argv[3] || null;
 var lessonFiles = fs.readdirSync(path.join(root, 'js/lessons')).filter(function (f) { return /\.js$/.test(f); }).sort().map(function (f) { return 'js/lessons/' + f; });
-['assets/katex/katex.min.js', 'js/core.js', 'js/expr.js', 'js/kit.js', 'js/kitx.js'].concat(lessonFiles).forEach(function (f) { vm.runInContext(fs.readFileSync(path.join(root, f), 'utf8'), ctx, { filename: f }); });
+['assets/katex/katex.min.js', 'js/core.js', 'js/expr.js', 'js/kit.js', 'js/kitx.js'].forEach(function (f) { vm.runInContext(fs.readFileSync(path.join(root, f), 'utf8'), ctx, { filename: f }); });
+var loadErrors = 0;
+lessonFiles.forEach(function (f) { try { vm.runInContext(fs.readFileSync(path.join(root, f), 'utf8'), ctx, { filename: f }); } catch (e) { loadErrors++; console.log('LOAD ERROR', f, e.message); } });
 var HW = ctx.HW, RUNS = Number(process.argv[2] || 400), errors = 0, total = 0, seenNums = {};
 Object.keys(HW.lessons).forEach(function (lid) {
   if (only && lid !== only) return;
@@ -51,4 +53,4 @@ Object.keys(HW.lessons).forEach(function (lid) {
 });
 console.log('variety (distinct prompts per item):', JSON.stringify(seenNums));
 console.log(total + ' instances, ' + errors + ' errors');
-process.exit(errors ? 1 : 0);
+process.exit(errors || loadErrors ? 1 : 0);

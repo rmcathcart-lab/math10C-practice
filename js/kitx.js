@@ -282,6 +282,91 @@
     };
   };
 
+  /* ---- exponent-law answers: an expression equal to targetTex, in simplest form.
+   * opt.positive (default true): no negative or zero exponents.  opt.evaluate (default true): number powers worked out.
+   * opt.form: null | 'power' (no radicals) | 'radical' (no fractional exponents) | 'single-power' (one power, e.g. 4096^{1/6}).
+   * opt.diag(analysis, ast) -> {code, hint} for lesson-specific mistakes. Variables are assumed positive. ---- */
+  function expoVars(ast, acc) { (function w(x) { if (!x || typeof x !== 'object') return; if (x.t === 'var') acc[x.n] = 1; ['a', 'b', 'n'].forEach(function (k) { if (x[k]) w(x[k]); }); })(ast); return acc; }
+  function baseVarsOf(ast) { var acc = {}; (function w(x) { if (!x || typeof x !== 'object') return; if (x.t === 'var') acc[x.n] = 1; if (x.t === 'pow') { w(x.a); return; } ['a', 'b', 'n'].forEach(function (k) { if (x[k]) w(x[k]); }); })(ast); return acc; }
+  K.expo = function (targetTex, opt) {
+    opt = opt || {};
+    var tp = ex.parse(targetTex); if (!tp.ok) throw new Error('bad target ' + targetTex + ' (' + tp.code + ')');
+    var tvars = Object.keys(expoVars(tp.ast, {})), ta = ex.analyze(tp.ast), positive = opt.positive !== false, evaluate = opt.evaluate !== false;
+    var tval = tvars.length ? null : ex.value(tp.ast);
+    return function (resp) {
+      var a = K.read(resp); if (a.res) return a.res;
+      var sv = Object.keys(expoVars(a.ast, {})), all = tvars.concat(sv.filter(function (v) { return tvars.indexOf(v) < 0; }));
+      var same = tvars.length || sv.length ? ex.equiv(a.ast, tp.ast, all, 6) : ex.eq(a.val, tval);
+      var an = ex.analyze(a.ast), f = an.flags;
+      if (same) {
+        var extra = sv.filter(function (v) { return tvars.indexOf(v) < 0; }), bv = baseVarsOf(a.ast);
+        if (extra.length && extra.every(function (v) { return !bv[v]; })) return form('combine', 'Right value — now combine the powers of the same base into one power and simplify its exponent.');
+        if (extra.length) return form('zero-exp', 'Right value — but ' + t(extra[0]) + ' cancels out completely (' + t(extra[0] + '^{0}=1') + '), so leave it out.');
+        if (opt.form === 'radical') { if (f.ratExp || /\^\{?\s*\\frac|\^\{?-?\d+\/\d+/.test(String(resp))) return form('not-radical', 'Right value — now write it in <b>radical form</b> (use the root key; no fractional exponents).'); return ok(); }
+        if (opt.form === 'single-power') { var top = a.ast; while (top.t === 'paren') top = top.a; if (top.t !== 'pow') return form('single-power', 'Right value — but write it as a <b>single power</b> (one base with one exponent), as the question asks.'); }
+        if ((opt.form === 'power' || opt.form === 'single-power') && f.roots) return form('not-power', 'Right value — now write it with a rational exponent instead of a radical.');
+        if (opt.form === 'single-power') return ok();
+        if (positive && f.negExp) return form('neg-exp', 'Right value — now write it with <b>positive exponents</b> only: move each power with a negative exponent to the other side of the fraction bar.');
+        if (positive && f.zeroExp) return form('zero-exp', 'Right value — but anything to the power ' + t('0') + ' is ' + t('1') + ', so simplify that part.');
+        if (f.nested) return form('brackets', 'Right value — now remove the brackets: apply the outside exponent to every factor inside.');
+        if (f.repeatVar) return form('combine', 'Right value — now combine the powers of the same base into one power.');
+        if (evaluate && f.numPow && opt.form !== 'single-power') return form('evaluate', 'Right value — now work out the number powers, e.g. ' + t('2^{3}=8') + '.');
+        if (f.decExp || f.unreducedExp) return form('exp-form', 'Right value — now simplify each exponent to a single number or fraction in lowest terms.');
+        if (!opt.form && f.roots && !ta.flags.roots) return form('not-power', 'Right value — write it with exponents instead of a radical.');
+        if (f.coefSplit) return form('coef', 'Right value — now simplify the numbers into a single coefficient (reduce any fraction).');
+        if (f.complex && !opt.anyForm) return form('simplify', 'That has the right value, but simplify it further.');
+        return ok();
+      }
+      if (!isFinite(a.val) && !sv.length) return wrong('undefined', null);
+      var h = opt.diag ? opt.diag(an, a.ast) : null;
+      if (h) return wrong(h.code || 'diag', h.hint);
+      // compare coefficient and exponents with the target
+      if (an.coef && ta.coef && !f.complex && !ta.flags.complex && !f.roots && !ta.flags.roots) {
+        var tv = ta.vars, sv2 = an.vars, keys = Object.keys(tv).concat(Object.keys(sv2)).filter(function (v, i, arr) { return arr.indexOf(v) === i; });
+        var bad = keys.filter(function (v) { var x = tv[v] || [0, 1], y = sv2[v] || [0, 1]; return x[0] * y[1] !== y[0] * x[1]; });
+        var coefOk = an.coef[0] * ta.coef[1] === ta.coef[0] * an.coef[1], coefNeg = an.coef[0] * ta.coef[1] === -ta.coef[0] * an.coef[1];
+        if (!bad.length && coefNeg) return wrong('sign', (keys.length ? 'Your variables are right — check' : 'Check') + ' the <b>sign</b>. A negative base to an even power is positive; to an odd power it stays negative.');
+        if (!bad.length && !coefOk && keys.length) return wrong('coef', 'Your variable part is right — check the <b>number</b> in front. Coefficients multiply or divide (they don’t add), and a coefficient inside brackets is raised to the outside power too.');
+        if (bad.length) {
+          var v = bad[0], x = tv[v] || [0, 1], y = sv2[v] || [0, 1];
+          if (x[0] * y[1] === -y[0] * x[1]) return wrong('flip-exp', 'Check ' + t(v) + ': it’s on the wrong side of the fraction bar (or its exponent has the wrong sign).');
+          return wrong('exp', (coefOk ? 'The coefficient is right, but check' : 'Check') + ' the exponent on ' + t(v) + '. Product law: add exponents. Quotient law: subtract. Power of a power: multiply.');
+        }
+      }
+      return wrong('value', null);
+    };
+  };
+
+  /* ---- scientific notation: a × 10^n with 1 ≤ |a| < 10 equal to value (opt.sig: significant digits required) ---- */
+  K.sciParts = function (x) { if (x === 0) return { a: 0, n: 0 }; var n = Math.floor(Math.log10(Math.abs(x)) + 1e-12), a = x / Math.pow(10, n); if (Math.abs(a) >= 10 - 1e-12) { a /= 10; n++; } return { a: Number(a.toPrecision(12)), n: n }; };
+  K.sciTex = function (x, sig) { var p = K.sciParts(x), a = sig ? Number(p.a.toPrecision(sig)).toFixed(Math.max(0, sig - 1)) : String(p.a); if (sig && Math.abs(Number(a)) >= 10) { p = K.sciParts(Number(a) * Math.pow(10, p.n)); a = Number(p.a).toFixed(Math.max(0, sig - 1)); } return a + '\\times 10^{' + p.n + '}'; };
+  K.sci = function (x, opt) {
+    opt = opt || {};
+    var want = opt.sig ? Number(Number(x).toPrecision(opt.sig)) : x;
+    return function (resp) {
+      if (/\d(\.\d+)?\s*[eE]\s*[-+−]?\d/.test(String(resp || ''))) return form('e-notation', 'That looks like calculator E-notation. Write it as ' + t('a\\times 10^{n}') + ' using the ×10ⁿ key.');
+      if (/\d\s*[xX]\s*10/.test(String(resp || ''))) return form('x-times', 'Use the ' + t('\\times') + ' key (or *) for “times”, not the letter x.');
+      var a = K.read(resp); if (a.res) return a.res;
+      var top = a.ast, sgn = 1; while (top.t === 'neg' || top.t === 'paren') { if (top.t === 'neg') sgn = -sgn; top = top.a; }
+      var coefNode = null, pw = null;
+      if (top.t === 'mul' && top.b.t === 'pow' && top.b.a.t === 'num' && top.b.a.v === 10) { coefNode = top.a; pw = top.b; }
+      else if (top.t === 'pow' && top.a.t === 'num' && top.a.v === 10) { coefNode = { t: 'num', v: 1, s: '1' }; pw = top; }
+      var close = opt.sig ? Math.abs(a.val - want) <= 1e-9 * Math.abs(want) || Number(a.val.toPrecision(opt.sig)) === want : (x === 0 ? a.val === 0 : Math.abs(a.val - x) <= 1e-9 * Math.abs(x));
+      if (!close) {
+        if (pw && Math.abs(Math.abs(a.val) - Math.abs(want)) <= 1e-9 * Math.abs(want)) return wrong('sign', 'Check the sign.');
+        if (pw) { var r = a.val / want, lg = Math.log10(Math.abs(r)); if (Math.abs(lg - Math.round(lg)) < 1e-9 && Math.round(lg) !== 0) return wrong('power-off', 'The digits are right, but the power of ' + t('10') + ' is off by ' + t(Math.abs(Math.round(lg))) + '. Count how many places the decimal point moves, and in which direction.'); }
+        if (opt.diag) { var h = opt.diag(a.val, a.ast); if (h) return wrong(h.code || 'diag', h.hint); }
+        if (opt.sig && ex.eq(a.val, x, 1e-6)) return form('sig', 'Right value — now round the coefficient to ' + opt.sig + ' significant digits.');
+        return wrong('value', null);
+      }
+      if (!pw) return form('not-sci', 'Right value — now write it in <b>scientific notation</b>: ' + t('a\\times 10^{n}') + ' with ' + t('1\\le a<10') + '.');
+      var c = Math.abs(ex.value(coefNode));
+      if (!(c >= 1 && c < 10)) return form('coef-range', 'Right value, but in scientific notation the number in front must be at least ' + t('1') + ' and less than ' + t('10') + '. Move the decimal point and adjust the power of ' + t('10') + '.');
+      if (opt.sig && coefNode.t === 'num') { var digs = coefNode.s.replace('.', '').replace(/^0+/, ''); if (digs.length > opt.sig) return form('sig', 'Round the coefficient to ' + opt.sig + ' significant digits.'); }
+      return ok();
+    };
+  };
+
   /* labels for the error codes above (teacher dashboard → Questions). Lessons add their own with HW.addCodes({...}) */
   HW.CODES = HW.CODES || {};
   HW.addCodes = function (o) { Object.keys(o).forEach(function (k) { HW.CODES[k] = o[k]; }); };
@@ -293,7 +378,10 @@
     'var-exp': 'Didn’t divide the variable exponent by the index', var: 'Stray variable', 'as-decimal': 'Not written as a decimal', dots: 'Used … instead of a bar',
     'no-bar': 'Didn’t show the repeating block', 'bar-block': 'Bar over the wrong digits', round: 'Not rounded', places: 'Rounded to the wrong place', truncate: 'Chopped instead of rounding',
     order: 'Two items in the wrong order', incomplete: 'Unfinished', row: 'A row of the table wrong', undefined: 'Undefined value',
-    'mc-said-true': 'Said true (it’s false)', 'mc-said-false': 'Said false (it’s true)'
+    'mc-said-true': 'Said true (it’s false)', 'mc-said-false': 'Said false (it’s true)',
+    'neg-exp': 'Left a negative exponent', 'zero-exp': 'Left a zero exponent / cancelled variable', brackets: 'Left brackets (power not distributed)', combine: 'Didn’t combine powers of the same base',
+    evaluate: 'Didn’t evaluate a number power', coef: 'Wrong coefficient', exp: 'Wrong exponent', 'flip-exp': 'Variable on the wrong side of the fraction bar', 'not-radical': 'Not in radical form',
+    'not-power': 'Not written as a power', 'exp-form': 'Exponent not simplified', 'x-times': 'Typed x for times', 'e-notation': 'Used calculator E-notation', 'single-power': 'Not a single power', 'power-off': 'Power of 10 off', 'not-sci': 'Not in scientific notation', 'coef-range': 'Coefficient not between 1 and 10', sig: 'Wrong number of significant digits'
   });
 
   /* ---------------- part builders ---------------- */
@@ -327,6 +415,15 @@
     var key = K.radTex(spec);
     if (mode === 'entire') { var EM = String(Math.round(Math.pow(Math.abs(rv(spec.k)), spec.n) * spec.m)); key = rv(spec.k) >= 0 ? ex.texRoot(spec.n, EM) : spec.n % 2 ? ex.texRoot(spec.n, '-' + EM) : '-' + ex.texRoot(spec.n, EM); }
     return P.math(prompt, K.radical(spec, mode, opt), key, sol, hints, text, { keys: 'radical', before: opt.before });
+  };
+  /* exponent-law answer. vars: the letters the student may need (keypad keys) */
+  P.expo = function (prompt, targetTex, opt, sol, hints, text) {
+    opt = opt || {}; var vs = Object.keys(expoVars(ex.parse(targetTex).ast, {})).concat(opt.vars || []).filter(function (v, i, arr) { return arr.indexOf(v) === i; }).sort();
+    return P.math(prompt, K.expo(targetTex, opt), targetTex, sol, hints, text, { keys: 'expo', vars: vs, pi: /\\pi/.test(targetTex) || !!opt.pi, before: opt.before });
+  };
+  P.sci = function (prompt, x, opt, sol, hints, text) {
+    opt = opt || {};
+    return P.math(prompt, K.sci(x, opt), K.sciTex(x, opt.sig), sol, hints, text, { keys: 'sci', before: opt.before });
   };
   P.fraction = function (prompt, fr, opt, sol, hints, text) {
     opt = opt || {}; fr = ex.norm(R(fr)[0], R(fr)[1]);

@@ -92,7 +92,7 @@
       var p = HW.parse.number(resp);
       if (!p.ok) return form(p.code === 'empty' ? 'empty' : 'notnumber', p.code === 'empty' ? 'Type your answer first.' : 'Enter a single number' + (opt.nr ? ' (numerical response: digits only).' : '.'));
       if (opt.nr && String(resp).replace(/\s/g, '').length > 4) return form('nr-long', 'Numerical response answers fit in 4 boxes (digits and a decimal point only).');
-      if (Math.abs(p.value - ans) < 1e-9) return ok();
+      if (Math.abs(p.value - ans) < 1e-9 * Math.max(1e-6, Math.abs(ans)) || p.value === ans) return ok();
       var h = diag ? diag(p.value) : null;
       if (h) return wrong(h.code || 'diag', h.hint || h);
       return wrong('value', null);
