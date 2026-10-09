@@ -276,7 +276,7 @@
     'triple-579': 'Used 5, 7, 9 (9 isn’t prime)', 'triple-135': 'Used 1, 3, 5 (1 isn’t prime)', 'triple-other': 'Used a triplet with a composite', 'not-smallest': 'Right count, not the smallest number', 'no-plus1': 'Forgot +1 on the exponents', added: 'Added instead of multiplied',
     seven: 'Left out the 7', not3: 'Number without exactly 3 factors', 'even-count': 'Number with an even factor count', 'not-largest': 'A prime factor, not the largest'
   };
-  function codeLabel(c) { if (/^mc-/.test(c)) return 'Chose a wrong option'; return CODE[c] || c; }
+  function codeLabel(c) { var X = HW.CODES || {}; if (X[c]) return X[c]; if (/^mc-/.test(c)) return 'Chose a wrong option'; return CODE[c] || c; }
   function renderQuestions(body) {
     var ls2 = builtLessons(), lesson = HW.lessons[st.lesson] || ls2[0]; if (!lesson) return;
     var bar = el('div', 'opt-row');

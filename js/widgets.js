@@ -152,7 +152,7 @@
       };
       api.kind = 'mathlive';
     } else {
-      var inp = plainInput(opt.placeholder || 'e.g. 2^3 × 3 × 11', 'text'); inp.classList.add('ans-wide');
+      var inp = plainInput(opt.placeholder || ({ radical: 'e.g. 3sqrt(5)', fraction: 'e.g. 3/4', decimal: 'e.g. 0.1\\overline{6}', expr: 'Your answer', var: 'e.g. 3x sqrt(2x)', abs: 'Your answer' })[opt.keys] || 'e.g. 2^3 × 3 × 11', 'text'); inp.classList.add('ans-wide');
       var prev = el('div', 'preview muted', 'Your answer will appear here as math.');
       var row2 = el('div', 'ans-row'); if (opt.before) row2.appendChild(el('span', 'ans-affix', HW.tex(opt.before)));
       row2.appendChild(inp); wrap.appendChild(row2); wrap.appendChild(prev);
@@ -173,16 +173,17 @@
       };
       api.kind = 'text';
     }
-    var keys = opt.keys || [
+    var keys = (typeof opt.keys === 'string' ? W.KEYSETS[opt.keys] : opt.keys) || [
       [{ label: '7', tex: '7', plain: '7' }, { label: '8', tex: '8', plain: '8' }, { label: '9', tex: '9', plain: '9' }, { label: '×', tex: '\\times', plain: ' × ', title: 'Multiply' }, { label: '⌫', fn: 'del' }],
       [{ label: '4', tex: '4', plain: '4' }, { label: '5', tex: '5', plain: '5' }, { label: '6', tex: '6', plain: '6' }, { label: 'x<sup>n</sup>', tex: '#@^{#?}', plain: '^', title: 'Exponent' }, { label: 'clear', fn: 'clear' }],
       [{ label: '1', tex: '1', plain: '1' }, { label: '2', tex: '2', plain: '2' }, { label: '3', tex: '3', plain: '3' }, { label: '◀', fn: 'left', title: 'Move left' }, { label: '▶', fn: 'right', title: 'Move right (out of an exponent)' }],
       [{ label: '0', tex: '0', plain: '0', wide: true }, { label: 'Check ↵', fn: 'enter', wide: true }]];
     var kp = keypad(keys, function (k) { if (k.fn === 'enter') { if (enter) enter(); return; } api.press(k); });
     kp.classList.add('kp-small'); wrap.appendChild(kp);
-    wrap.appendChild(el('div', 'w-help', api.kind === 'mathlive'
+    var help = typeof opt.keys === 'string' && W.KEYHELP[opt.keys] ? W.KEYHELP[opt.keys][api.kind === 'mathlive' ? 0 : 1] : null;
+    wrap.appendChild(el('div', 'w-help', help || (api.kind === 'mathlive'
       ? 'Use <b>×</b> between factors and <b>x<sup>n</sup></b> for an exponent (or type <b>^</b>). Press <b>▶</b> to step out of an exponent.'
-      : 'Type <b>^</b> for an exponent and <b>*</b> or <b>×</b> between factors, e.g. <code>2^3 × 3 × 11</code>.'));
+      : 'Type <b>^</b> for an exponent and <b>*</b> or <b>×</b> between factors, e.g. <code>2^3 × 3 × 11</code>.')));
     api.node = wrap; api.onEnter = function (fn) { enter = fn; };
     return api;
   };
@@ -207,7 +208,7 @@
     var wrap = el('div', 'w-select'), set = {}, enter = null, btns = [];
     var row = el('div', 'sel-row');
     opt.options.forEach(function (o) {
-      var v = typeof o === 'object' ? o.value : o, label = typeof o === 'object' ? o.html : HW.k(String(o));
+      var v = typeof o === 'object' ? o.value : o, label = typeof o === 'object' ? HW.tex(o.html) : HW.k(String(o));
       var b = el('button', 'sel-chip', label); b.type = 'button'; b.setAttribute('aria-pressed', 'false');
       b.addEventListener('click', function () { if (wrap.classList.contains('off')) return; set[v] = !set[v]; b.classList.toggle('on', !!set[v]); b.setAttribute('aria-pressed', String(!!set[v])); });
       btns.push({ b: b, v: v }); row.appendChild(b);

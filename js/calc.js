@@ -11,6 +11,18 @@
   /* ---------------- exact fractions where possible ---------------- */
   function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = a % b; a = b; b = t; } return a; }
   function V(f, q) { return { f: f, q: q || null }; } // float value + optional exact [num, den]
+  function fracOf(v) { // [n, d] with 1 < d < 1000, or null
+    if (v.q && v.q[1] !== 1 && v.q[1] < 1000) return v.q;
+    var x = v.f; if (!isFinite(x) || Math.abs(x) >= 1e7 || x % 1 === 0) return null;
+    var h0 = 1, h1 = Math.floor(x), k0 = 0, k1 = 1, b = x - Math.floor(x);
+    for (var i = 0; i < 30 && k1 < 1000; i++) {
+      if (Math.abs(x - h1 / k1) <= 5e-10 * Math.max(1, Math.abs(x))) return k1 > 1 ? [h1, k1] : null;
+      if (b < 1e-12) break;
+      b = 1 / b; var a = Math.floor(b); b -= a;
+      var h2 = a * h1 + h0, k2 = a * k1 + k0; h0 = h1; h1 = h2; k0 = k1; k1 = k2;
+    }
+    return k1 < 1000 && k1 > 1 && Math.abs(x - h1 / k1) <= 5e-10 * Math.max(1, Math.abs(x)) ? [h1, k1] : null;
+  }
   function fromQ(n, d) {
     if (d === 0) throw err('DIVIDE BY 0');
     if (d < 0) { n = -n; d = -d; }
@@ -196,11 +208,13 @@
         this.resultShown = true; this.hpos = -1; this.cur = this.entry.length;
       } catch (e) { if (!e.calc) throw e; this.error = e.message + ' ERROR'; }
     },
-    toggleFD: function () { if (this.result) { this.showFrac = !this.showFrac; if (!this.result.q) this.showFrac = false; } },
+    // F◂▸D: like the real calculator, a decimal converts when it matches a fraction with denominator below 1000 to 10 digits
+    toggleFD: function () { if (this.result) { this.showFrac = !this.showFrac; if (!fracOf(this.result)) this.showFrac = false; } },
     fmt: function (v) {
       if (!v) return '';
-      if (this.showFrac && v.q && v.q[1] !== 1 && v.q[1] < 1000) {
-        var n = v.q[0], d = v.q[1];
+      var fq = this.showFrac ? fracOf(v) : null;
+      if (fq) {
+        var n = fq[0], d = fq[1];
         if (this.mixed && Math.abs(n) > d) { var w = Math.trunc(n / d), r = Math.abs(n % d); return w + '┘' + r + '┘' + d; }
         return n + '┘' + d;
       }

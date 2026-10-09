@@ -24,3 +24,7 @@ run('0 . 0 0 0 0 0 0 0 0 0 0 1 2 enter','1.2E-11');
 run('2 pow 3 pow 2 enter','64.');
 run('neg 8 pow lp 1 div 3 rp enter','-2.');
 run('9 0 asin','');
+run('0 . 3 6 3 6 3 6 3 6 3 6 enter fd','4┘11');
+run('0 . 4 4 4 4 4 4 4 4 4 4 enter fd','4┘9');
+run('2 . 1 6 6 6 6 6 6 6 6 7 enter fd','13┘6');
+run('0 . 1 2 3 4 enter fd','0.1234');

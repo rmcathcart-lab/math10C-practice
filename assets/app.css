@@ -335,3 +335,36 @@ math-field.mf::part(menu-toggle), math-field.mf::part(virtual-keyboard-toggle) {
   .calc { left: 50% !important; right: auto !important; top: auto !important; bottom: 8px !important; transform: translateX(-50%); width: min(340px, calc(100vw - 16px)); }
   .cls-btn { min-width: 0; flex: 1; }
 }
+
+/* ---------- ordering ---------- */
+.w-order .ord-head { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-bottom: 6px; }
+.w-order .ord-arrow { font-size: 16px; }
+.ord-line { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-height: 56px; padding: 8px 10px; border: 1.5px dashed #cdc6b6; border-radius: 12px; background: #fbfaf6; }
+.ord-slot { display: inline-grid; place-items: center; min-width: 44px; height: 40px; border-radius: 9px; background: #efebe2; color: #a39c8c; font-size: 13px; font-weight: 700; }
+.ord-sep { color: var(--muted); font-weight: 700; }
+.ord-pool { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; min-height: 48px; }
+.ord-pool.empty::after { content: 'All placed — press Check.'; color: var(--muted); font-size: 14px; align-self: center; }
+.ord-chip { min-width: 56px; min-height: 44px; padding: 6px 14px; border: 1.5px solid var(--line); border-radius: 11px; background: #fff; cursor: pointer; font-size: 18px; color: var(--ink); }
+.ord-chip:hover { border-color: #c8c0ae; }
+.ord-chip.placed { border-color: var(--brand2); background: var(--brand-soft); }
+.ord-tools { display: flex; gap: 6px; margin-top: 6px; }
+.w-order.off .ord-chip { cursor: default; }
+
+/* ---------- table of choices ---------- */
+.grid-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+.grid-tbl { border-collapse: separate; border-spacing: 0; font-size: 16px; }
+.grid-tbl th, .grid-tbl td { padding: 6px 8px; text-align: center; border-bottom: 1px solid var(--line2); }
+.grid-tbl thead th { font-size: 14px; font-weight: 700; color: var(--ink2); vertical-align: bottom; }
+.grid-tbl .grid-rowh { text-align: left; font-weight: 500; padding-right: 14px; white-space: nowrap; }
+.grid-btn { width: 40px; height: 36px; border: 1.5px solid #d6cfbf; border-radius: 9px; background: #fff; cursor: pointer; font-size: 18px; font-weight: 700; color: var(--brand); }
+.grid-btn:not(.multi) { border-radius: 50%; width: 36px; }
+.grid-btn.on { border-color: var(--brand2); background: var(--brand-soft); }
+.w-grid.off .grid-btn { cursor: default; }
+
+/* ---------- several boxes ---------- */
+.w-fields { display: flex; flex-direction: column; gap: 10px; }
+.fld-label { min-width: 90px; font-weight: 600; color: var(--ink2); }
+.w-mc.cols-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.katex-display { overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
+.nw { white-space: nowrap; }
+.numlist { display: flex; flex-wrap: wrap; gap: 10px 26px; margin: 12px 0; font-size: 1.05em; }

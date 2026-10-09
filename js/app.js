@@ -329,7 +329,7 @@
     }
     if (shown) {
       fb.className = 'feedback shown';
-      fb.innerHTML = '<div class="fb-title">Here’s the answer</div><div class="fb-ans">' + inst.answer + '</div>';
+      fb.innerHTML = '<div class="fb-title">Here’s the answer</div><div class="fb-ans">' + HW.tex(inst.answer) + '</div>';
       card.appendChild(fb);
       card.appendChild(solutionBlock(inst, true));
       var acts2 = el('div', 'qactions');
@@ -372,14 +372,15 @@
     switch (I.type) {
       case 'number': return W.number({ nr: I.nr, before: I.before, after: I.after });
       case 'list': return W.list({});
-      case 'math': return W.math({ before: I.before });
-      case 'mc': return W.mc({ options: I.options });
+      case 'math': return W.math({ before: I.before, keys: I.keys, placeholder: I.placeholder });
+      case 'mc': return W.mc({ options: I.options, columns: I.columns });
       case 'select': return W.select({ options: I.options });
       case 'classify': return W.classify({ n: I.n });
       case 'pairs': return W.pairs({ start: I.start });
       case 'ladder': return W.ladder({ n: I.n, exponent: I.exponent, onStep: function (s) { onStep(s, fb); } });
       case 'tree': return W.tree({ n: I.n, exponent: I.exponent, onStep: function (s) { onStep(s, fb); } });
     }
+    if (W[I.type]) return W[I.type](I);
     throw new Error('unknown input ' + I.type);
   }
   function onStep(s, fb) {
@@ -401,6 +402,9 @@
       if (t === 'classify') return resp ? resp.choice + (resp.choice === 'composite' ? ' ' + resp.a + '×' + resp.b : '') : '';
       if (t === 'mc') { var o = inst.input.options.filter(function (x) { return x.key === resp; })[0]; return resp ? resp + '. ' + (o ? stripTags(o.html) : '') : ''; }
       if (t === 'ladder' || t === 'tree') return resp ? String(resp.final || '') : '';
+      if (t === 'order') { var byO = {}; inst.input.items.forEach(function (x) { byO[x.id] = stripTags(x.html) || x.id; }); return (resp || []).map(function (id) { return byO[id] || id; }).join(' , '); }
+      if (t === 'grid') { var colN = {}; inst.input.cols.forEach(function (c) { colN[c.id] = c.label || stripTags(c.html); }); return inst.input.rows.map(function (r) { var g = (resp || {})[r.id]; return (r.label || stripTags(r.html)) + ': ' + (Array.isArray(g) ? g.map(function (c) { return colN[c]; }).join('+') || '–' : g == null ? '–' : colN[g]); }).join('; '); }
+      if (t === 'fields') return (resp || []).join(' | ');
       return String(resp == null ? '' : resp);
     } catch (e) { return ''; }
   }
@@ -411,6 +415,8 @@
     if (t === 'mc') { var o = inst.input.options.filter(function (x) { return x.key === resp; })[0]; return o ? '<b>' + o.key + '.</b> ' + HW.tex(o.html) : esc(txt); }
     if (t === 'classify') return resp.choice === 'prime' ? 'Prime' : 'Composite: ' + HW.k(HW.fmt(inst.input.n) + '=' + resp.a + '\\times ' + resp.b);
     if (t === 'list' || t === 'select') return HW.k((resp || []).join(',\\ '));
+    if (t === 'order') { var byH = {}; inst.input.items.forEach(function (x) { byH[x.id] = HW.tex(x.html); }); return (resp || []).map(function (id) { return byH[id] || esc(id); }).join(', '); }
+    if (t === 'fields') return (resp || []).map(function (v, i) { var f = inst.input.fields[i] || {}; return (f.label ? HW.tex(f.label) + ' ' : '') + esc(v); }).join(' &nbsp;·&nbsp; ');
     return esc(txt);
   }
   function logAttempt(it, verdict, code, answer, tryNo) {
@@ -446,7 +452,7 @@
     var tries = document.querySelector('.qcard .tries'); if (tries) drawTries(tries, inst, tv);
     if (w.mark && inst.input.type === 'mc') w.mark(resp);
     if (tv >= inst.tries) {
-      if (cur.practice) { showFb(fb, 'shown', 'Here’s the answer', ''); fb.appendChild(el('div', 'fb-ans', inst.answer)); fb.appendChild(solutionBlock(inst, true)); w.disable(true); cur.ptv = 0; return; }
+      if (cur.practice) { showFb(fb, 'shown', 'Here’s the answer', ''); fb.appendChild(el('div', 'fb-ans', HW.tex(inst.answer))); fb.appendChild(solutionBlock(inst, true)); w.disable(true); cur.ptv = 0; return; }
       r.s = 'shown'; r.reveals = (r.reveals || 0) + 1; touch(lesson.id);
       L.push({ t: 'event', type: 'reveal', lesson: lesson.id, item: it.id, at: Date.now() + 5 }, true);
       drawNav(); drawCard(); return;
