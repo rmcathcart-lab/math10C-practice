@@ -141,7 +141,7 @@
     { k: 1, say: '<b>2</b> has exactly two factors, 1 and 2. Prime.' },
     { k: 2, say: '<b>4</b> = 2 × 2, so it has more than two factors. Not prime.' },
     { k: 3, say: '<b>11</b> has only 1 and 11. Prime.' },
-    { k: 5, say: '<b>22</b> = 2 × 11 and <b>44</b> = 4 × 11 are composite. So the prime factors of 44 are just <b>2 and 11</b>.' }
+    { k: 5, speak: '22 and 44 are composite, because 22 equals 2 times 11 and 44 equals 4 times 11. So the prime factors of 44 are just 2 and 11.', say: '<b>22</b> = 2 × 11 and <b>44</b> = 4 × 11 are composite. So the prime factors of 44 are just <b>2 and 11</b>.' }
   ].map(function (o) { return { part: 'b', k: o.k, say: o.say }; });
   var T44 = [{ id: 'r', v: 44 }, { id: 'a', v: 4, parent: 'r' }, { id: 'b', v: 11, parent: 'r' }, { id: 'c', v: 2, parent: 'a' }, { id: 'd', v: 2, parent: 'a' }];
   var e3c = [

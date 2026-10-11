@@ -5,8 +5,8 @@
  *   step      = { part?, say: 'HTML caption', speak?: 'words to read aloud (default: the caption as plain text)', … anything render needs }
  *
  * render(step, ctx) draws the whole state for that step (so Back works); elements with class "fresh" fade in.
- * The voice uses the browser's built-in speech (Web Speech API): nothing to download, works on Chromebooks, iPads and
- * desktop Chrome. When the voice is on, Play waits for each step to be read before moving on. */
+ * The voice plays a recorded clip when one exists (see "recorded narration" below), otherwise the browser's built-in
+ * speech (Web Speech API), which works on Chromebooks, iPads and desktop Chrome. When the voice is on, Play waits for each step to be read before moving on. */
 (function (root) {
   'use strict';
   var HW = root.HW = root.HW || {};
@@ -34,12 +34,12 @@
       .replace(/<[^>]+>/g, ' ')
       .replace(/&nbsp;|&#8239;| | /g, ' ').replace(/&amp;/g, ' and ').replace(/&lt;/g, ' less than ').replace(/&gt;/g, ' greater than ')
       .replace(/(\d)[ ,](?=\d{3}\b)/g, '$1')
-      .replace(/\((i{1,3}|iv|v|[a-h])\)/g, ' part $1, ').replace(/\+/g, ' plus ').replace(/−/g, ' minus ')
+      .replace(/\b(part)\s+\((i{1,3}|iv|v|[a-h])\)/gi, '$1 $2').replace(/^\s*\(([a-h])\)\s*/, 'Part $1. ').replace(/\((i{1,3}|iv|v|[a-h])\)/g, ' part $1, ').replace(/\+/g, ' plus ').replace(/−/g, ' minus ')
       .replace(/²/g, ' squared').replace(/³/g, ' cubed')
       .replace(/×/g, ' times ').replace(/÷/g, ' divided by ').replace(/≈/g, ' is about ').replace(/≠/g, ' is not equal to ').replace(/√\s*(\d+)/g, 'the square root of $1').replace(/√/g, 'the square root of ')
       .replace(/ = /g, ' equals ').replace(/=/g, ' equals ').replace(/</g, ' is less than ').replace(/>/g, ' is greater than ')
       .replace(/[✓✗✔✘→←•]/g, ' ').replace(/—|–/g, ', ').replace(/\s*\(\s*/g, ', ').replace(/\s*\)\s*/g, ', ')
-      .replace(/\s+,/g, ',').replace(/,\s*,/g, ',').replace(/\s+/g, ' ').trim();
+      .replace(/\s+([.,:;!?])/g, '$1').replace(/,\s*,/g, ',').replace(/([.:;!?]),/g, '$1').replace(/\s+/g, ' ').trim();
     return s;
   };
   function speak(text, onEnd) {
@@ -66,7 +66,38 @@
       synth.speak(u);
     })();
   }
-  function hush() { Voice.token = {}; if (Voice.supported) { try { root.speechSynthesis.cancel(); } catch (e) {} } }
+  /* ---------------- recorded narration ----------------
+   * Clips live at audio/narration/<lesson>/<key>.m4a, where key = HW.narrationKey(words spoken).
+   * js/narration.js (built by tools/narration.js) lists which keys exist, so an edited caption simply
+   * falls back to the browser voice until it is re-recorded. */
+  HW.narrationKey = function (text) { // FNV-1a, 32-bit, as 8 hex digits
+    var h = 0x811c9dc5, s = String(text);
+    for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+    return ('0000000' + h.toString(16)).slice(-8);
+  };
+  function clipFor(lesson, text) {
+    var set = HW.narrationClips && HW.narrationClips[lesson], k = HW.narrationKey(text);
+    return set && set[k] ? 'audio/narration/' + lesson + '/' + k + '.m4a' : null;
+  }
+  var audio = null;
+  function playClip(url, text, onEnd) {
+    var token = {}; Voice.token = token;
+    if (!audio) { audio = new root.Audio(); audio.preload = 'auto'; }
+    var fin = function (ok) {
+      if (Voice.token !== token) return;
+      audio.onended = audio.onerror = null;
+      if (ok) { if (onEnd) onEnd(); } else speak(text, onEnd); // missing/blocked clip: use the browser voice
+    };
+    audio.onended = function () { fin(true); };
+    audio.onerror = function () { fin(false); };
+    audio.src = url;
+    try { var p = audio.play(); if (p && p.catch) p.catch(function () { fin(false); }); } catch (e) { fin(false); }
+  }
+  function hush() {
+    Voice.token = {};
+    if (audio) { try { audio.onended = audio.onerror = null; audio.pause(); } catch (e) {} }
+    if (Voice.supported) { try { root.speechSynthesis.cancel(); } catch (e) {} }
+  }
   HW.hushExplainer = hush;
   function pref(k, v) { try { if (v === undefined) return root.localStorage.getItem('hw:' + k); root.localStorage.setItem('hw:' + k, v); } catch (e) { return null; } }
 
@@ -86,19 +117,21 @@
     var ctr = el('div', 'xcontrols');
     var back = el('button', 'btn xbtn', '◀'), play = el('button', 'btn btn-primary xbtn xplay', '▶ Play'), next = el('button', 'btn xbtn', '▶▶');
     back.type = play.type = next.type = 'button'; back.setAttribute('aria-label', 'Previous step'); next.setAttribute('aria-label', 'Next step');
-    var voiceOn = Voice.supported && pref('voice') !== 'off';
+    var hasClips = !!(HW.narrationClips && HW.narrationClips[x.lesson] && x.steps.some(function (s) { return clipFor(x.lesson, s.speak || HW.speakable(s.say)); }));
+    var canTalk = Voice.supported || hasClips;
+    var voiceOn = canTalk && pref('voice') !== 'off';
     var vbtn = el('button', 'btn xbtn xvoice'); vbtn.type = 'button';
     function drawVoice() { vbtn.innerHTML = voiceOn ? '🔊 Voice on' : '🔈 Voice off'; vbtn.setAttribute('aria-pressed', String(voiceOn)); }
     drawVoice();
     var prog = el('div', 'xprog', '<i></i>'), stepno = el('span', 'xstepno');
     [back, play, next].forEach(function (b) { ctr.appendChild(b); });
-    if (Voice.supported) ctr.appendChild(vbtn);
+    if (canTalk) ctr.appendChild(vbtn);
     ctr.appendChild(prog); ctr.appendChild(stepno);
     card.appendChild(ctr);
-    card.appendChild(el('div', 'w-help', 'Press <b>Play</b> to watch' + (Voice.supported ? ' and listen' : '') + ', or step through with ◀ and ▶▶. The words under the picture are what the narrator says.'));
+    card.appendChild(el('div', 'w-help', 'Press <b>Play</b> to watch' + (canTalk ? ' and listen' : '') + ', or step through with ◀ and ▶▶. The words under the picture are what the narrator says.'));
     host.appendChild(card);
 
-    var render = x.setup(stage, side, board), cur = 0, playing = false, timer = null, steps = x.steps, seen = {};
+    var render = x.setup(stage, side, board), cur = 0, playing = false, timer = null, steps = x.steps, seen = {}, prefetched = {};
     if (tabs) x.parts.forEach(function (p) {
       var b = el('button', 'xtab', HW.tex(p.label)); b.type = 'button'; b.dataset.part = p.id;
       b.addEventListener('click', function () { var k = steps.findIndex(function (s) { return s.part === p.id; }); if (k >= 0) { stop(); show(k, true); } });
@@ -115,7 +148,12 @@
       try { render(s, { index: cur, steps: steps }); } catch (e) { if (root.console) console.error(e); }
       seen[cur] = 1; if (opt.onStep) opt.onStep(cur);
       if (cur === steps.length - 1 && opt.onDone) opt.onDone();
-      if (talk && voiceOn) speak(s.speak || HW.speakable(s.say), playing ? function () { timer = setTimeout(advance, 650); } : null);
+      if (talk && voiceOn) {
+        var words = s.speak || HW.speakable(s.say), url = clipFor(x.lesson, words), after = playing ? function () { timer = setTimeout(advance, 650); } : null;
+        if (url) playClip(url, words, after); else speak(words, after);
+        var nx = steps[cur + 1], nurl = nx && clipFor(x.lesson, nx.speak || HW.speakable(nx.say));
+        if (nurl && !prefetched[nurl]) { prefetched[nurl] = 1; try { var a = new root.Audio(); a.preload = 'auto'; a.src = nurl; } catch (e) {} }
+      }
       else if (playing) { var words = HW.speakable(s.say).split(/\s+/).length; timer = setTimeout(advance, Math.max(2600, words * 300)); }
     }
     function advance() { if (!playing) return; if (cur >= steps.length - 1) { stop(); return; } show(cur + 1, true); }
