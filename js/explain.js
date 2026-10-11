@@ -46,7 +46,7 @@
     if (!Voice.supported) { if (onEnd) onEnd(); return; }
     var synth = root.speechSynthesis; synth.cancel();
     // short chunks: some browsers stop long utterances part-way
-    var parts = String(text).match(/[^.!?]+[.!?]*/g) || [String(text)], i = 0, token = {}, t0 = Date.now(), failed = false;
+    var parts = String(text).replace(/([.!?])\s+/g, '$1\u0000').split('\u0000').filter(function (x) { return x.trim(); }), i = 0, token = {}, t0 = Date.now(), failed = false;
     var need = Math.max(1800, String(text).split(/\s+/).length * 330); // about how long reading it aloud takes
     Voice.token = token;
     (function next() {
