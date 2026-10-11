@@ -6,7 +6,7 @@
   var HW = root.HW, el = HW.el, esc = HW.esc, L = HW.Ledger, cfg = root.HW_CONFIG || {};
   var view = document.getElementById('view'), top = document.getElementById('topbar');
   var STORE = 'hw:v1:', SESSION = 'hw:session', AWAY_GRACE = 1500, IDLE_MS = 120000;
-  var S = null, session = null, cur = { lesson: null, item: null, inst: null, widget: null, practice: false, notice: null };
+  var S = null, session = null, cur = { lesson: null, item: null, inst: null, widget: null, practice: false, notice: null, example: null, player: null };
   var lastInteract = Date.now(), pendingSecs = {}, saveTimer = null;
 
   /* ---------------- storage ---------------- */
@@ -250,13 +250,19 @@
   function mins(s) { if (s < 60) return '<1 min'; var m = Math.round(s / 60); return m < 60 ? m + ' min' : Math.floor(m / 60) + ' h ' + (m % 60) + ' min'; }
 
   /* ---------------- lesson ---------------- */
-  function leaveLesson() { if (cur.lesson) { saveState(); pushProgress(cur.lesson.id); } cur = { lesson: null, item: null, inst: null, widget: null, practice: false, notice: null }; }
+  function leaveLesson() { stopPlayer(); if (cur.lesson) { saveState(); pushProgress(cur.lesson.id); } cur = { lesson: null, item: null, inst: null, widget: null, practice: false, notice: null, example: null, player: null }; }
+  function stopPlayer() { if (cur.player) { try { cur.player.stop(); } catch (e) {} cur.player = null; } if (HW.hushExplainer) HW.hushExplainer(); }
+  function examplesOf(lesson) { return (HW.explainers && HW.explainers[lesson.id]) || []; }
   function openLesson(lesson, itemId) {
     var switching = !cur.lesson || cur.lesson.id !== lesson.id;
     if (switching) leaveLesson();
     cur.lesson = lesson;
     document.body.className = 'lesson';
-    var l = LS(lesson.id);
+    var l = LS(lesson.id), exs = examplesOf(lesson);
+    var ex = exs.filter(function (x) { return x.id === itemId; })[0];
+    if (ex) return showExample(ex, switching);
+    // a first visit starts on the lesson's first example
+    if (!itemId && exs.length && !l.cur && !Object.keys(l.items).length) { history.replaceState(null, '', '#/lesson/' + lesson.id + '/' + exs[0].id); return showExample(exs[0], switching); }
     var id = itemId && lesson.byId[itemId] ? itemId : (l.cur && lesson.byId[l.cur] ? l.cur : firstOpen(lesson));
     if (!itemId) { history.replaceState(null, '', '#/lesson/' + lesson.id + '/' + id); }
     showItem(id, switching);
@@ -268,9 +274,31 @@
     for (i = 0; i < lesson.items.length; i++) { it = lesson.items[i]; r = l.items[it.id]; if ((!r || r.s !== 'done') && !it.extra) return it.id; }
     return lesson.items[Math.min(idx + 1, lesson.items.length - 1)].id;
   }
+  function showExample(x, fresh) {
+    var lesson = cur.lesson, l = LS(lesson.id);
+    stopPlayer();
+    cur.item = null; cur.example = x.id; cur.practice = false; cur.inst = null; cur.widget = null;
+    drawTop('<a href="#/">All lessons</a><span class="sep">/</span>Unit ' + lesson.unit + ' · Lesson ' + esc(lesson.num));
+    if (fresh || !document.querySelector('.lesson-wrap')) buildLessonFrame(lesson);
+    drawNav(); drawHeaderBar();
+    var main = document.querySelector('.qmain'); main.innerHTML = '';
+    var started = false;
+    cur.player = HW.explainerPlayer(main, x, {
+      onPlay: function () { lastInteract = Date.now(); if (!started) { started = true; L.push({ t: 'event', type: 'watch', lesson: lesson.id, item: x.id }); } },
+      onStep: function () { lastInteract = Date.now(); },
+      onDone: function () { l.watched = l.watched || {}; if (!l.watched[x.id]) { l.watched[x.id] = Date.now(); touch(lesson.id); drawNav(); } }
+    });
+    var exs = examplesOf(lesson), k = exs.indexOf(x), foot = el('div', 'xnext');
+    var nextHref = k + 1 < exs.length ? '#/lesson/' + lesson.id + '/' + exs[k + 1].id : '#/lesson/' + lesson.id + '/' + firstOpen(lesson);
+    var nb = el('a', 'btn btn-ghost btn-next', k + 1 < exs.length ? 'Next: Example ' + exs[k + 1].num + ' →' : 'Start the assignment →'); nb.href = nextHref;
+    foot.appendChild(nb); main.appendChild(foot);
+    L.setStatus({ view: 'lesson', lesson: lesson.id, item: x.id, label: 'Example ' + x.num, example: true, away: false }, true);
+    window.scrollTo && window.scrollTo(0, 0);
+  }
   function showItem(id, fresh) {
     var lesson = cur.lesson, it = lesson.byId[id], l = LS(lesson.id), r = IR(lesson.id, id);
-    cur.item = id; cur.practice = false; l.cur = id;
+    stopPlayer();
+    cur.item = id; cur.example = null; cur.practice = false; l.cur = id;
     if (r.s === 'new') { r.s = 'open'; r.at = Date.now(); L.push({ t: 'event', type: 'open', lesson: lesson.id, item: id }); }
     touch(lesson.id);
     drawTop('<a href="#/">All lessons</a><span class="sep">/</span>Unit ' + lesson.unit + ' · Lesson ' + esc(lesson.num));
@@ -305,7 +333,15 @@
       if (it.q !== lastQ) { groups.push({ q: it.q, extra: it.extra, items: [] }); lastQ = it.q; }
       groups[groups.length - 1].items.push(it);
     });
-    var extraHead = false;
+    var extraHead = false, exs = examplesOf(lesson);
+    if (exs.length) {
+      nav.appendChild(el('div', 'qnav-title ex', 'Lesson examples'));
+      exs.forEach(function (x) {
+        var a = el('a', 'xnav' + (cur.example === x.id ? ' on' : '') + (l.watched && l.watched[x.id] ? ' seen' : ''), '<span class="xn-num">' + esc(x.num) + '</span><span class="xn-t">' + HW.tex(x.title) + '</span><span class="xn-st" aria-hidden="true">' + (l.watched && l.watched[x.id] ? '✓' : '▶') + '</span>');
+        a.href = '#/lesson/' + lesson.id + '/' + x.id; a.title = 'Example ' + x.num + (l.watched && l.watched[x.id] ? ' — watched' : '');
+        nav.appendChild(a);
+      });
+    }
     nav.appendChild(el('div', 'qnav-title', 'Assignment'));
     groups.forEach(function (g) {
       if (g.extra && !extraHead) { extraHead = true; nav.appendChild(el('div', 'qnav-title extra', 'Extra practice <span>optional</span>')); }
@@ -526,7 +562,7 @@
   setInterval(function () {
     if (!session || !cur.lesson || awayAt || document.visibilityState !== 'visible' || !document.hasFocus() || Date.now() - lastInteract > IDLE_MS) return;
     var lid = cur.lesson.id, l = LS(lid); l.secs = (l.secs || 0) + 1;
-    var r = IR(lid, cur.item); r.secs = (r.secs || 0) + 1;
+    if (cur.item) { var r = IR(lid, cur.item); r.secs = (r.secs || 0) + 1; }
     pendingSecs[lid] = (pendingSecs[lid] || 0) + 1;
     if (l.secs % 20 === 0) saveSoon(lid);
   }, 1000);

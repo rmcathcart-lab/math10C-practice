@@ -96,6 +96,11 @@ async def main():
         pins = page.locator('.field.pin'); await pins.nth(0).fill('1234'); await pins.nth(1).fill('1234')
         await page.click('.btn-primary'); await page.wait_for_selector('.lesson-row')
         await page.click('a.lesson-row'); await page.wait_for_selector('.qcard')
+        # a first visit opens the lesson's first worked example (explainer), with the examples listed above the assignment
+        ex = await page.evaluate("[location.hash, !!document.querySelector('.xcard'), document.querySelectorAll('.qnav .xnav').length]")
+        print('first visit:', ex); assert ex[1] and ex[2] == 5, ex
+        await page.click('.xcontrols .xbtn[aria-label="Next step"]'); await page.wait_for_timeout(200)
+        await goto_item(page, '1a'); await page.wait_for_selector('.qcard .btn-check')
 
         # 1a right first try
         await answer(page, await inst(page)); print('1a', (await fb(page))[:60])
