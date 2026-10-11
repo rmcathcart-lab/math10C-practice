@@ -46,16 +46,23 @@
     if (!Voice.supported) { if (onEnd) onEnd(); return; }
     var synth = root.speechSynthesis; synth.cancel();
     // short chunks: some browsers stop long utterances part-way
-    var parts = String(text).match(/[^.!?]+[.!?]*/g) || [String(text)], i = 0, token = {};
+    var parts = String(text).match(/[^.!?]+[.!?]*/g) || [String(text)], i = 0, token = {}, t0 = Date.now(), failed = false;
+    var need = Math.max(1800, String(text).split(/\s+/).length * 330); // about how long reading it aloud takes
     Voice.token = token;
     (function next() {
       if (Voice.token !== token) return;
-      if (i >= parts.length) { if (onEnd) onEnd(); return; }
+      if (i >= parts.length) {
+        // if the browser refused to speak (or finished impossibly fast), keep a normal reading pace instead of rushing
+        var spent = Date.now() - t0, short = failed || spent < need * 0.45;
+        if (onEnd) { if (short) setTimeout(function () { if (Voice.token === token) onEnd(); }, Math.max(0, need - spent)); else onEnd(); }
+        return;
+      }
       var u = new root.SpeechSynthesisUtterance(parts[i++].trim());
       if (Voice.voice) { u.voice = Voice.voice; u.lang = Voice.voice.lang; } else u.lang = 'en-CA';
       u.rate = Voice.rate || 0.98; u.pitch = 1;
       var done = false, guard = setTimeout(function () { if (!done) { done = true; next(); } }, 2500 + u.text.length * 110);
-      u.onend = u.onerror = function () { if (done) return; done = true; clearTimeout(guard); next(); };
+      u.onend = function () { if (done) return; done = true; clearTimeout(guard); next(); };
+      u.onerror = function () { failed = true; if (done) return; done = true; clearTimeout(guard); next(); };
       synth.speak(u);
     })();
   }
