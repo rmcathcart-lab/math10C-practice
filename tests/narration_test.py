@@ -1,5 +1,5 @@
 """Recorded narration: steps with a clip play it (and advance when it ends), steps without one fall back to the
-browser voice. Needs the e2e servers (tests/restart_mock.sh) and test clips for u1l1 Example 1 steps 1 and 3."""
+browser voice. Needs the e2e servers (tests/restart_mock.sh) and recorded clips for u1l1 (step 2's is hidden to test the fallback)."""
 import asyncio
 BASE = 'http://localhost:8811/'
 CONFIG = "var HW_CONFIG = { siteName: 'Math 10C Practice', backend: 'http://localhost:8765/' };"
@@ -32,6 +32,8 @@ async def main():
         await page.click('.btn-primary'); await page.wait_for_selector('.lesson-row')
         await page.click('a.lesson-row'); await page.wait_for_selector('.xcard')
         print('voice button:', await page.inner_text('.xvoice'))
+        # pretend step 2 has no recording, to check the fallback to the browser voice
+        await page.evaluate("delete HW.narrationClips.u1l1['c39afa38']")
         await page.click('.xplay')
         for _ in range(80):
             await page.wait_for_timeout(500)
