@@ -32,22 +32,30 @@ func wait(timeout: TimeInterval, _ done: () -> Bool) -> Bool {
 // ---- 1. permission to use Personal Voice ----
 final class Box<T> { var value: T; init(_ v: T) { value = v } }
 if #available(macOS 14.0, *) {
+    print("Asking macOS for permission to use your Personal Voice — if a box pops up, click Allow…")
     let status = Box<AVSpeechSynthesizer.PersonalVoiceAuthorizationStatus?>(nil)
     AVSpeechSynthesizer.requestPersonalVoiceAuthorization { s in status.value = s }
-    _ = wait(timeout: 180) { status.value != nil }
+    if !wait(timeout: 45, { status.value != nil }) { print("(no answer after 45 seconds — carrying on)") }
     switch status.value {
     case .some(.authorized): print("Personal Voice: allowed")
     case .some(.denied):
         print("Personal Voice: NOT allowed. In System Settings → Privacy & Security, find Personal Voice and allow Terminal, then run this again.")
     case .some(.unsupported): print("Personal Voice: not supported on this Mac.")
-    default: print("Personal Voice: no answer to the permission request.")
+    default: print("Personal Voice: macOS didn't answer the permission request.")
     }
 } else {
     print("Personal Voice needs macOS 14 (Sonoma) or newer.")
 }
 
+func isPersonalEarly(_ v: AVSpeechSynthesisVoice) -> Bool {
+    if #available(macOS 14.0, *) { return v.voiceTraits.contains(.isPersonalVoice) }
+    return false
+}
+
 // ---- 2. pick the voice ----
+print("Looking for the voice \"\(wanted)\"…")
 let voices = AVSpeechSynthesisVoice.speechVoices()
+print("  this Mac offers \(voices.count) voices (\(voices.filter(isPersonalEarly).count) Personal Voice)")
 func isPersonal(_ v: AVSpeechSynthesisVoice) -> Bool {
     if #available(macOS 14.0, *) { return v.voiceTraits.contains(.isPersonalVoice) }
     return false
@@ -89,6 +97,7 @@ final class Job {
     var last = Date()
     var error: String?
 }
+print("Recording \(lines.count) lines into \(outDir.path)\n")
 let synth = AVSpeechSynthesizer()
 let watcher = Watcher()
 synth.delegate = watcher
