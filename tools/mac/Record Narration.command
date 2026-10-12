@@ -1,5 +1,5 @@
 #!/bin/bash
-# Records the explainer narration with Ryan's Personal Voice. Double-click, or run:  bash "Record Narration.command"
+# Records the explainer narration with a Mac voice. Run:  bash "Record Narration.command" --siri   (or a voice name, e.g. "Evan (Enhanced)"; add --test to try one line)
 # Everything shown in the window is also saved to narration_log.txt in this folder.
 cd "$(dirname "$0")" || exit 1
 LOG="narration_log.txt"

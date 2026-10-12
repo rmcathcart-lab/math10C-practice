@@ -52,7 +52,9 @@ To record (or re-record) clips with a Mac voice:
 
 1. `node tools/narration.js export <folder>` — writes `lines.json` and `script.txt` (every line the narrator says).
 2. Copy `tools/mac/make_narration.swift` and `tools/mac/Record Narration.command` into that folder and run
-   `bash "Record Narration.command"` on the Mac (defaults to "Ryan's Personal Voice"; pass another voice name to use it).
+   `bash "Record Narration.command" --siri` on the Mac (the System Voice, e.g. Siri Voice 4), or pass a voice name such as
+   `"Evan (Enhanced)"`; add `--test` to record and play one line first. Personal Voice (`--personal`) authorizes but
+   AVSpeechSynthesizer.write returns no audio for it on macOS 26.
 3. Copy the folder's `audio/<lesson>/*.m4a` into `audio/narration/<lesson>/` in this repo.
 4. `node tools/narration.js index` — rebuilds `js/narration.js`, the list of clips the site knows about.
 
