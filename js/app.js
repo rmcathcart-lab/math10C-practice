@@ -234,6 +234,17 @@
       var list = el('div', 'lesson-list');
       u.lessons.forEach(function (c) {
         var lesson = HW.lessons[c.id], row = el(lesson ? 'a' : 'div', 'lesson-row' + (lesson ? '' : ' locked'));
+        // beside each assignment: a small card that opens the lesson itself on the teaching site (a spacer keeps the rows lined up)
+        var line = el('div', 'lesson-line'), turl = teachingUrl(c);
+        if (turl) {
+          var tc = el('a', 'lesson-teach', '<span class="lt-ic" aria-hidden="true">📘</span><span class="lt-t">Lesson</span><span class="lt-go" aria-hidden="true">↗</span>');
+          tc.href = turl; tc.target = '_blank'; tc.rel = 'noopener';
+          tc.title = 'Open Lesson ' + c.num + ' (examples and class notes) in a new tab';
+          tc.setAttribute('aria-label', 'Open Lesson ' + c.num + ' — ' + stripTags(c.title) + ' — on the teaching site');
+          tc.addEventListener('click', function () { L.push({ t: 'event', type: 'notes', lesson: c.id }); });
+          line.appendChild(tc);
+        } else line.appendChild(el('div', 'lesson-teach none', ''));
+        line.appendChild(row);
         var info = el('div', 'lr-info', '<div class="lr-num">Lesson ' + esc(c.num) + '</div><div class="lr-title">' + HW.tex(esc(c.title)) + '</div>');
         row.appendChild(info);
         if (lesson) {
@@ -244,7 +255,7 @@
           row.appendChild(right);
           row.appendChild(el('span', 'lr-go', s.reqDone || s.extraDone ? (s.reqDone === s.req ? 'Review' : 'Continue') : 'Start'));
         } else row.appendChild(el('span', 'lr-soon', 'Coming soon'));
-        list.appendChild(row);
+        list.appendChild(line);
       });
       sec.appendChild(list); view.appendChild(sec);
     });

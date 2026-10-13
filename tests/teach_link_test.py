@@ -1,4 +1,4 @@
-"""The lesson sidebar's "Go to the lesson" link: uses the block set for the class (beats the letter in the code),
+"""The home page's lesson cards and the lesson sidebar's "Go to the lesson" link: uses the block set for the class (beats the letter in the code),
 points at the right lesson page, and is absent for lessons the teaching site doesn't have yet.
 Needs python3 -m http.server 8811 and a fresh mock (tests/restart_mock.sh)."""
 import asyncio, urllib.request
@@ -17,6 +17,14 @@ async def main():
         await page.click('.name-btn:has-text("Ben Lee")')
         pins = page.locator('.field.pin'); await pins.nth(0).fill('4321'); await pins.nth(1).fill('4321')
         await page.click('.btn-primary'); await page.wait_for_selector('.lesson-row')
+        # home page: a lesson card to the left of each assignment (Unit 1 only so far)
+        home = await page.evaluate("[...document.querySelectorAll('.lesson-line')].map(l => { const a = l.querySelector('a.lesson-teach'); return a ? a.getAttribute('href') : null; })")
+        print('home cards:', home)
+        assert len(home) == 15 and home[0].endswith('/u1/l1/?class=C') and home[5].endswith('/u1/l6a/?class=C') and home[7].endswith('/u1/l7/?class=C') and all(h is None for h in home[8:]), home
+        await page.screenshot(path='/tmp/home_cards.png', full_page=False)
+        await page.set_viewport_size({'width': 390, 'height': 800}); await page.wait_for_timeout(200)
+        await page.screenshot(path='/tmp/home_cards_phone.png')
+        await page.set_viewport_size({'width': 1300, 'height': 950})
         out = {}
         for lid in ['u1l1', 'u1l6a', 'u2l1']:
             await page.evaluate("location.hash = '#/lesson/%s'" % lid); await page.wait_for_selector('.qcard'); await page.wait_for_timeout(300)

@@ -43,7 +43,8 @@ Homework practice for every Math 10C lesson, built from the course booklets. Eve
 
 ## Link to the teaching site
 
-The lesson sidebar starts with a **Go to the lesson** button that opens the same lesson on the Math 10C Teaching
-site (`HW.TEACHING` in `js/catalog.js` lists the lessons it has) in a new tab, with `?class=<block>` so the student sees
+The home page shows a small **Lesson** card to the left of each assignment, and the lesson sidebar starts with a
+**Go to the lesson** button; both open that opens the same lesson on the Math 10C Teaching
+the same lesson on the Math 10C Teaching site (`HW.TEACHING` in `js/catalog.js` lists the lessons it has) in a new tab, with `?class=<block>` so the student sees
 that class's notes. The block is the one set for the class in the dashboard's Settings; without one, a final letter
 A–D in the class code (e.g. `10c-b`) is used, otherwise the link has no class.
