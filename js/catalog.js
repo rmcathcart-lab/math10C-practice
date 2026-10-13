@@ -3,6 +3,10 @@
 (function (root) {
   'use strict';
   root.HW = root.HW || {};
+  /* lessons that have a page on the Math 10C Teaching site (examples + the teacher's class notes); the lesson
+   * sidebar links to it as <base>u1/l6a/?class=<block> */
+  root.HW.TEACHING = { base: 'https://rmcathcart-lab.github.io/math10c-teaching/',
+    lessons: ['u1l1', 'u1l2', 'u1l3', 'u1l4', 'u1l5', 'u1l6a', 'u1l6b', 'u1l7'] };
   root.HW.CATALOG = [
     { unit: 1, title: 'Number', outcomes: 'AN1 · AN2', lessons: [
       { id: 'u1l1', num: '1', title: 'Prime Building Blocks of Numbers' },

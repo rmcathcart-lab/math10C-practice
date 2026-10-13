@@ -96,10 +96,9 @@ async def main():
         pins = page.locator('.field.pin'); await pins.nth(0).fill('1234'); await pins.nth(1).fill('1234')
         await page.click('.btn-primary'); await page.wait_for_selector('.lesson-row')
         await page.click('a.lesson-row'); await page.wait_for_selector('.qcard')
-        # a first visit opens the lesson's first worked example (explainer), with the examples listed above the assignment
-        ex = await page.evaluate("[location.hash, !!document.querySelector('.xcard'), document.querySelectorAll('.qnav .xnav').length]")
-        print('first visit:', ex); assert ex[1] and ex[2] == 5, ex
-        await page.click('.xcontrols .xbtn[aria-label="Next step"]'); await page.wait_for_timeout(200)
+        # the sidebar starts with a link to the lesson on the teaching site, for this student's block (10c-b → B)
+        tl = await page.evaluate("[location.hash, (document.querySelector('.qnav a.teach-link')||{}).href, (document.querySelector('.qnav a.teach-link')||{}).target, document.querySelectorAll('.xnav').length]")
+        print('teaching link:', tl); assert tl[0].endswith('/1a') and tl[1] == 'https://rmcathcart-lab.github.io/math10c-teaching/u1/l1/?class=B' and tl[2] == '_blank' and tl[3] == 0, tl
         await goto_item(page, '1a'); await page.wait_for_selector('.qcard .btn-check')
 
         # 1a right first try

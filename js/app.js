@@ -6,7 +6,7 @@
   var HW = root.HW, el = HW.el, esc = HW.esc, L = HW.Ledger, cfg = root.HW_CONFIG || {};
   var view = document.getElementById('view'), top = document.getElementById('topbar');
   var STORE = 'hw:v1:', SESSION = 'hw:session', AWAY_GRACE = 1500, IDLE_MS = 120000;
-  var S = null, session = null, cur = { lesson: null, item: null, inst: null, widget: null, practice: false, notice: null, example: null, player: null };
+  var S = null, session = null, rosterInfo = {}, cur = { lesson: null, item: null, inst: null, widget: null, practice: false, notice: null };
   var lastInteract = Date.now(), pendingSecs = {}, saveTimer = null;
 
   /* ---------------- storage ---------------- */
@@ -78,7 +78,11 @@
       L.get('progress', { 'class': sess.klass, name: sess.name, token: sess.token }).then(function (d) {
         if (d && d.ok === false && d.error === 'badtoken') { signOut('Your PIN was reset by your teacher. Sign in again.'); return; }
         if (d && d.ok && d.lessons) { var changed = merge(d.lessons); if (changed) { saveState(); route(); } }
-        if (d && d.ok) { drawTop(top.dataset.crumb); }
+        if (d && d.ok) {
+          var blk = (d.times && d.times.block) || '';
+          if (blk !== (session.block || '')) { session.block = blk; ls(SESSION, JSON.stringify(session)); if (cur.lesson) drawNav(); }
+          drawTop(top.dataset.crumb);
+        }
       }).catch(function () {});
     }
     route();
@@ -129,7 +133,7 @@
       L.get('roster', { 'class': code }).then(function (d) {
         go.disabled = false; go.textContent = 'Continue';
         if (!d || !d.ok) { err.textContent = d && d.error === 'unknown class' ? 'That class code wasn’t found. Check it with your teacher.' : 'Something went wrong. Try again.'; return; }
-        ls('hw:lastclass', code); stepName(body, d.code || code, d.names || [], d.label);
+        ls('hw:lastclass', code); rosterInfo = { label: d.label || '', block: (d.times && d.times.block) || '' }; stepName(body, d.code || code, d.names || [], d.label);
       }).catch(function () { go.disabled = false; go.textContent = 'Continue'; err.textContent = 'Can’t reach the class list right now. Check your internet connection and try again.'; });
     }
     go.addEventListener('click', next); inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') next(); });
@@ -168,7 +172,7 @@
       go.disabled = true; err.textContent = '';
       L.get(create ? 'setpin' : 'signin', { 'class': klass, name: name, pin: p, device: deviceId() }).then(function (d) {
         go.disabled = false;
-        if (d && d.ok && d.token) { startSession({ klass: klass, name: name, token: d.token }); return; }
+        if (d && d.ok && d.token) { startSession({ klass: klass, name: name, token: d.token, label: rosterInfo.label, block: rosterInfo.block }); return; }
         err.textContent = d && d.error === 'badpin' ? 'That PIN isn’t right. Ask your teacher to reset it if you forgot it.' : d && d.error === 'haspin' ? 'This name already has a PIN.' : d && d.error === 'locked' ? 'Too many tries. Wait a few minutes or ask your teacher.' : 'Something went wrong. Try again.';
         if (d && d.error === 'haspin') stepPin(body, klass, name, false);
       }).catch(function () { go.disabled = false; err.textContent = 'Can’t reach the server. Check your internet connection.'; });
@@ -250,19 +254,26 @@
   function mins(s) { if (s < 60) return '<1 min'; var m = Math.round(s / 60); return m < 60 ? m + ' min' : Math.floor(m / 60) + ' h ' + (m % 60) + ' min'; }
 
   /* ---------------- lesson ---------------- */
-  function leaveLesson() { stopPlayer(); if (cur.lesson) { saveState(); pushProgress(cur.lesson.id); } cur = { lesson: null, item: null, inst: null, widget: null, practice: false, notice: null, example: null, player: null }; }
-  function stopPlayer() { if (cur.player) { try { cur.player.stop(); } catch (e) {} cur.player = null; } if (HW.hushExplainer) HW.hushExplainer(); }
-  function examplesOf(lesson) { return (HW.explainers && HW.explainers[lesson.id]) || []; }
+  function leaveLesson() { if (cur.lesson) { saveState(); pushProgress(cur.lesson.id); } cur = { lesson: null, item: null, inst: null, widget: null, practice: false, notice: null }; }
+  /* the matching lesson page on the Math 10C Teaching site, opened with the student's class (block) so they see that
+     class's notes: the block set for the class in the teacher dashboard, else a letter at the end of the class code */
+  function studentBlock() {
+    if (!session) return '';
+    if (session.block) return String(session.block).toUpperCase();
+    var m = /(?:^|[^a-z0-9])([a-d])$/i.exec(session.klass || '') || /block\s*([a-d])\b/i.exec(session.label || '');
+    return m ? m[1].toUpperCase() : '';
+  }
+  function teachingUrl(lesson) {
+    var T = HW.TEACHING; if (!T || T.lessons.indexOf(lesson.id) < 0) return '';
+    var m = /^u(\d+)l(\w+)$/.exec(lesson.id), b = studentBlock();
+    return T.base + 'u' + m[1] + '/l' + m[2] + '/' + (b ? '?class=' + b : '');
+  }
   function openLesson(lesson, itemId) {
     var switching = !cur.lesson || cur.lesson.id !== lesson.id;
     if (switching) leaveLesson();
     cur.lesson = lesson;
     document.body.className = 'lesson';
-    var l = LS(lesson.id), exs = examplesOf(lesson);
-    var ex = exs.filter(function (x) { return x.id === itemId; })[0];
-    if (ex) return showExample(ex, switching);
-    // a first visit starts on the lesson's first example
-    if (!itemId && exs.length && !l.cur && !Object.keys(l.items).length) { history.replaceState(null, '', '#/lesson/' + lesson.id + '/' + exs[0].id); return showExample(exs[0], switching); }
+    var l = LS(lesson.id);
     var id = itemId && lesson.byId[itemId] ? itemId : (l.cur && lesson.byId[l.cur] ? l.cur : firstOpen(lesson));
     if (!itemId) { history.replaceState(null, '', '#/lesson/' + lesson.id + '/' + id); }
     showItem(id, switching);
@@ -274,31 +285,9 @@
     for (i = 0; i < lesson.items.length; i++) { it = lesson.items[i]; r = l.items[it.id]; if ((!r || r.s !== 'done') && !it.extra) return it.id; }
     return lesson.items[Math.min(idx + 1, lesson.items.length - 1)].id;
   }
-  function showExample(x, fresh) {
-    var lesson = cur.lesson, l = LS(lesson.id);
-    stopPlayer();
-    cur.item = null; cur.example = x.id; cur.practice = false; cur.inst = null; cur.widget = null;
-    drawTop('<a href="#/">All lessons</a><span class="sep">/</span>Unit ' + lesson.unit + ' · Lesson ' + esc(lesson.num));
-    if (fresh || !document.querySelector('.lesson-wrap')) buildLessonFrame(lesson);
-    drawNav(); drawHeaderBar();
-    var main = document.querySelector('.qmain'); main.innerHTML = '';
-    var started = false;
-    cur.player = HW.explainerPlayer(main, x, {
-      onPlay: function () { lastInteract = Date.now(); if (!started) { started = true; L.push({ t: 'event', type: 'watch', lesson: lesson.id, item: x.id }); } },
-      onStep: function () { lastInteract = Date.now(); },
-      onDone: function () { l.watched = l.watched || {}; if (!l.watched[x.id]) { l.watched[x.id] = Date.now(); touch(lesson.id); drawNav(); } }
-    });
-    var exs = examplesOf(lesson), k = exs.indexOf(x), foot = el('div', 'xnext');
-    var nextHref = k + 1 < exs.length ? '#/lesson/' + lesson.id + '/' + exs[k + 1].id : '#/lesson/' + lesson.id + '/' + firstOpen(lesson);
-    var nb = el('a', 'btn btn-ghost btn-next', k + 1 < exs.length ? 'Next: Example ' + exs[k + 1].num + ' →' : 'Start the assignment →'); nb.href = nextHref;
-    foot.appendChild(nb); main.appendChild(foot);
-    L.setStatus({ view: 'lesson', lesson: lesson.id, item: x.id, label: 'Example ' + x.num, example: true, away: false }, true);
-    window.scrollTo && window.scrollTo(0, 0);
-  }
   function showItem(id, fresh) {
     var lesson = cur.lesson, it = lesson.byId[id], l = LS(lesson.id), r = IR(lesson.id, id);
-    stopPlayer();
-    cur.item = id; cur.example = null; cur.practice = false; l.cur = id;
+    cur.item = id; cur.practice = false; l.cur = id;
     if (r.s === 'new') { r.s = 'open'; r.at = Date.now(); L.push({ t: 'event', type: 'open', lesson: lesson.id, item: id }); }
     touch(lesson.id);
     drawTop('<a href="#/">All lessons</a><span class="sep">/</span>Unit ' + lesson.unit + ' · Lesson ' + esc(lesson.num));
@@ -333,14 +322,13 @@
       if (it.q !== lastQ) { groups.push({ q: it.q, extra: it.extra, items: [] }); lastQ = it.q; }
       groups[groups.length - 1].items.push(it);
     });
-    var extraHead = false, exs = examplesOf(lesson);
-    if (exs.length) {
-      nav.appendChild(el('div', 'qnav-title ex', 'Lesson examples'));
-      exs.forEach(function (x) {
-        var a = el('a', 'xnav' + (cur.example === x.id ? ' on' : '') + (l.watched && l.watched[x.id] ? ' seen' : ''), '<span class="xn-num">' + esc(x.num) + '</span><span class="xn-t">' + HW.tex(x.title) + '</span><span class="xn-st" aria-hidden="true">' + (l.watched && l.watched[x.id] ? '✓' : '▶') + '</span>');
-        a.href = '#/lesson/' + lesson.id + '/' + x.id; a.title = 'Example ' + x.num + (l.watched && l.watched[x.id] ? ' — watched' : '');
-        nav.appendChild(a);
-      });
+    var extraHead = false, turl = teachingUrl(lesson);
+    if (turl) {
+      var tb = el('a', 'teach-link', '<span class="tl-ic" aria-hidden="true">📘</span><span class="tl-t"><b>Go to the lesson</b><span>Examples and class notes</span></span><span class="tl-go" aria-hidden="true">↗</span>');
+      tb.href = turl; tb.target = '_blank'; tb.rel = 'noopener';
+      tb.title = 'Opens Lesson ' + lesson.num + ' on the teaching site' + (studentBlock() ? ' (Block ' + studentBlock() + ' notes)' : '') + ' in a new tab';
+      tb.addEventListener('click', function () { viaNotes = Date.now(); L.push({ t: 'event', type: 'notes', lesson: lesson.id, item: cur.item }); });
+      nav.appendChild(tb);
     }
     nav.appendChild(el('div', 'qnav-title', 'Assignment'));
     groups.forEach(function (g) {
@@ -537,11 +525,12 @@
   }
 
   /* ---------------- leaving the page = new numbers ---------------- */
-  var awayAt = 0;
+  var awayAt = 0, viaNotes = 0;
   function working() { if (!cur.lesson || !cur.item) return false; if (cur.practice) return true; var r = IR(cur.lesson.id, cur.item); return r.s === 'open'; }
   function goneAway() { if (awayAt) return; awayAt = Date.now(); if (cur.lesson) L.setStatus(Object.assign({}, L.status || {}, { away: true }), true); }
   function cameBack() {
     if (!awayAt) return; var gone = Date.now() - awayAt; awayAt = 0;
+    var notes = viaNotes && Date.now() - viaNotes < gone + 5000; viaNotes = 0; // left by opening the lesson page
     if (!cur.lesson) return;
     L.setStatus(Object.assign({}, L.status || {}, { away: false }), true);
     if (gone < AWAY_GRACE || !working()) { if (gone >= AWAY_GRACE) L.push({ t: 'event', type: 'away', lesson: cur.lesson.id, item: cur.item, secs: Math.round(gone / 1000) }); return; }
@@ -550,7 +539,8 @@
     else newVersion(cur.lesson, it, 'leave');
     touch(cur.lesson.id);
     L.push({ t: 'event', type: 'leave', lesson: cur.lesson.id, item: it.id, secs: Math.round(gone / 1000) }, true);
-    cur.notice = '<b>You left the page</b> (' + Math.round(gone / 1000) + ' s), so this question has new numbers. Keep this tab open while you work — use the on-screen calculator or your own calculator.';
+    cur.notice = notes ? '<b>Welcome back from the lesson.</b> This question has new numbers — try it with what you just reviewed.'
+      : '<b>You left the page</b> (' + Math.round(gone / 1000) + ' s), so this question has new numbers. Keep this tab open while you work — use the on-screen calculator or your own calculator.';
     drawCard();
   }
   document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') goneAway(); else if (document.hasFocus()) cameBack(); });

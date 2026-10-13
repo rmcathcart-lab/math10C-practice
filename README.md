@@ -41,23 +41,9 @@ Homework practice for every Math 10C lesson, built from the course booklets. Eve
 
 `backend/Code.gs` runs as an Apps Script web app (Execute as: me · Who has access: Anyone) and writes to the "Math 10C Practice Ledger" spreadsheet: Roster, Attempts, Events, Progress, Days. Run `setup()` once; the teacher key is in Project Settings → Script properties. Put the web-app URL in `js/config.js`. After changing `Code.gs`, deploy a **new version of the same deployment** so the URL stays the same.
 
-## Lesson-example explainers and narration
+## Link to the teaching site
 
-Each lesson can have step-by-step animated explainers for its worked examples (`js/explainers/<lesson>.js`, player in
-`js/explain.js`). They appear in the lesson sidebar above the assignment.
-
-The narrator plays a recorded clip for a step when one exists, otherwise the browser's built-in voice reads the caption.
-
-To record (or re-record) clips with a Mac voice:
-
-1. `node tools/narration.js export <folder>` — writes `lines.json` and `script.txt` (every line the narrator says).
-2. Copy `tools/mac/make_narration.swift` and `tools/mac/Record Narration.command` into that folder and run
-   `bash "Record Narration.command" --siri` on the Mac (the System Voice, e.g. Siri Voice 4), or pass a voice name such as
-   `"Evan (Enhanced)"`; add `--test` to record and play one line first. Personal Voice (`--personal`) authorizes but
-   AVSpeechSynthesizer.write returns no audio for it on macOS 26.
-3. Copy the folder's `audio/<lesson>/*.m4a` into `audio/narration/<lesson>/` in this repo.
-4. `node tools/narration.js index` — rebuilds `js/narration.js`, the list of clips the site knows about.
-
-Clips are named by a hash of the words spoken, so editing a caption makes that step fall back to the browser voice
-until it is recorded again; re-running the Mac script only records new lines. `node tools/narration.js status`
-shows how many lines have clips.
+The lesson sidebar starts with a **Go to the lesson** button that opens the same lesson on the Math 10C Teaching
+site (`HW.TEACHING` in `js/catalog.js` lists the lessons it has) in a new tab, with `?class=<block>` so the student sees
+that class's notes. The block is the one set for the class in the dashboard's Settings; without one, a final letter
+A–D in the class code (e.g. `10c-b`) is used, otherwise the link has no class.
